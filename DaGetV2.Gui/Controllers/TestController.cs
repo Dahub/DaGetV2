@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using DaGetV2.Gui.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace DaGetV2.Gui.Controllers
 {
@@ -14,19 +11,20 @@ namespace DaGetV2.Gui.Controllers
     {
         public async Task<IActionResult> Index()
         {
-            string req = "http://authapi.daoauth.fr/authorize?response_type=code&client_id=xWVvmIPVgAIYmnSs&state=test&redirect_uri=http%3A%2F%2Flocalhost:52941/Test/Return";
+            string req = "http://authapi.daoauth.fr/authorize?response_type=code&client_id=xWVvmIPVgAIYmnSs&scope=R_sc1%20RW_sc2&state=test&redirect_uri=http%3A%2F%2Flocalhost:52941/Test/Return";
             return Redirect(req);
         }
 
-        public async Task<IActionResult> Return(string code)
+        public async Task<IActionResult> Return(string code, string error, string error_description)
         {
 
             var formContent = new MultipartFormDataContent()
             {
                 { new StringContent(code),  "code" },
                 { new StringContent("authorization_code"),  "grant_type" },
-                 { new StringContent("xWVvmIPVgAIYmnSs"),  "client_id" },
-                 { new StringContent("http://localhost:52941/Test/Return"),  "redirect_uri" }
+                { new StringContent("xWVvmIPVgAIYmnSs"),  "client_id" },
+                { new StringContent("R_sc1 RW_sc2"),  "scope" },
+                { new StringContent("http://localhost:52941/Test/Return"),  "redirect_uri" }
             };
 
             HttpClient cl = new HttpClient();
@@ -43,8 +41,8 @@ namespace DaGetV2.Gui.Controllers
 
             if ((int)resp.StatusCode >= 300)
             {
-                var error = await resp.Content.ReadAsAsync<ErrorApiResultDto>();
-                return View(error);
+                var er = await resp.Content.ReadAsAsync<ErrorApiResultDto>();
+                return View(er);
             }
 
             var content = await resp.Content.ReadAsAsync<Result>();

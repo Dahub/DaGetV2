@@ -5,13 +5,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="1.1.6" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DaGetV2.Dal.EF\DaGetV2.Dal.EF.csproj" />
+    <ProjectReference Include="..\DaGetV2.Dal.Interface\DaGetV2.Dal.Interface.csproj" />
+    <ProjectReference Include="..\DaGetV2.Domain.Interface\DaGetV2.Domain.Interface.csproj" />
+    <ProjectReference Include="..\DaGetV2.Domain\DaGetV2.Domain.csproj" />
   </ItemGroup>
 
 </Project>
