@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using DaGetV2.Domain;
+using System.Linq;
 
 namespace DaGetV2.Dal.EF
 {
@@ -21,6 +22,188 @@ namespace DaGetV2.Dal.EF
         {
             modelBuilder.HasDefaultSchema("daget");
 
+            BuildBankAccount(modelBuilder);
+            BuildBankAccountType(modelBuilder);
+            BuildOperation(modelBuilder);
+            BuildOperationType(modelBuilder);
+            BuildTransfert(modelBuilder);
+            BuildUser(modelBuilder);
+            BuildUserBankAccount(modelBuilder);
+            
+            // remove cascade delete default behavior
+            var cascadeFKs = modelBuilder.Model.GetEntityTypes()
+               .SelectMany(t => t.GetForeignKeys())
+               .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
+
+            foreach (var fk in cascadeFKs)
+                fk.DeleteBehavior = DeleteBehavior.Restrict;
+        }
+
+        private static void BuildUserBankAccount(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserBankAccount>().ToTable("UserBankAccount");
+            modelBuilder.Entity<UserBankAccount>().HasKey(u => u.Id);
+            modelBuilder.Entity<UserBankAccount>()
+                .Property(uba => uba.IsOwner)
+                .HasColumnName("IsOwner")
+                .HasColumnType("bit")
+                .IsRequired();
+            modelBuilder.Entity<UserBankAccount>()
+                .Property(uba => uba.UserId)
+                .HasColumnName("FK_User")
+                .HasColumnType("integer")
+                .IsRequired();
+            modelBuilder.Entity<UserBankAccount>()
+               .HasOne<User>(uba => uba.User)
+               .WithMany(u => u.UsersBanksAccounts)
+               .HasForeignKey(uba => uba.UserId);
+            modelBuilder.Entity<UserBankAccount>()
+               .Property(uba => uba.BankAccountId)
+               .HasColumnName("FK_BankAccount")
+               .HasColumnType("integer")
+               .IsRequired();
+            modelBuilder.Entity<UserBankAccount>()
+               .HasOne<BankAccount>(uba => uba.BankAccount)
+               .WithMany(ba => ba.UsersBanksAccounts)
+               .HasForeignKey(uba => uba.BankAccountId);
+        }
+
+        private static void BuildUser(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>().ToTable("User");
+            modelBuilder.Entity<User>().HasKey(u => u.Id);
+            modelBuilder.Entity<User>()
+                .Property(u => u.LastConnexionDate)
+                .HasColumnName("LastConnexionDate")
+                .HasColumnType("datetime")
+                .IsRequired();
+            modelBuilder.Entity<User>()
+                .Property(u => u.UserName)
+                .HasColumnName("UserName")
+                .HasColumnType("nvarchar(256)")
+                .HasMaxLength(256)
+                .IsRequired();
+            modelBuilder.Entity<User>().HasIndex(u => u.UserName).IsUnique();
+        }
+
+        private static void BuildTransfert(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Transfert>().ToTable("Transfert");
+            modelBuilder.Entity<Transfert>().HasKey(t => t.Id);
+            modelBuilder.Entity<Transfert>()
+                .Property(t => t.OperationFromId)
+                .HasColumnName("FK_OperationFrom")
+                .HasColumnType("integer")
+                .IsRequired();
+            modelBuilder.Entity<Transfert>()
+                .HasOne<Operation>(t => t.OperationFrom)
+                .WithMany(of => of.FromTransferts)
+                .HasForeignKey(t => t.OperationFromId);
+            modelBuilder.Entity<Transfert>()
+              .Property(t => t.OperationToId)
+              .HasColumnName("FK_OperationTo")
+              .HasColumnType("integer")
+              .IsRequired();
+            modelBuilder.Entity<Transfert>()
+                .HasOne<Operation>(t => t.OperationTo)
+                .WithMany(of => of.ToTransferts)
+                .HasForeignKey(t => t.OperationToId);
+        }
+
+        private static void BuildOperationType(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<OperationType>().ToTable("OperationType");
+            modelBuilder.Entity<OperationType>().HasKey(u => u.Id);
+            modelBuilder.Entity<OperationType>()
+               .Property(ot => ot.Wording)
+               .HasColumnName("Wording")
+               .HasColumnType("nvarchar(256)")
+               .IsRequired();
+            modelBuilder.Entity<OperationType>()
+              .Property(ot => ot.BankAccountId)
+              .HasColumnName("FK_BankAccount")
+              .HasColumnType("integer")
+              .IsRequired();
+            modelBuilder.Entity<OperationType>()
+                .HasOne<BankAccount>(ot => ot.BankAccount)
+                .WithMany(ba => ba.OperationsTypes)
+                .HasForeignKey(o => o.BankAccountId);
+            modelBuilder.Entity<OperationType>()
+               .HasMany<Operation>(ot => ot.Operations)
+               .WithOne(o => o.OperationType);
+        }
+
+        private static void BuildOperation(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Operation>().ToTable("Operation");
+            modelBuilder.Entity<Operation>().HasKey(ba => ba.Id);
+            modelBuilder.Entity<Operation>()
+                .Property(o => o.IsClosed)
+                .HasColumnName("IsClosed")
+                .HasColumnType("bit")
+                .IsRequired();
+            modelBuilder.Entity<Operation>()
+               .Property(o => o.IsTransfert)
+               .HasColumnName("IsTransfert")
+               .HasColumnType("bit")
+               .IsRequired();
+            modelBuilder.Entity<Operation>()
+                .Property(o => o.CreationDate)
+                .HasColumnName("CreationDate")
+                .HasColumnType("datetime")
+                .IsRequired();
+            modelBuilder.Entity<Operation>()
+                .Property(o => o.OperationDate)
+                .HasColumnName("OperationDate")
+                .HasColumnType("datetime")
+                .IsRequired();
+            modelBuilder.Entity<Operation>()
+                .Property(o => o.Amount)
+                .HasColumnName("Amount")
+                .HasColumnType("decimal(18,2)")
+                .IsRequired();
+            modelBuilder.Entity<Operation>()
+                .Property(o => o.BankAccountId)
+                .HasColumnName("FK_BankAccount")
+                .HasColumnType("integer")
+                .IsRequired();
+            modelBuilder.Entity<Operation>()
+                .HasOne<BankAccount>(o => o.BankAccount)
+                .WithMany(ba => ba.Operations)
+                .HasForeignKey(o => o.BankAccountId);
+            modelBuilder.Entity<Operation>()
+                .Property(o => o.OperationTypeId)
+                .HasColumnName("FK_OperationType")
+                .HasColumnType("integer")
+                .IsRequired();
+            modelBuilder.Entity<Operation>()
+                .HasOne<OperationType>(o => o.OperationType)
+                .WithMany(ot => ot.Operations)
+                .HasForeignKey(o => o.OperationTypeId);
+            modelBuilder.Entity<Operation>()
+                .HasMany<Transfert>(t => t.FromTransferts)
+                .WithOne(o => o.OperationFrom);
+            modelBuilder.Entity<Operation>()
+                .HasMany<Transfert>(t => t.ToTransferts)
+                .WithOne(o => o.OperationTo);
+        }
+
+        private static void BuildBankAccountType(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<BankAccountType>().ToTable("BankAccountType");
+            modelBuilder.Entity<BankAccountType>().HasKey(ba => ba.Id);
+            modelBuilder.Entity<BankAccountType>()
+                .Property(bat => bat.Wording)
+                .HasColumnName("Wording")
+                .HasColumnType("nvarchar(256)")
+                .IsRequired();
+            modelBuilder.Entity<BankAccountType>()
+                .HasMany<BankAccount>(bat => bat.BanksAccounts)
+                .WithOne(ba => ba.BankAccountType);
+        }
+
+        private static void BuildBankAccount(ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<BankAccount>().ToTable("BankAccount");
             modelBuilder.Entity<BankAccount>().HasKey(ba => ba.Id);
             modelBuilder.Entity<BankAccount>()
@@ -37,7 +220,7 @@ namespace DaGetV2.Dal.EF
             modelBuilder.Entity<BankAccount>()
                 .Property(ba => ba.Balance)
                 .HasColumnName("Balance")
-                .HasColumnType("decimal(18,2")
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
             modelBuilder.Entity<BankAccount>()
                 .HasOne<BankAccountType>(ba => ba.BankAccountType)
@@ -59,21 +242,6 @@ namespace DaGetV2.Dal.EF
             modelBuilder.Entity<BankAccount>()
                 .HasMany<UserBankAccount>(ba => ba.UsersBanksAccounts)
                 .WithOne(uba => uba.BankAccount);
-
-            modelBuilder.Entity<User>().ToTable("User");
-            modelBuilder.Entity<User>().HasKey(u => u.Id);
-            modelBuilder.Entity<User>()
-                .Property(u => u.LastConnexionDate)
-                .HasColumnName("LastConnexionDate")
-                .HasColumnType("datetime")
-                .IsRequired();
-            modelBuilder.Entity<User>()
-                .Property(u => u.UserName)                
-                .HasColumnName("UserName")
-                .HasColumnType("nvarchar(256)")
-                .HasMaxLength(256)
-                .IsRequired();
-            modelBuilder.Entity<User>().HasIndex(u => u.UserName).IsUnique();
         }
 
         public void Commit()
