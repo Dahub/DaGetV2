@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DaGetV2.Dal.Interface.Repositories;
+using System;
 
 namespace DaGetV2.Dal.Interface
 {
@@ -6,5 +7,8 @@ namespace DaGetV2.Dal.Interface
     {
         void Commit();
         void CommitAsync();
+
+        IUserRepository GetUserRepository();
+        IBankAccountRepository GetBankAccountRepository();
     }
 }

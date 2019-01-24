@@ -1,7 +1,8 @@
-﻿using DaGetV2.Dal.Interface;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using DaGetV2.Dal.EF.Repositories;
+using DaGetV2.Dal.Interface;
+using DaGetV2.Dal.Interface.Repositories;
 using DaGetV2.Domain;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace DaGetV2.Dal.EF
@@ -252,6 +253,16 @@ namespace DaGetV2.Dal.EF
         public async void CommitAsync()
         {
             await SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public IUserRepository GetUserRepository()
+        {
+            return new UserRepository() { Context = this };
+        }
+
+        public IBankAccountRepository GetBankAccountRepository()
+        {
+            return new BankAccountRepository() { Context = this };
         }
     }
 }
