@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DaGetV2.Gui.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using DaGetV2.Gui.Models;
+using System.Diagnostics;
 
 namespace DaGetV2.Gui.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         public IActionResult Index()
-        {
+        {           
+
+            var test = User.Claims;
+            var tt = test;
+
             return View();
         }
 
