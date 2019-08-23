@@ -50,6 +50,11 @@ namespace DaGetV2.Dal.EF
                 .HasColumnType("bit")
                 .IsRequired();
             modelBuilder.Entity<UserBankAccount>()
+               .Property(uba => uba.IsReadOnly)
+               .HasColumnName("IsReadOnly")
+               .HasColumnType("bit")
+               .IsRequired();
+            modelBuilder.Entity<UserBankAccount>()
                 .Property(uba => uba.UserId)
                 .HasColumnName("FK_User")
                 .HasColumnType("integer")
@@ -212,6 +217,12 @@ namespace DaGetV2.Dal.EF
                 .HasColumnName("OpeningBalance")
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();
+            modelBuilder.Entity<BankAccount>()
+               .Property(ba => ba.Wording)
+               .HasColumnName("Wording")
+               .HasColumnType("nvarchar(256)")
+               .HasMaxLength(256)
+               .IsRequired();
             modelBuilder.Entity<BankAccount>()
                 .HasMany<Operation>(ba => ba.Operations)
                 .WithOne(o => o.BankAccount);

@@ -9,8 +9,7 @@ namespace DaGetV2.Gui.Controllers
     public class HomeController : Controller
     {
         public IActionResult Index()
-        {           
-
+        {         
             var test = User.Claims;
             var tt = test;
 

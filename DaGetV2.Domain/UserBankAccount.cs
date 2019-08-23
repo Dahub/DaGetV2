@@ -10,5 +10,6 @@ namespace DaGetV2.Domain
         public int BankAccountId { get; set; }
         public BankAccount BankAccount { get; set; }
         public bool IsOwner { get; set; }
+        public bool IsReadOnly { get; set; }
     }
 }

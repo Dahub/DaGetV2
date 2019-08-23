@@ -19,10 +19,10 @@ namespace DaGetV2.Api
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             string cs = Configuration.GetConnectionString("DaGetConnexionString");
+            services.Configure<AppConfiguration>(Configuration.GetSection("AppConfiguration"));
 
             services.AddSingleton<IContextFactory>(cf => new EfContextFactory()
             {
@@ -45,6 +45,8 @@ namespace DaGetV2.Api
             {
                 app.UseHsts();
             }
+
+            app.UseMiddleware<DaOAuthIntrospectionMiddleware>();
 
             app.UseHttpsRedirection();
             app.UseMvc();

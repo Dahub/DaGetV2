@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 
 namespace DaGetV2.Api.Controllers
 {
@@ -14,7 +15,11 @@ namespace DaGetV2.Api.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "value1", "value2" };
+            StringValues tt = string.Empty;
+
+            Request.Headers.TryGetValue("username", out tt);
+
+            return new string[] { tt };
         }
 
         // GET api/values/5

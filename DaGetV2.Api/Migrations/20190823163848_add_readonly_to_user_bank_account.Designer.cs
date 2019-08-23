@@ -4,14 +4,16 @@ using DaGetV2.Dal.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DaGetV2.Api.Migrations
 {
     [DbContext(typeof(DaGetContext))]
-    partial class DaGetContextModelSnapshot : ModelSnapshot
+    [Migration("20190823163848_add_readonly_to_user_bank_account")]
+    partial class add_readonly_to_user_bank_account
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,12 +43,6 @@ namespace DaGetV2.Api.Migrations
                     b.Property<decimal>("OpeningBalance")
                         .HasColumnName("OpeningBalance")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Wording")
-                        .IsRequired()
-                        .HasColumnName("Wording")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
 
                     b.HasKey("Id");
 
