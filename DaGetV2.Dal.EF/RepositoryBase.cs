@@ -10,6 +10,7 @@ namespace DaGetV2.Dal.EF
     internal abstract class RepositoryBase<T> : IRepository<T> where T : class, IDomainObject
     {
         IContext IRepository<T>.Context { get; set; }
+
         public DaGetContext Context { get; set; }
 
         public virtual Guid Add(T toAdd)

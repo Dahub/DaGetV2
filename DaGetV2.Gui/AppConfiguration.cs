@@ -10,7 +10,7 @@
 
         public string AuthorizeEndpoint { get; set; }
 
-        public string DaGetApi { get; set; }
+        public string DaGetApiUrl { get; set; }
 
         public string LogoutUrl { get; set; }
     }

@@ -21,7 +21,7 @@ namespace DaGetV2.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            string cs = Configuration.GetConnectionString("DaGetConnexionString");
+            var cs = Configuration.GetConnectionString("DaGetConnexionString");
             services.Configure<AppConfiguration>(Configuration.GetSection("AppConfiguration"));
 
             services.AddSingleton<IContextFactory>(cf => new EfContextFactory()

@@ -17,12 +17,12 @@ namespace DaGetV2.Gui.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        [Route("/Home/Index")]
+        public async Task<IActionResult> IndexAsync()
         {
-            // ask for bank accounts list
+            var response = await GetToApi("bankaccount");
 
-
-            return View();
+            return View("Index");
         }
 
         [HttpGet]

@@ -3,6 +3,7 @@
     public interface IContextFactory
     {
         string ConnexionString { get; set; }
+
         IContext CreateContext();
     }
 }
