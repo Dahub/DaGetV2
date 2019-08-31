@@ -54,28 +54,33 @@ namespace DaGetV2.Api
 
             var result = await response.Content.ReadAsAsync<Result>();
 
-            if(!result.active)
+            if (!result.active)
                 await ExitWithUnauthorize(context);
 
-           context.Request.Headers.Add("username", result.name);
+            context.Request.Headers.Add("username", result.name);
 
             await _next(context);
         }
 
         private static async Task ExitWithUnauthorize(HttpContext context)
         {
-            await context.Response.WriteAsync("access_token header missing");
+            await context.Response.WriteAsync("access_token header missing or invalid token");
             context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
             await Task.CompletedTask;
         }
 
-        public class Result
+        private class Result
         {
             public bool active { get; set; }
+
             public long exp { get; set; }
+
             public string[] aud { get; set; }
+
             public string client_id { get; set; }
+
             public string name { get; set; }
+            
             public string scope { get; set; }
         }
     }

@@ -15,7 +15,7 @@ namespace DaGetV2.Api
         /// <returns>DB context</returns>
         public DaGetContext CreateDbContext(string[] args)
         {
-            IConfigurationRoot configuration = new ConfigurationBuilder()
+            var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .Build();

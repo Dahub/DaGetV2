@@ -1,6 +1,7 @@
 ﻿using DaGetV2.Dal.Interface;
 using DaGetV2.Domain.Interface;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,7 +12,7 @@ namespace DaGetV2.Dal.EF
         IContext IRepository<T>.Context { get; set; }
         public DaGetContext Context { get; set; }
 
-        public virtual int Add(T toAdd)
+        public virtual Guid Add(T toAdd)
         {
             Context.Set<T>().Add(toAdd);
             return toAdd.Id;
@@ -23,7 +24,7 @@ namespace DaGetV2.Dal.EF
             Context.Entry(toDelete).State = EntityState.Deleted;
         }
 
-        public virtual T GetById(int id)
+        public virtual T GetById(Guid id)
         {
             return Context.Set<T>().
                Where(c => c.Id.Equals(id)).FirstOrDefault();

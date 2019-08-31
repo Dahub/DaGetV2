@@ -12,5 +12,6 @@ namespace DaGetV2.Api.Controllers
     [ApiController]
     public class BankAccountController : ControllerBase
     {
+        
     }
 }

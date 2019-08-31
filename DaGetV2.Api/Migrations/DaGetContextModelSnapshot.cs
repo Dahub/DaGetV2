@@ -22,17 +22,16 @@ namespace DaGetV2.Api.Migrations
 
             modelBuilder.Entity("DaGetV2.Domain.BankAccount", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<decimal>("Balance")
                         .HasColumnName("Balance")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("BankAccountTypeId")
+                    b.Property<Guid>("BankAccountTypeId")
                         .HasColumnName("FK_BankAccountType")
-                        .HasColumnType("integer");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnName("CreationDate")
@@ -57,9 +56,8 @@ namespace DaGetV2.Api.Migrations
 
             modelBuilder.Entity("DaGetV2.Domain.BankAccountType", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Wording")
                         .IsRequired()
@@ -69,21 +67,32 @@ namespace DaGetV2.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BankAccountType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("15f2a0f2-71f0-4823-8798-77cfa5752014"),
+                            Wording = "Courant"
+                        },
+                        new
+                        {
+                            Id = new Guid("c146e49e-5884-4174-81f3-e26a5f2cf8cd"),
+                            Wording = "Epargne"
+                        });
                 });
 
             modelBuilder.Entity("DaGetV2.Domain.Operation", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<decimal>("Amount")
                         .HasColumnName("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("BankAccountId")
+                    b.Property<Guid>("BankAccountId")
                         .HasColumnName("FK_BankAccount")
-                        .HasColumnType("integer");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnName("CreationDate")
@@ -101,9 +110,9 @@ namespace DaGetV2.Api.Migrations
                         .HasColumnName("OperationDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("OperationTypeId")
+                    b.Property<Guid>("OperationTypeId")
                         .HasColumnName("FK_OperationType")
-                        .HasColumnType("integer");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -116,13 +125,12 @@ namespace DaGetV2.Api.Migrations
 
             modelBuilder.Entity("DaGetV2.Domain.OperationType", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<int>("BankAccountId")
+                    b.Property<Guid>("BankAccountId")
                         .HasColumnName("FK_BankAccount")
-                        .HasColumnType("integer");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Wording")
                         .IsRequired()
@@ -138,17 +146,16 @@ namespace DaGetV2.Api.Migrations
 
             modelBuilder.Entity("DaGetV2.Domain.Transfert", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<int>("OperationFromId")
+                    b.Property<Guid>("OperationFromId")
                         .HasColumnName("FK_OperationFrom")
-                        .HasColumnType("integer");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("OperationToId")
+                    b.Property<Guid>("OperationToId")
                         .HasColumnName("FK_OperationTo")
-                        .HasColumnType("integer");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -161,9 +168,8 @@ namespace DaGetV2.Api.Migrations
 
             modelBuilder.Entity("DaGetV2.Domain.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("LastConnexionDate")
                         .HasColumnName("LastConnexionDate")
@@ -185,13 +191,12 @@ namespace DaGetV2.Api.Migrations
 
             modelBuilder.Entity("DaGetV2.Domain.UserBankAccount", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<int>("BankAccountId")
+                    b.Property<Guid>("BankAccountId")
                         .HasColumnName("FK_BankAccount")
-                        .HasColumnType("integer");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsOwner")
                         .HasColumnName("IsOwner")
@@ -201,9 +206,9 @@ namespace DaGetV2.Api.Migrations
                         .HasColumnName("IsReadOnly")
                         .HasColumnType("bit");
 
-                    b.Property<int>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnName("FK_User")
-                        .HasColumnType("integer");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 

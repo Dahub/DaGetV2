@@ -2,6 +2,7 @@
 using DaGetV2.Dal.Interface;
 using DaGetV2.Dal.Interface.Repositories;
 using DaGetV2.Domain;
+using DaGetV2.Shared.Constant;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -12,11 +13,17 @@ namespace DaGetV2.Dal.EF
         public DaGetContext(DbContextOptions options) : base(options) { }
 
         public DbSet<BankAccount> BankAccounts { get; set; }
+
         public DbSet<BankAccountType> BankAccountTypes { get; set; }
+
         public DbSet<Operation> Operations { get; set; }
+
         public DbSet<OperationType> OperationTypes { get; set; }
+
         public DbSet<Transfert> Transferts { get; set; }
+
         public DbSet<User> Users { get; set; }
+
         public DbSet<UserBankAccount> UserBankAccount { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,7 +44,9 @@ namespace DaGetV2.Dal.EF
                .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
 
             foreach (var fk in cascadeFKs)
+            {
                 fk.DeleteBehavior = DeleteBehavior.Restrict;
+            }
         }
 
         private static void BuildUserBankAccount(ModelBuilder modelBuilder)
@@ -57,7 +66,7 @@ namespace DaGetV2.Dal.EF
             modelBuilder.Entity<UserBankAccount>()
                 .Property(uba => uba.UserId)
                 .HasColumnName("FK_User")
-                .HasColumnType("integer")
+                .HasColumnType("uniqueidentifier")
                 .IsRequired();
             modelBuilder.Entity<UserBankAccount>()
                .HasOne<User>(uba => uba.User)
@@ -66,7 +75,7 @@ namespace DaGetV2.Dal.EF
             modelBuilder.Entity<UserBankAccount>()
                .Property(uba => uba.BankAccountId)
                .HasColumnName("FK_BankAccount")
-               .HasColumnType("integer")
+               .HasColumnType("uniqueidentifier")
                .IsRequired();
             modelBuilder.Entity<UserBankAccount>()
                .HasOne<BankAccount>(uba => uba.BankAccount)
@@ -99,7 +108,7 @@ namespace DaGetV2.Dal.EF
             modelBuilder.Entity<Transfert>()
                 .Property(t => t.OperationFromId)
                 .HasColumnName("FK_OperationFrom")
-                .HasColumnType("integer")
+                .HasColumnType("uniqueidentifier")
                 .IsRequired();
             modelBuilder.Entity<Transfert>()
                 .HasOne<Operation>(t => t.OperationFrom)
@@ -108,7 +117,7 @@ namespace DaGetV2.Dal.EF
             modelBuilder.Entity<Transfert>()
               .Property(t => t.OperationToId)
               .HasColumnName("FK_OperationTo")
-              .HasColumnType("integer")
+              .HasColumnType("uniqueidentifier")
               .IsRequired();
             modelBuilder.Entity<Transfert>()
                 .HasOne<Operation>(t => t.OperationTo)
@@ -128,7 +137,7 @@ namespace DaGetV2.Dal.EF
             modelBuilder.Entity<OperationType>()
               .Property(ot => ot.BankAccountId)
               .HasColumnName("FK_BankAccount")
-              .HasColumnType("integer")
+              .HasColumnType("uniqueidentifier")
               .IsRequired();
             modelBuilder.Entity<OperationType>()
                 .HasOne<BankAccount>(ot => ot.BankAccount)
@@ -171,7 +180,7 @@ namespace DaGetV2.Dal.EF
             modelBuilder.Entity<Operation>()
                 .Property(o => o.BankAccountId)
                 .HasColumnName("FK_BankAccount")
-                .HasColumnType("integer")
+                .HasColumnType("uniqueidentifier")
                 .IsRequired();
             modelBuilder.Entity<Operation>()
                 .HasOne<BankAccount>(o => o.BankAccount)
@@ -180,7 +189,7 @@ namespace DaGetV2.Dal.EF
             modelBuilder.Entity<Operation>()
                 .Property(o => o.OperationTypeId)
                 .HasColumnName("FK_OperationType")
-                .HasColumnType("integer")
+                .HasColumnType("uniqueidentifier")
                 .IsRequired();
             modelBuilder.Entity<Operation>()
                 .HasOne<OperationType>(o => o.OperationType)
@@ -206,6 +215,16 @@ namespace DaGetV2.Dal.EF
             modelBuilder.Entity<BankAccountType>()
                 .HasMany<BankAccount>(bat => bat.BanksAccounts)
                 .WithOne(ba => ba.BankAccountType);
+            modelBuilder.Entity<BankAccountType>()
+                .HasData(new BankAccountType()
+                {
+                    Id = BankAccountTypeIds.Current,
+                    Wording = "Courant"
+                }, new BankAccountType()
+                {
+                    Id = BankAccountTypeIds.Saving,
+                    Wording = "Epargne"
+                });
         }
 
         private static void BuildBankAccount(ModelBuilder modelBuilder)
@@ -241,7 +260,7 @@ namespace DaGetV2.Dal.EF
             modelBuilder.Entity<BankAccount>()
                 .Property(ba => ba.BankAccountTypeId)
                 .HasColumnName("FK_BankAccountType")
-                .HasColumnType("integer")
+                .HasColumnType("uniqueidentifier")
                 .IsRequired();
             modelBuilder.Entity<BankAccount>()
                 .Property(ba => ba.CreationDate)

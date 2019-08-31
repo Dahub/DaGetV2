@@ -4,7 +4,7 @@ namespace DaGetV2.Service.DTO
 {
     public class BankAccountDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public decimal Balance { get; set; }
         

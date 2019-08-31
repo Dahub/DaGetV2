@@ -67,7 +67,7 @@ namespace DaGetV2.Gui
                options.Scope.Add("RW_bank_account");
                options.Scope.Add("RW_operation");
                options.Scope.Add("RW_operation_type");
-
+       
                options.SaveTokens = true;
 
                options.Events = new OAuthEvents
@@ -84,8 +84,6 @@ namespace DaGetV2.Gui
                };
            });
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())

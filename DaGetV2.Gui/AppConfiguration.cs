@@ -9,5 +9,9 @@
         public string TokenEndpoint { get; set; }
 
         public string AuthorizeEndpoint { get; set; }
+
+        public string DaGetApi { get; set; }
+
+        public string LogoutUrl { get; set; }
     }
 }

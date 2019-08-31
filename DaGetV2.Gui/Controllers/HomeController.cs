@@ -1,38 +1,36 @@
 ﻿using DaGetV2.Gui.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace DaGetV2.Gui.Controllers
 {
     [Authorize]
-    public class HomeController : Controller
+    public class HomeController : ControllerBase
     {
+        public HomeController(IConfiguration configuration) : base(configuration)
+        {
+
+        }
+
+        [HttpGet]
         public IActionResult Index()
-        {         
-            var test = User.Claims;
-            var tt = test;
+        {
+            // ask for bank accounts list
+
 
             return View();
         }
 
-        public IActionResult About()
+        [HttpGet]
+        [Route("/Home/Logout")]
+        public async Task<RedirectResult> LogoutAsync()
         {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
+            await HttpContext.SignOutAsync();
+            return Redirect(Url.Content(_appConfiguration.LogoutUrl));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
