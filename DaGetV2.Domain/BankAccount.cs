@@ -10,6 +10,8 @@ namespace DaGetV2.Domain
 
         public DateTime CreationDate { get; set; }
 
+        public DateTime ModificationDate { get; set; }
+
         public Guid BankAccountTypeId { get; set; }
 
         public BankAccountType BankAccountType { get; set; }

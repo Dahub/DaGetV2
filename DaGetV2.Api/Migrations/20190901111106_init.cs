@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DaGetV2.Api.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,6 +16,8 @@ namespace DaGetV2.Api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    ModificationDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     Wording = table.Column<string>(type: "nvarchar(256)", nullable: false)
                 },
                 constraints: table =>
@@ -29,8 +31,9 @@ namespace DaGetV2.Api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    LastConnexionDate = table.Column<DateTime>(type: "datetime", nullable: false)
+                    CreationDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    ModificationDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -44,6 +47,7 @@ namespace DaGetV2.Api.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    ModificationDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     FK_BankAccountType = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Balance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     OpeningBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -67,6 +71,8 @@ namespace DaGetV2.Api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    ModificationDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     Wording = table.Column<string>(type: "nvarchar(256)", nullable: false),
                     FK_BankAccount = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -88,6 +94,8 @@ namespace DaGetV2.Api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    ModificationDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     FK_User = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FK_BankAccount = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsOwner = table.Column<bool>(type: "bit", nullable: false),
@@ -118,8 +126,9 @@ namespace DaGetV2.Api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    IsClosed = table.Column<bool>(type: "bit", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    ModificationDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    IsClosed = table.Column<bool>(type: "bit", nullable: false),
                     OperationDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsTransfert = table.Column<bool>(type: "bit", nullable: false),
@@ -151,6 +160,8 @@ namespace DaGetV2.Api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    ModificationDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     FK_OperationFrom = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FK_OperationTo = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -176,14 +187,14 @@ namespace DaGetV2.Api.Migrations
             migrationBuilder.InsertData(
                 schema: "daget",
                 table: "BankAccountType",
-                columns: new[] { "Id", "Wording" },
-                values: new object[] { new Guid("15f2a0f2-71f0-4823-8798-77cfa5752014"), "Courant" });
+                columns: new[] { "Id", "CreationDate", "ModificationDate", "Wording" },
+                values: new object[] { new Guid("15f2a0f2-71f0-4823-8798-77cfa5752014"), new DateTime(2019, 9, 1, 13, 11, 6, 42, DateTimeKind.Local).AddTicks(8855), new DateTime(2019, 9, 1, 13, 11, 6, 45, DateTimeKind.Local).AddTicks(6591), "Courant" });
 
             migrationBuilder.InsertData(
                 schema: "daget",
                 table: "BankAccountType",
-                columns: new[] { "Id", "Wording" },
-                values: new object[] { new Guid("c146e49e-5884-4174-81f3-e26a5f2cf8cd"), "Epargne" });
+                columns: new[] { "Id", "CreationDate", "ModificationDate", "Wording" },
+                values: new object[] { new Guid("c146e49e-5884-4174-81f3-e26a5f2cf8cd"), new DateTime(2019, 9, 1, 13, 11, 6, 45, DateTimeKind.Local).AddTicks(7648), new DateTime(2019, 9, 1, 13, 11, 6, 45, DateTimeKind.Local).AddTicks(7673), "Epargne" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BankAccount_FK_BankAccountType",

@@ -15,6 +15,10 @@ namespace DaGetV2.Dal.EF
 
         public virtual Guid Add(T toAdd)
         {
+            var now = DateTime.Now;
+            toAdd.CreationDate = now;
+            toAdd.ModificationDate = now;
+            
             Context.Set<T>().Add(toAdd);
             return toAdd.Id;
         }
@@ -33,6 +37,8 @@ namespace DaGetV2.Dal.EF
 
         public virtual void Update(T toUpdate)
         {
+            toUpdate.ModificationDate = DateTime.Now;
+
             Context.Set<T>().Attach(toUpdate);
             Context.Entry(toUpdate).State = EntityState.Modified;
         }

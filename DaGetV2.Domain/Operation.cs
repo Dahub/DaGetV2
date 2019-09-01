@@ -6,11 +6,13 @@ namespace DaGetV2.Domain
 {
     public class Operation : IDomainObject
     {
-        public Guid Id { get; set; }     
-       
-        public bool IsClosed { get; set; }
+        public Guid Id { get; set; }
 
         public DateTime CreationDate { get; set; }
+
+        public DateTime ModificationDate { get; set; }
+
+        public bool IsClosed { get; set; }
 
         public DateTime OperationDate { get; set; }
 

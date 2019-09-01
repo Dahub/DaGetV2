@@ -4,6 +4,7 @@ using DaGetV2.Dal.Interface.Repositories;
 using DaGetV2.Domain;
 using DaGetV2.Shared.Constant;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 
 namespace DaGetV2.Dal.EF
@@ -54,6 +55,16 @@ namespace DaGetV2.Dal.EF
             modelBuilder.Entity<UserBankAccount>().ToTable("UserBankAccount");
             modelBuilder.Entity<UserBankAccount>().HasKey(u => u.Id);
             modelBuilder.Entity<UserBankAccount>()
+               .Property(ba => ba.CreationDate)
+               .HasColumnName("CreationDate")
+               .HasColumnType("datetime")
+               .IsRequired();
+            modelBuilder.Entity<UserBankAccount>()
+               .Property(ba => ba.ModificationDate)
+               .HasColumnName("ModificationDate")
+               .HasColumnType("datetime")
+               .IsRequired();
+            modelBuilder.Entity<UserBankAccount>()
                 .Property(uba => uba.IsOwner)
                 .HasColumnName("IsOwner")
                 .HasColumnType("bit")
@@ -88,10 +99,15 @@ namespace DaGetV2.Dal.EF
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<User>().HasKey(u => u.Id);
             modelBuilder.Entity<User>()
-                .Property(u => u.LastConnexionDate)
-                .HasColumnName("LastConnexionDate")
-                .HasColumnType("datetime")
-                .IsRequired();
+               .Property(ba => ba.CreationDate)
+               .HasColumnName("CreationDate")
+               .HasColumnType("datetime")
+               .IsRequired();
+            modelBuilder.Entity<User>()
+               .Property(ba => ba.ModificationDate)
+               .HasColumnName("ModificationDate")
+               .HasColumnType("datetime")
+               .IsRequired();
             modelBuilder.Entity<User>()
                 .Property(u => u.UserName)
                 .HasColumnName("UserName")
@@ -105,6 +121,16 @@ namespace DaGetV2.Dal.EF
         {
             modelBuilder.Entity<Transfert>().ToTable("Transfert");
             modelBuilder.Entity<Transfert>().HasKey(t => t.Id);
+            modelBuilder.Entity<Transfert>()
+               .Property(ba => ba.CreationDate)
+               .HasColumnName("CreationDate")
+               .HasColumnType("datetime")
+               .IsRequired();
+            modelBuilder.Entity<Transfert>()
+               .Property(ba => ba.ModificationDate)
+               .HasColumnName("ModificationDate")
+               .HasColumnType("datetime")
+               .IsRequired();
             modelBuilder.Entity<Transfert>()
                 .Property(t => t.OperationFromId)
                 .HasColumnName("FK_OperationFrom")
@@ -129,6 +155,16 @@ namespace DaGetV2.Dal.EF
         {
             modelBuilder.Entity<OperationType>().ToTable("OperationType");
             modelBuilder.Entity<OperationType>().HasKey(u => u.Id);
+            modelBuilder.Entity<OperationType>()
+               .Property(ba => ba.CreationDate)
+               .HasColumnName("CreationDate")
+               .HasColumnType("datetime")
+               .IsRequired();
+            modelBuilder.Entity<OperationType>()
+               .Property(ba => ba.ModificationDate)
+               .HasColumnName("ModificationDate")
+               .HasColumnType("datetime")
+               .IsRequired();
             modelBuilder.Entity<OperationType>()
                .Property(ot => ot.Wording)
                .HasColumnName("Wording")
@@ -163,10 +199,15 @@ namespace DaGetV2.Dal.EF
                .HasColumnType("bit")
                .IsRequired();
             modelBuilder.Entity<Operation>()
-                .Property(o => o.CreationDate)
-                .HasColumnName("CreationDate")
-                .HasColumnType("datetime")
-                .IsRequired();
+               .Property(ba => ba.CreationDate)
+               .HasColumnName("CreationDate")
+               .HasColumnType("datetime")
+               .IsRequired();
+            modelBuilder.Entity<Operation>()
+               .Property(ba => ba.ModificationDate)
+               .HasColumnName("ModificationDate")
+               .HasColumnType("datetime")
+               .IsRequired();
             modelBuilder.Entity<Operation>()
                 .Property(o => o.OperationDate)
                 .HasColumnName("OperationDate")
@@ -208,6 +249,16 @@ namespace DaGetV2.Dal.EF
             modelBuilder.Entity<BankAccountType>().ToTable("BankAccountType");
             modelBuilder.Entity<BankAccountType>().HasKey(ba => ba.Id);
             modelBuilder.Entity<BankAccountType>()
+               .Property(ba => ba.CreationDate)
+               .HasColumnName("CreationDate")
+               .HasColumnType("datetime")
+               .IsRequired();
+            modelBuilder.Entity<BankAccountType>()
+               .Property(ba => ba.ModificationDate)
+               .HasColumnName("ModificationDate")
+               .HasColumnType("datetime")
+               .IsRequired();
+            modelBuilder.Entity<BankAccountType>()
                 .Property(bat => bat.Wording)
                 .HasColumnName("Wording")
                 .HasColumnType("nvarchar(256)")
@@ -219,12 +270,17 @@ namespace DaGetV2.Dal.EF
                 .HasData(new BankAccountType()
                 {
                     Id = BankAccountTypeIds.Current,
-                    Wording = "Courant"
+                    Wording = "Courant",
+                    CreationDate = DateTime.Now,
+                    ModificationDate = DateTime.Now
                 }, new BankAccountType()
                 {
                     Id = BankAccountTypeIds.Saving,
-                    Wording = "Epargne"
+                    Wording = "Epargne",
+                    CreationDate = DateTime.Now,
+                    ModificationDate = DateTime.Now
                 });
+            ;
         }
 
         private static void BuildBankAccount(ModelBuilder modelBuilder)
@@ -267,6 +323,11 @@ namespace DaGetV2.Dal.EF
                 .HasColumnName("CreationDate")
                 .HasColumnType("datetime")
                 .IsRequired();
+            modelBuilder.Entity<BankAccount>()
+               .Property(ba => ba.ModificationDate)
+               .HasColumnName("ModificationDate")
+               .HasColumnType("datetime")
+               .IsRequired();
             modelBuilder.Entity<BankAccount>()
                 .HasMany<OperationType>(ba => ba.OperationsTypes)
                 .WithOne(ot => ot.BankAccount);

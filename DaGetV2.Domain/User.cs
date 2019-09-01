@@ -8,10 +8,12 @@ namespace DaGetV2.Domain
     {
         public Guid Id { get; set; }
 
-        public string UserName { get; set; }
+        public DateTime CreationDate { get; set; }
 
-        public DateTime LastConnexionDate { get; set; }
+        public DateTime ModificationDate { get; set; }
 
-        public ICollection<UserBankAccount> UsersBanksAccounts { get; set; }
+        public string UserName { get; set; }        
+
+        public ICollection<UserBankAccount> UsersBanksAccounts { get; set; }        
     }
 }

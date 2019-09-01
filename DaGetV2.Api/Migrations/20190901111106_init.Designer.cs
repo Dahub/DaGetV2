@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DaGetV2.Api.Migrations
 {
     [DbContext(typeof(DaGetContext))]
-    [Migration("20190831164814_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20190901111106_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,6 +39,10 @@ namespace DaGetV2.Api.Migrations
                         .HasColumnName("CreationDate")
                         .HasColumnType("datetime");
 
+                    b.Property<DateTime>("ModificationDate")
+                        .HasColumnName("ModificationDate")
+                        .HasColumnType("datetime");
+
                     b.Property<decimal>("OpeningBalance")
                         .HasColumnName("OpeningBalance")
                         .HasColumnType("decimal(18,2)");
@@ -61,6 +65,14 @@ namespace DaGetV2.Api.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnName("CreationDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("ModificationDate")
+                        .HasColumnName("ModificationDate")
+                        .HasColumnType("datetime");
+
                     b.Property<string>("Wording")
                         .IsRequired()
                         .HasColumnName("Wording")
@@ -74,11 +86,15 @@ namespace DaGetV2.Api.Migrations
                         new
                         {
                             Id = new Guid("15f2a0f2-71f0-4823-8798-77cfa5752014"),
+                            CreationDate = new DateTime(2019, 9, 1, 13, 11, 6, 42, DateTimeKind.Local).AddTicks(8855),
+                            ModificationDate = new DateTime(2019, 9, 1, 13, 11, 6, 45, DateTimeKind.Local).AddTicks(6591),
                             Wording = "Courant"
                         },
                         new
                         {
                             Id = new Guid("c146e49e-5884-4174-81f3-e26a5f2cf8cd"),
+                            CreationDate = new DateTime(2019, 9, 1, 13, 11, 6, 45, DateTimeKind.Local).AddTicks(7648),
+                            ModificationDate = new DateTime(2019, 9, 1, 13, 11, 6, 45, DateTimeKind.Local).AddTicks(7673),
                             Wording = "Epargne"
                         });
                 });
@@ -108,6 +124,10 @@ namespace DaGetV2.Api.Migrations
                         .HasColumnName("IsTransfert")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime>("ModificationDate")
+                        .HasColumnName("ModificationDate")
+                        .HasColumnType("datetime");
+
                     b.Property<DateTime>("OperationDate")
                         .HasColumnName("OperationDate")
                         .HasColumnType("datetime");
@@ -134,6 +154,14 @@ namespace DaGetV2.Api.Migrations
                         .HasColumnName("FK_BankAccount")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnName("CreationDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("ModificationDate")
+                        .HasColumnName("ModificationDate")
+                        .HasColumnType("datetime");
+
                     b.Property<string>("Wording")
                         .IsRequired()
                         .HasColumnName("Wording")
@@ -150,6 +178,14 @@ namespace DaGetV2.Api.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnName("CreationDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("ModificationDate")
+                        .HasColumnName("ModificationDate")
+                        .HasColumnType("datetime");
 
                     b.Property<Guid>("OperationFromId")
                         .HasColumnName("FK_OperationFrom")
@@ -173,8 +209,12 @@ namespace DaGetV2.Api.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("LastConnexionDate")
-                        .HasColumnName("LastConnexionDate")
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnName("CreationDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("ModificationDate")
+                        .HasColumnName("ModificationDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("UserName")
@@ -200,6 +240,10 @@ namespace DaGetV2.Api.Migrations
                         .HasColumnName("FK_BankAccount")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnName("CreationDate")
+                        .HasColumnType("datetime");
+
                     b.Property<bool>("IsOwner")
                         .HasColumnName("IsOwner")
                         .HasColumnType("bit");
@@ -207,6 +251,10 @@ namespace DaGetV2.Api.Migrations
                     b.Property<bool>("IsReadOnly")
                         .HasColumnName("IsReadOnly")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModificationDate")
+                        .HasColumnName("ModificationDate")
+                        .HasColumnType("datetime");
 
                     b.Property<Guid>("UserId")
                         .HasColumnName("FK_User")

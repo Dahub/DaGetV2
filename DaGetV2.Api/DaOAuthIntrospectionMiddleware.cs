@@ -62,48 +62,49 @@ namespace DaGetV2.Api
                 await ExitWithUnauthorize(context);
             }
 
-            var result = await response.Content.ReadAsAsync<Result>();
+            var responseContent = await response.Content.ReadAsAsync<Result>();
 
-            if (!result.active)
+            if (!responseContent.active)
             {
                 await ExitWithUnauthorize(context);
             }
 
-            context.Request.Headers.Add("username", result.name);
+            context.Request.Headers.Add("username", responseContent.name);
 
-            PersistUserIfNeeded(result);
+            PersistUserIfNeeded(responseContent);
 
             await _next(context);
         }
 
-        private void PersistUserIfNeeded(Result result)
+        private void PersistUserIfNeeded(Result responseContent)
         {
-            if (!_persistedUsers.ContainsKey(result.name) || !_persistedUsers.TryGetValue(result.name, out var userPersisted) || !userPersisted)
+            if (!_persistedUsers.ContainsKey(responseContent.name) || !_persistedUsers.TryGetValue(responseContent.name, out var userPersisted) || !userPersisted)
             {
                 using (var dbContext = _contextFactory.CreateContext())
                 {
                     var userRepository = dbContext.GetUserRepository();
 
-                    if (!userRepository.UserExists(result.name))
+                    if (!userRepository.UserExists(responseContent.name))
                     {
                         userRepository.Add(new Domain.User()
                         {
                             Id = Guid.NewGuid(),
-                            LastConnexionDate = DateTime.Now,
-                            UserName = result.name
+                            CreationDate = DateTime.Now,
+                            UserName = responseContent.name
                         });
 
                         dbContext.Commit();
                     }
                 }
-                _persistedUsers.TryAdd(result.name, true);
+                _persistedUsers.TryAdd(responseContent.name, true);
             }
         }
 
         private static async Task ExitWithUnauthorize(HttpContext context)
         {
-            await context.Response.WriteAsync("access_token header missing or invalid token");
             context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            await context.Response.WriteAsync("access_token header missing or invalid token");
+            
             await Task.CompletedTask;
         }
 
