@@ -13,14 +13,13 @@ namespace DaGetV2.Dal.EF
 
         public DaGetContext Context { get; set; }
 
-        public virtual Guid Add(T toAdd)
+        public virtual void Add(T toAdd)
         {
             var now = DateTime.Now;
             toAdd.CreationDate = now;
             toAdd.ModificationDate = now;
             
             Context.Set<T>().Add(toAdd);
-            return toAdd.Id;
         }
 
         public virtual void Delete(T toDelete)
