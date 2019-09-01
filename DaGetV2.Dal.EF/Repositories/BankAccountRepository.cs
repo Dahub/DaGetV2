@@ -10,7 +10,7 @@ namespace DaGetV2.Dal.EF.Repositories
     {
         public IEnumerable<BankAccount> GetAllByUser(string userName)
         {
-            return Context.UserBankAccount.
+            return Context.UserBankAccounts.
                 Where(uba => uba.User.UserName.Equals(userName)).
                 Select(uba => uba.BankAccount).
                 Include(ba => ba.BankAccountType).

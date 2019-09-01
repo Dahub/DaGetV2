@@ -1,3 +1,5 @@
+using System;
+using DaGetV2.Domain;
 using Xunit;
 
 namespace DaGetV2.Dal.EF.Test

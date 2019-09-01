@@ -25,7 +25,7 @@ namespace DaGetV2.Dal.EF
 
         public DbSet<User> Users { get; set; }
 
-        public DbSet<UserBankAccount> UserBankAccount { get; set; }
+        public DbSet<UserBankAccount> UserBankAccounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
