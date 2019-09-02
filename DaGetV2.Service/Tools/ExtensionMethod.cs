@@ -12,10 +12,14 @@ namespace DaGetV2.Service
         {
             if(bankAccounts == null || String.IsNullOrWhiteSpace(userName))
             {
-                return new List<BankAccountDto>();
+                yield break;
             }
-
-            return bankAccounts.Select(ba => ba.ToDto(userName));
+            
+            foreach(var ba in bankAccounts)
+            {
+                yield return ba.ToDto(userName);
+            }
+            //return bankAccounts.Select(ba => ba.ToDto(userName));
         }
 
         public static BankAccountDto ToDto(this BankAccount bankAccount, string userName)
@@ -29,7 +33,7 @@ namespace DaGetV2.Service
 
             return new BankAccountDto()
             {
-                Id = bankAccount.Id,
+                Id = bankAccount.Id.ToString(),
                 Balance = bankAccount.Balance,
                 BankAccountType = bankAccount.BankAccountType.Wording,
                 IsOwner = isOwner,

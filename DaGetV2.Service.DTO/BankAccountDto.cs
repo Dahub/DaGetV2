@@ -1,10 +1,10 @@
-﻿using System;
+﻿using DaGetV2.Shared.ApiTool;
 
 namespace DaGetV2.Service.DTO
 {
-    public class BankAccountDto
+    public class BankAccountDto : IDto
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         public decimal Balance { get; set; }
         

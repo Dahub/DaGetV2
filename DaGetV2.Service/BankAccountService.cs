@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DaGetV2.Dal.Interface;
 using DaGetV2.Domain;
 using DaGetV2.Service.DTO;
@@ -18,7 +19,7 @@ namespace DaGetV2.Service
         {
             var bankAccountRepositoy = context.GetBankAccountRepository();
 
-            return bankAccountRepositoy.GetAllByUser(userName).ToDto(userName);
+            return bankAccountRepositoy.GetAllByUser(userName).ToList().ToDto(userName);
         }
     }
 }

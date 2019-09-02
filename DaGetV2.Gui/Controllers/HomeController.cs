@@ -1,8 +1,12 @@
 ﻿using DaGetV2.Gui.Models;
+using DaGetV2.Service.DTO;
+using DaGetV2.Shared.ApiTool;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -22,7 +26,11 @@ namespace DaGetV2.Gui.Controllers
         {
             var response = await GetToApi("bankaccount");
 
-            return View("Index");
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            var bankAccounts = JsonConvert.DeserializeObject<ListResult<BankAccountDto>>(responseContent);
+
+            return View("Index", bankAccounts);
         }
 
         [HttpGet]

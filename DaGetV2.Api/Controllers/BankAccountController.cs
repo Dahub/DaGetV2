@@ -4,6 +4,8 @@ using DaGetV2.Dal.Interface;
 using DaGetV2.Service.DTO;
 using DaGetV2.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using DaGetV2.Shared.ApiTool;
 
 namespace DaGetV2.Api.Controllers
 {
@@ -22,12 +24,16 @@ namespace DaGetV2.Api.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IEnumerable<BankAccountDto>> Get([FromHeader(Name = "username")] string userName)
+        public IActionResult Get([FromHeader(Name = "username")] string userName)
         {
+            IEnumerable<BankAccountDto> bankAccounts;
+
             using (var context = _contextFactory.CreateContext())
             {
-                return _service.GetAll(context, userName);
+                bankAccounts = _service.GetAll(context, userName);
             }
+
+            return Ok(bankAccounts.ToListResult());
         }
     }
 }

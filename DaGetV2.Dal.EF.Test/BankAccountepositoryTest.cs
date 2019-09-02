@@ -26,6 +26,7 @@ namespace DaGetV2.Dal.EF.Test
                 Assert.NotNull(bankAccount.BankAccountType);
                 Assert.NotNull(bankAccount.UsersBanksAccounts);
                 Assert.NotEmpty(bankAccount.UsersBanksAccounts);
+                Assert.NotNull(bankAccount.UsersBanksAccounts.First().User);
             }
         }
     }

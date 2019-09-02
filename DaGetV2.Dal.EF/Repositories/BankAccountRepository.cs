@@ -14,7 +14,8 @@ namespace DaGetV2.Dal.EF.Repositories
                 Where(uba => uba.User.UserName.Equals(userName)).
                 Select(uba => uba.BankAccount).
                 Include(ba => ba.BankAccountType).
-                Include(ba => ba.UsersBanksAccounts);
+                Include(ba => ba.UsersBanksAccounts).
+                ThenInclude(uba => uba.User);
         }
     }
 }

@@ -47,7 +47,7 @@ namespace DaGetV2.Gui
                        var exp = tokens.FirstOrDefault(t => t.Name == "expires_at");
                        var expires = DateTime.Parse(exp.Value);
 
-                       if (expires < DateTime.Now.AddSeconds(-120))
+                       if (expires < DateTime.Now.AddSeconds(+120))
                        {
                            context.RejectPrincipal();
                            return Task.CompletedTask;
