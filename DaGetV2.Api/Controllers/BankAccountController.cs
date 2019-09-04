@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using DaGetV2.Dal.Interface;
 using DaGetV2.Service.DTO;
 using DaGetV2.Service.Interface;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using DaGetV2.Shared.ApiTool;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DaGetV2.Api.Controllers
 {

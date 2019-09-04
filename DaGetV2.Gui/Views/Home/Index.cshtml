@@ -1,4 +1,4 @@
-﻿@model DaGetV2.Shared.ApiTool.ListResult<DaGetV2.Service.DTO.BankAccountDto>
+﻿@model HomeIndexModel
 
 @{
     Layout = "_layout";
@@ -6,13 +6,58 @@
 
 <div class="row">
 
-    @foreach (var bankAccount in Model.Datas)
+    @foreach (var bankAccount in Model.BankAccountSummaries)
     {
-    <div class="col-4">
-        <a href="" class="btn btn-sq-lg btn-blue" style="padding-top: 20px">
-            @bankAccount.Wording<br />
-            <span>@bankAccount.Balance</span>
-        </a>
-    </div>
+        <div class="col-3">
+            @if (bankAccount.IsReadOnly)
+            {
+                <a href="/BankAccount/@bankAccount.Id" class="btn btn-sq-lg btn-info" style="padding-top: 20px">
+
+                    @bankAccount.Wording<br />
+                    <span>@bankAccount.Balance €</span>
+                </a>
+            }
+            else
+            {
+                if (bankAccount.Balance > 0m)
+                {
+                    <a href="/BankAccount/@bankAccount.Id" class="btn btn-sq-lg btn-success" style="padding-top: 20px">
+                        @bankAccount.Wording<br />
+                        <span>@bankAccount.Balance €</span>
+                    </a>
+                }
+                else
+                {
+                    <a href="/BankAccount/@bankAccount.Id" class="btn btn-sq-lg btn-danger" style="padding-top: 20px">
+                        @bankAccount.Wording<br />
+                        <span>@bankAccount.Balance €</span>
+                    </a>
+                }
+            }
+            <div class="d-flex justify-content-around">
+                @if (bankAccount.IsOwner)
+                {
+
+                    <a href="/BankAccount/Edit/@bankAccount.Id" title="Editer"><i class="material-icons md-48">build</i></a>
+                    <a href="/BankAccount/Share/@bankAccount.Id" title="Partager"><i class="material-icons md-48">share</i></a>
+                    <a href="/BankAccount/Delete/@bankAccount.Id" title="Supprimer"><i class="material-icons md-48">delete</i></a>
+
+                }
+                else
+                {
+                    <i class="material-icons md-48 md-dark md-inactive">build</i>
+                    <i class="material-icons md-48 md-dark md-inactive">share</i>
+                    <i class="material-icons md-48 md-dark md-inactive">delete</i>
+                }
+            </div>
+        </div>
     }
+
 </div>
+<hr />
+<div class="row">
+    <div class="col-4">
+        <a href="/BankAccount/Create" class="btn btn-lg btn-blue">Nouveau compte</a>
+    </div>
+</div>
+

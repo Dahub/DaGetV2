@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DaGetV2.Gui.Controllers
@@ -30,7 +31,19 @@ namespace DaGetV2.Gui.Controllers
 
             var bankAccounts = JsonConvert.DeserializeObject<ListResult<BankAccountDto>>(responseContent);
 
-            return View("Index", bankAccounts);
+            return View("Index", new HomeIndexModel()
+            {
+                BankAccountSummaries = bankAccounts.Datas.Select(ba =>
+                    new BankAccountSummary()
+                    {
+                        Balance = ba.Balance,
+                        BankAccountType = ba.BankAccountType,
+                        Id = ba.Id,
+                        IsOwner = ba.IsOwner,
+                        IsReadOnly = ba.IsReadOnly,
+                        Wording = ba.Wording
+                    })
+            });
         }
 
         [HttpGet]

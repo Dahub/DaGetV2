@@ -57,7 +57,7 @@ namespace DaGetV2.Service.Test
 
             Assert.Equal(148.36m, bankAccountDto.Balance);
             Assert.Equal("bank account type", bankAccountDto.BankAccountType);
-            Assert.Equal(bankAccountId, bankAccountDto.Id);
+            Assert.Equal(bankAccountId.ToString(), bankAccountDto.Id.ToString());
             Assert.True(bankAccountDto.IsOwner);
             Assert.False(bankAccountDto.IsReadOnly);
             Assert.Equal("bank account", bankAccountDto.Wording);

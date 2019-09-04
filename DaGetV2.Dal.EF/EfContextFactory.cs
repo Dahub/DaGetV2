@@ -5,14 +5,21 @@ namespace DaGetV2.Dal.EF
 {
     public class EfContextFactory : IContextFactory
     {
-        public string ConnexionString { get; set; }
+        private readonly string _connexionString;
+
+        private readonly DbContextOptions _options;
+
+        public EfContextFactory(string connexionString)
+        {
+            _connexionString = connexionString;
+            var builder = new DbContextOptionsBuilder<DaGetContext>();
+            builder.UseSqlServer(_connexionString, b => b.MigrationsAssembly("DaGetV2.Dal.EF"));
+            _options = builder.Options;
+        }
 
         public IContext CreateContext()
         {
-            var builder = new DbContextOptionsBuilder<DaGetContext>();
-            builder.UseSqlServer(ConnexionString, b => b.MigrationsAssembly("DaGetV2.Dal.EF"));
-
-            return new DaGetContext(builder.Options);
+            return new DaGetContext(_options);
         }
     }
 }

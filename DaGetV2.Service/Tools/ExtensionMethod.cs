@@ -8,6 +8,33 @@ namespace DaGetV2.Service
 {
     public static class ExtensionMethod
     {
+        public static IEnumerable<BankAccountTypeDto> ToDto(this IEnumerable<BankAccountType> bankAccountTypes)
+        {
+            if (bankAccountTypes == null)
+            {
+                yield break;
+            }
+
+            foreach (var bat in bankAccountTypes)
+            {
+                yield return bat.ToDto();
+            }
+        }
+
+        public static BankAccountTypeDto ToDto(this BankAccountType bankAccountType)
+        {
+            if(bankAccountType == null)
+            {
+                return null;
+            }
+
+            return new BankAccountTypeDto()
+            {
+                Id = bankAccountType.Id,
+                Wording = bankAccountType.Wording
+            };
+        }
+
         public static IEnumerable<BankAccountDto> ToDto(this IEnumerable<BankAccount> bankAccounts, string userName)
         {
             if(bankAccounts == null || String.IsNullOrWhiteSpace(userName))
@@ -19,7 +46,6 @@ namespace DaGetV2.Service
             {
                 yield return ba.ToDto(userName);
             }
-            //return bankAccounts.Select(ba => ba.ToDto(userName));
         }
 
         public static BankAccountDto ToDto(this BankAccount bankAccount, string userName)
