@@ -75,6 +75,10 @@ namespace DaGetV2.Gui
 
         private void AddAccessTokenHeader()
         {
+            if(_client.DefaultRequestHeaders.Contains("access_token"))
+            {
+                _client.DefaultRequestHeaders.Remove("access_token");
+            }
             var token = User.Claims.Where(c => c.Type.Equals("access_token")).Select(c => c.Value).FirstOrDefault();
             _client.DefaultRequestHeaders.Add("access_token", token);
         }
