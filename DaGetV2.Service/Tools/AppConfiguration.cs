@@ -7,5 +7,7 @@
         public string RessourceServerName { get; set; }
 
         public string Password { get; set; }
+
+        public string[] DefaultsOperationTypes { get; set; }
     }
 }

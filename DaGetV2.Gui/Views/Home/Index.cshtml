@@ -9,46 +9,47 @@
     @foreach (var bankAccount in Model.BankAccountSummaries)
     {
         <div class="col-3">
-            @if (bankAccount.IsReadOnly)
-            {
-                <a href="/BankAccount/@bankAccount.Id" class="btn btn-sq-lg btn-info" style="padding-top: 20px">
 
-                    @bankAccount.Wording<br />
-                    <span>@bankAccount.Balance €</span>
+            @{
+                string btnCssClass = "gray";
+                if(!bankAccount.IsReadOnly)
+                {
+                    if(bankAccount.Balance >= 0)
+                    {
+                        btnCssClass = "green";
+                    }
+                    else
+                    {
+                        btnCssClass = "red";
+                    }
+                }
+             }
+
+            <div class="dg-btn @btnCssClass">
+                <a href="#">
+                    <div class="dg-btn-up">
+                        @bankAccount.Wording
+                    </div>
+                    <div class="dg-btn-center">
+                        <i class="material-icons md-48">euro_symbol</i>@bankAccount.Balance
+                    </div>
                 </a>
-            }
-            else
-            {
-                if (bankAccount.Balance > 0m)
-                {
-                    <a href="/BankAccount/@bankAccount.Id" class="btn btn-sq-lg btn-success" style="padding-top: 20px">
-                        @bankAccount.Wording<br />
-                        <span>@bankAccount.Balance €</span>
-                    </a>
-                }
-                else
-                {
-                    <a href="/BankAccount/@bankAccount.Id" class="btn btn-sq-lg btn-danger" style="padding-top: 20px">
-                        @bankAccount.Wording<br />
-                        <span>@bankAccount.Balance €</span>
-                    </a>
-                }
-            }
-            <div class="d-flex justify-content-around">
-                @if (bankAccount.IsOwner)
-                {
+                <div class="dg-btn-down">
+                    @if (bankAccount.IsOwner)
+                    {
 
-                    <a href="/BankAccount/Edit/@bankAccount.Id" title="Editer"><i class="material-icons md-48">build</i></a>
-                    <a href="/BankAccount/Share/@bankAccount.Id" title="Partager"><i class="material-icons md-48">share</i></a>
-                    <a href="/BankAccount/Delete/@bankAccount.Id" title="Supprimer"><i class="material-icons md-48">delete</i></a>
+                        <a href="/BankAccount/Edit/@bankAccount.Id" title="Editer"><i class="material-icons md-48">build</i></a>
+                        <a href="/BankAccount/Share/@bankAccount.Id" title="Partager"><i class="material-icons md-48">share</i></a>
+                        <a href="/BankAccount/Delete/@bankAccount.Id" title="Supprimer"><i class="material-icons md-48">delete</i></a>
 
-                }
-                else
-                {
-                    <i class="material-icons md-48 md-dark md-inactive">build</i>
-                    <i class="material-icons md-48 md-dark md-inactive">share</i>
-                    <i class="material-icons md-48 md-dark md-inactive">delete</i>
-                }
+                    }
+                    else
+                    {
+                        <i class="material-icons md-48 md-dark md-inactive">build</i>
+                        <i class="material-icons md-48 md-dark md-inactive">share</i>
+                        <i class="material-icons md-48 md-dark md-inactive">delete</i>
+                    }
+                </div>
             </div>
         </div>
     }

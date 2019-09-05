@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using DaGetV2.Dal.Interface;
+using DaGetV2.Service.DTO;
 using DaGetV2.Service.Interface;
-using Microsoft.AspNetCore.Http;
+using DaGetV2.Shared.ApiTool;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DaGetV2.Api.Controllers
@@ -27,10 +25,14 @@ namespace DaGetV2.Api.Controllers
         [Route("")]
         public IActionResult Get()
         {
-            using(var context = _contextFactory.CreateContext())
+            IEnumerable<BankAccountTypeDto> bankAccountTypes;
+
+            using (var context = _contextFactory.CreateContext())
             {
-                return Ok(_bankAccountTypeService.GetAll(context));
+                bankAccountTypes = _bankAccountTypeService.GetAll(context);                
             }
+
+            return Ok(bankAccountTypes.ToListResult());
         }
     }
 }

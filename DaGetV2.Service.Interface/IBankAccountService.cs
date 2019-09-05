@@ -1,8 +1,7 @@
-﻿using DaGetV2.Dal.EF;
+﻿using System.Collections.Generic;
 using DaGetV2.Dal.Interface;
 using DaGetV2.Domain;
 using DaGetV2.Service.DTO;
-using System.Collections.Generic;
 
 namespace DaGetV2.Service.Interface
 {

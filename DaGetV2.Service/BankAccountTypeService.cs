@@ -6,7 +6,7 @@ using DaGetV2.Service.Interface;
 
 namespace DaGetV2.Service
 {
-    public class BankAccountTypeService : IBankAccountTypeService
+    public class BankAccountTypeService : BaseService, IBankAccountTypeService
     {
         public IEnumerable<BankAccountTypeDto> GetAll(IContext context)
         {

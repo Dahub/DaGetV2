@@ -24,10 +24,22 @@ namespace DaGetV2.Api
             var cs = Configuration.GetConnectionString("DaGetConnexionString");
             services.Configure<AppConfiguration>(Configuration.GetSection("AppConfiguration"));
 
+            var conf = Configuration.GetSection("AppConfiguration").Get<AppConfiguration>();
+
             services.AddSingleton<IContextFactory>(cf => new EfContextFactory(cs));
 
-            services.AddTransient<IBankAccountService>(bas => new BankAccountService());
-            services.AddTransient<IBankAccountTypeService>(bats => new BankAccountTypeService());
+            services.AddTransient<IBankAccountService>(bas => new BankAccountService()
+            {
+                Configuration = conf
+            });
+            services.AddTransient<IBankAccountTypeService>(bats => new BankAccountTypeService()
+            {
+                Configuration = conf
+            });
+            services.AddTransient<IOperationTypeService>(ots => new OperationTypeService()
+            {
+                Configuration = conf
+            });
 
             services.AddMvc().AddJsonOptions(
                 options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)

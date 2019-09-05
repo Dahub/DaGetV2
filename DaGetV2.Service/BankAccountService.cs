@@ -8,7 +8,7 @@ using DaGetV2.Service.Interface;
 
 namespace DaGetV2.Service
 {
-    public class BankAccountService : IBankAccountService
+    public class BankAccountService : BaseService, IBankAccountService
     {
         public int Add(IContext context, BankAccount toCreate)
         {
