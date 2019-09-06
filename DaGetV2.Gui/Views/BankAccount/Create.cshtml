@@ -4,5 +4,70 @@
     Layout = "_layout";
 }
 
-<div class="row">
-</div>
+<h1>Création d'un nouveau compte en banque</h1>
+<hr />
+
+<form action="Create" id="createBankAccountForm" method="post">
+
+    @{
+        int count = 0;
+        @foreach (var operationType in Model.OperationTypes)
+        {
+            <input type="hidden" name="OperationTypes[@count].Key" value="@operationType.Key" />
+            <input type="hidden" name="OperationTypes[@count].Value" value="@operationType.Value" />
+
+            count++;
+        }
+    }
+
+    @{
+        count = 0;
+        @foreach (var bankAccountType in Model.BankAccountTypes)
+        {
+            <input type="hidden" name="BankAccountTypes[@count].Key" value="@bankAccountType.Key" />
+            <input type="hidden" name="BankAccountTypes[@count].Value" value="@bankAccountType.Value" />
+
+            count++;
+        }
+    }
+
+    <div class="row">
+        <div class="col">
+
+            <h3>Informations générales</h3>
+
+            <div class="form-group">
+                <label class="control-label">Libellé</label>
+                @Html.TextBoxFor(model => model.Wording, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Montant initial</label>
+                @Html.TextBoxFor(model => model.InitialBalance, new { type = "number", step = "0.01", @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Type de compte</label>
+                @Html.DropDownListFor(model => model.BankAccountTypeId, Model.BankAccountTypes.Select(bat => new SelectListItem(bat.Value, bat.Key.ToString())), null, new { @class = "form-control" })         
+            </div>
+
+        </div>
+
+        <div class="col">
+        </div>
+        <div class="w-100"></div>
+
+        <br />
+        <div class="col-3">
+            <a href="/Home/Index" class="btn btn-lg btn-secondary btn-block">Annuler</a>
+        </div>
+        <div class="col-9">
+            <input id="postForm" value="Valider" class="btn btn-lg btn-primary btn-block" />
+        </div>
+
+    </div>
+</form>
+
+@section Scripts{
+    <script src="~/js/createBankAccount.js"></script>
+}

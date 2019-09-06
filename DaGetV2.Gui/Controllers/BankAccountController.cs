@@ -4,12 +4,14 @@ using System.Threading.Tasks;
 using DaGetV2.Gui.Models;
 using DaGetV2.Service.DTO;
 using DaGetV2.Shared.ApiTool;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace DaGetV2.Gui.Controllers
 {
+    [Authorize]
     public class BankAccountController : ControllerBase
     {
         public BankAccountController(IConfiguration configuration) 
@@ -42,6 +44,13 @@ namespace DaGetV2.Gui.Controllers
                 BankAccountTypes = bankAccountTypes.Datas.ToDictionary(k => k.Id, v => v.Wording),
                 OperationTypes = operationTypes.Datas.ToDictionary(k => k.Id, v => v.Wording)
             });
+        }
+
+        [HttpPost]
+        [Route("/BankAccount/Create")]
+        public async Task<IActionResult> CreateAync(BankAccountCreateModel model)
+        {
+            return View("Create", model);
         }
     }
 }

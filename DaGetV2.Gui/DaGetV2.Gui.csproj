@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\js\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\DaGetV2.Service.DTO\DaGetV2.Service.DTO.csproj" />
   </ItemGroup>
 
