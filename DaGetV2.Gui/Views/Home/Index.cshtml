@@ -26,7 +26,7 @@
              }
 
             <div class="dg-btn @btnCssClass">
-                <a href="#">
+                <a href="/BankAccount/Detail/@bankAccount.Id">
                     <div class="dg-btn-up">
                         @bankAccount.Wording
                     </div>
@@ -34,14 +34,12 @@
                         <i class="material-icons md-48">euro_symbol</i>@bankAccount.Balance
                     </div>
                 </a>
-                <div class="dg-btn-down">
+                <div class="dg-btn-down @btnCssClass">
                     @if (bankAccount.IsOwner)
                     {
-
                         <a href="/BankAccount/Edit/@bankAccount.Id" title="Editer"><i class="material-icons md-48">build</i></a>
                         <a href="/BankAccount/Share/@bankAccount.Id" title="Partager"><i class="material-icons md-48">share</i></a>
                         <a href="/BankAccount/Delete/@bankAccount.Id" title="Supprimer"><i class="material-icons md-48">delete</i></a>
-
                     }
                     else
                     {
