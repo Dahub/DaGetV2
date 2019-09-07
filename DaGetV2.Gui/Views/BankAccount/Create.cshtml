@@ -1,4 +1,5 @@
 ﻿@model DaGetV2.Gui.Models.BankAccountCreateModel
+@using System.Linq;
 
 @{
     Layout = "_layout";
@@ -11,17 +12,6 @@
 
     @{
         int count = 0;
-        @foreach (var operationType in Model.OperationTypes)
-        {
-            <input type="hidden" name="OperationTypes[@count].Key" value="@operationType.Key" />
-            <input type="hidden" name="OperationTypes[@count].Value" value="@operationType.Value" />
-
-            count++;
-        }
-    }
-
-    @{
-        count = 0;
         @foreach (var bankAccountType in Model.BankAccountTypes)
         {
             <input type="hidden" name="BankAccountTypes[@count].Key" value="@bankAccountType.Key" />
@@ -30,6 +20,20 @@
             count++;
         }
     }
+
+    <div id="operationTypesToPost">
+        @{
+            count = 0;
+            @foreach (var operationType in Model.OperationTypes)
+            {
+                <input type="hidden" name="OperationTypes[@count].Key" value="@operationType.Key" />
+
+                <input type="hidden" name="OperationTypes[@count].Value" value="@operationType.Value" />
+
+                count++;
+            }
+        }
+    </div>
 
     <div class="row">
         <div class="col">
@@ -48,12 +52,42 @@
 
             <div class="form-group">
                 <label class="control-label">Type de compte</label>
-                @Html.DropDownListFor(model => model.BankAccountTypeId, Model.BankAccountTypes.Select(bat => new SelectListItem(bat.Value, bat.Key.ToString())), null, new { @class = "form-control" })         
+                @Html.DropDownListFor(model => model.BankAccountTypeId, Model.BankAccountTypes.Select(bat => new SelectListItem(bat.Value, bat.Key.ToString())), null, new { @class = "form-control" })
             </div>
 
         </div>
 
         <div class="col">
+            <h3>Types d'opération</h3>
+            <br />
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            Libellé
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="operationTypeTableBody">
+                    @foreach (var operationType in Model.OperationTypes)
+                    {
+                        <tr>
+                            <td>
+                                <input type="hidden" id="operationTypeId" value="@operationType.Key" />
+                                <input type="text" id="operationTypeWording" class="form-control" value="@operationType.Value" />
+                            </td>
+
+                            <td>
+                                <span><i onclick="deleteOperationType(this)" class="material-icons md-36" style="cursor: pointer;">delete_outline</i></span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <button id="addOperationType" type="button" class="btn btn-lg btn-block btn-secondary">Nouveau type d'opération</button>
+
         </div>
         <div class="w-100"></div>
 

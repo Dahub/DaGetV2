@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using DaGetV2.Gui.Models;
@@ -42,7 +44,7 @@ namespace DaGetV2.Gui.Controllers
             return View("Create", new BankAccountCreateModel()
             {
                 BankAccountTypes = bankAccountTypes.Datas.ToDictionary(k => k.Id, v => v.Wording),
-                OperationTypes = operationTypes.Datas.ToDictionary(k => k.Id, v => v.Wording)
+                OperationTypes = operationTypes.Datas.Select(ot => new KeyValuePair<Guid?, string>(ot.Id, ot.Wording))
             });
         }
 

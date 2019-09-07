@@ -11,66 +11,6 @@ a {
     word-wrap: break-word;
 }
 
-.btn-blue {
-    color: #FFFFFF;
-    background-color: #949494;
-    border-color: #FFFFFF;
-}
-
-    .btn-blue:hover,
-    .btn-blue:focus,
-    .btn-blue:active,
-    .btn-blue.active,
-    .open .dropdown-toggle.btn-blue {
-        color: #FFFFFF;
-        background-color: #3658FF;
-        border-color: #FFFFFF;
-    }
-
-    .btn-blue:active,
-    .btn-blue.active,
-    .open .dropdown-toggle.btn-blue {
-        background-image: none;
-    }
-
-    .btn-blue.disabled,
-    .btn-blue[disabled],
-    fieldset[disabled] .btn-blue,
-    .btn-blue.disabled:hover,
-    .btn-blue[disabled]:hover,
-    fieldset[disabled] .btn-blue:hover,
-    .btn-blue.disabled:focus,
-    .btn-blue[disabled]:focus,
-    fieldset[disabled] .btn-blue:focus,
-    .btn-blue.disabled:active,
-    .btn-blue[disabled]:active,
-    fieldset[disabled] .btn-blue:active,
-    .btn-blue.disabled.active,
-    .btn-blue[disabled].active,
-    fieldset[disabled] .btn-blue.active {
-        background-color: #949494;
-        border-color: #FFFFFF;
-    }
-
-    .btn-blue .badge {
-        color: #949494;
-        background-color: #FFFFFF;
-    }
-
-.border-right {
-    border-right: 1px solid #ddd;
-}
-
-.borders {
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-    margin: -1px;
-}
-
-.border-left {
-    border-left: 1px solid #ddd;
-}
-
 .dg-btn {
     height: 200px;
     width: 200px;

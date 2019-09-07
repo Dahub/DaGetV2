@@ -15,6 +15,6 @@ namespace DaGetV2.Gui.Models
 
         public IDictionary<Guid, string> BankAccountTypes { get; set; }
 
-        public IDictionary<Guid, string> OperationTypes { get; set; }
+        public IEnumerable<KeyValuePair<Guid?, string>> OperationTypes { get; set; }
     }
 }

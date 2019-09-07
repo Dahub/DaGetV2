@@ -8,55 +8,55 @@
 
     @foreach (var bankAccount in Model.BankAccountSummaries)
     {
-        <div class="col-3">
+    <div class="col-3">
 
-            @{
-                string btnCssClass = "gray";
-                if(!bankAccount.IsReadOnly)
+        @{
+            string btnCssClass = "gray";
+            if (!bankAccount.IsReadOnly)
+            {
+                if (bankAccount.Balance >= 0)
                 {
-                    if(bankAccount.Balance >= 0)
-                    {
-                        btnCssClass = "green";
-                    }
-                    else
-                    {
-                        btnCssClass = "red";
-                    }
+                    btnCssClass = "green";
                 }
-             }
+                else
+                {
+                    btnCssClass = "red";
+                }
+            }
+        }      
 
-            <div class="dg-btn @btnCssClass">
-                <a href="/BankAccount/Detail/@bankAccount.Id">
-                    <div class="dg-btn-up">
-                        @bankAccount.Wording
-                    </div>
-                    <div class="dg-btn-center">
-                        <i class="material-icons md-48">euro_symbol</i>@bankAccount.Balance
-                    </div>
-                </a>
-                <div class="dg-btn-down @btnCssClass">
-                    @if (bankAccount.IsOwner)
-                    {
-                        <a href="/BankAccount/Edit/@bankAccount.Id" title="Editer"><i class="material-icons md-48">build</i></a>
-                        <a href="/BankAccount/Share/@bankAccount.Id" title="Partager"><i class="material-icons md-48">share</i></a>
-                        <a href="/BankAccount/Delete/@bankAccount.Id" title="Supprimer"><i class="material-icons md-48">delete</i></a>
-                    }
-                    else
-                    {
-                        <i class="material-icons md-48 md-dark md-inactive">build</i>
-                        <i class="material-icons md-48 md-dark md-inactive">share</i>
-                        <i class="material-icons md-48 md-dark md-inactive">delete</i>
-                    }
+        <div class="dg-btn @btnCssClass">
+            <a href="/BankAccount/Detail/@bankAccount.Id">
+                <div class="dg-btn-up">
+                    @bankAccount.Wording
                 </div>
+                <div class="dg-btn-center">
+                    <i class="material-icons md-48">euro_symbol</i>@bankAccount.Balance
+                </div>
+            </a>
+            <div class="dg-btn-down @btnCssClass">
+                @if (bankAccount.IsOwner)
+                {
+                    <a href="/BankAccount/Edit/@bankAccount.Id" title="Editer"><i class="material-icons md-48">build</i></a>
+                    <a href="/BankAccount/Share/@bankAccount.Id" title="Partager"><i class="material-icons md-48">share</i></a>
+                    <a href="/BankAccount/Delete/@bankAccount.Id" title="Supprimer"><i class="material-icons md-48">delete</i></a>
+                }
+                else
+                {
+                    <i class="material-icons md-48 md-dark md-inactive">build</i>
+                    <i class="material-icons md-48 md-dark md-inactive">share</i>
+                    <i class="material-icons md-48 md-dark md-inactive">delete</i>
+                }
             </div>
         </div>
+    </div>
     }
 
 </div>
 <hr />
 <div class="row">
     <div class="col-4">
-        <a href="/BankAccount/Create" class="btn btn-lg btn-blue">Nouveau compte</a>
+        <a href="/BankAccount/Create" class="btn btn-lg btn-primary">Nouveau compte</a>
     </div>
 </div>
 
