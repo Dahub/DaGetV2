@@ -360,5 +360,15 @@ namespace DaGetV2.Dal.EF
         {
             return new BankAccountTypeRepository() { Context = this };
         }
+
+        public IOperationTypeRepository GetOperationTypeRepository()
+        {
+            return new OperationTypeRepository() { Context = this };
+        }
+
+        public IUserBankAccountRepository GetUserBankAccountRepository()
+        {
+            return new UserBankAccountRepository() { Context = this };
+        }
     }
 }

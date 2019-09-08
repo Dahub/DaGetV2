@@ -6,6 +6,11 @@ namespace DaGetV2.Dal.EF.Repositories
 {
     internal class UserRepository : RepositoryBase<User>, IUserRepository
     {
+        public User GetByUserName(string username)
+        {
+            return Context.Users.Where(u => u.UserName.Equals(username, System.StringComparison.OrdinalIgnoreCase)).SingleOrDefault();
+        }
+
         public bool UserExists(string username)
         {
             return Context.Users.Where(u => u.UserName.Equals(username, System.StringComparison.OrdinalIgnoreCase)).Any();

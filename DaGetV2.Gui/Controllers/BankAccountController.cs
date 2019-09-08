@@ -52,7 +52,19 @@ namespace DaGetV2.Gui.Controllers
         [Route("/BankAccount/Create")]
         public async Task<IActionResult> CreateAync(BankAccountCreateModel model)
         {
-            return View("Create", model);
+            var createBankAccountResponse = await PostToApi("bankAccount", new CreateBankAccountDto()
+            {
+                BankAccountTypeId = model.BankAccountTypeId,
+                InitialBalance = model.InitialBalance,
+                OperationsTypes = model.OperationTypes.Select(ot => ot.Value),
+                Wording = model.Wording
+            });
+            if (createBankAccountResponse.StatusCode.Equals(HttpStatusCode.Unauthorized))
+            {
+                return Unauthorized();
+            }
+
+            return View();
         }
     }
 }

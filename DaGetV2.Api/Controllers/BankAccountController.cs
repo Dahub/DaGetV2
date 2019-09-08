@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DaGetV2.Dal.Interface;
 using DaGetV2.Service.DTO;
 using DaGetV2.Service.Interface;
 using DaGetV2.Shared.ApiTool;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DaGetV2.Api.Controllers
@@ -14,7 +16,9 @@ namespace DaGetV2.Api.Controllers
         private readonly IBankAccountService _service;
         private readonly IContextFactory _contextFactory;
 
-        public BankAccountController([FromServices] IContextFactory contextFactory, [FromServices] IBankAccountService bankAccountService)
+        public BankAccountController(
+            [FromServices] IContextFactory contextFactory, 
+            [FromServices] IBankAccountService bankAccountService)
         {
             _service = bankAccountService;
             _contextFactory = contextFactory;
@@ -32,6 +36,21 @@ namespace DaGetV2.Api.Controllers
             }
 
             return Ok(bankAccounts.ToListResult());
+        }
+
+        [HttpPost]
+        [Route("")]
+        public IActionResult Post([FromHeader(Name = "username")] string userName, CreateBankAccountDto toCreateBankAccount)
+        {
+            Guid createdBankAccountid;
+
+            using (var context = _contextFactory.CreateContext())
+            {
+                createdBankAccountid = _service.Add(context, userName, toCreateBankAccount);
+            }
+
+            var currentUrl = UriHelper.GetDisplayUrl(Request);
+            return Created($"{currentUrl}/{createdBankAccountid}", null);
         }
     }
 }

@@ -43,16 +43,19 @@
             <div class="form-group">
                 <label class="control-label">Libellé</label>
                 @Html.TextBoxFor(model => model.Wording, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Wording, "", new { @class = "text-danger" })
             </div>
 
             <div class="form-group">
                 <label class="control-label">Montant initial</label>
                 @Html.TextBoxFor(model => model.InitialBalance, new { type = "number", step = "0.01", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.InitialBalance, "", new { @class = "text-danger" })
             </div>
 
             <div class="form-group">
                 <label class="control-label">Type de compte</label>
                 @Html.DropDownListFor(model => model.BankAccountTypeId, Model.BankAccountTypes.Select(bat => new SelectListItem(bat.Value, bat.Key.ToString())), null, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BankAccountTypeId, "", new { @class = "text-danger" })
             </div>
 
         </div>
