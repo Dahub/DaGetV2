@@ -3,20 +3,20 @@ using Xunit;
 
 namespace DaGetV2.Dal.EF.Test
 {
-    public class BankAccountepositoryTest : TestBase
-    {       
-        public BankAccountepositoryTest() : base("bankAccountTestDatabase")
-        {            
-        }
-
+    public class BankAccountepositoryTest
+    {     
         [Fact]
         public void GetAllByUser_Should_Return_Banks_Accounts_With_Type_And_Users_Bank_Account()
         {
-            using (var context = new DaGetContext(_dbContextOptions))
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseSammyUser(dbName);
+            DataBaseHelper.Instance.UserSammyBankAccount(dbName, user.Id);
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
                 var bankAccountRepository = context.GetBankAccountRepository();
 
-                var bankAccounts = bankAccountRepository.GetAllByUser(_sammy.UserName);
+                var bankAccounts = bankAccountRepository.GetAllByUser(user.UserName);
 
                 Assert.NotNull(bankAccounts);
                 Assert.NotEmpty(bankAccounts);

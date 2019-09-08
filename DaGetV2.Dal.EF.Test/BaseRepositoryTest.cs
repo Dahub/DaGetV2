@@ -5,20 +5,18 @@ using Xunit;
 
 namespace DaGetV2.Dal.EF.Test
 {
-    public class BaseRepositoryTest : TestBase
+    public class BaseRepositoryTest 
     {
-        public BaseRepositoryTest()
-            : base("baseRepositoryDbName")
-        {           
-        }
-
         [Fact]
         public void GetById_Should_Get_Entity()
         {
-            using (var context = new DaGetContext(_dbContextOptions))
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseSammyUser(dbName);
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
                 var userRepository = context.GetUserRepository();
-                var entity = userRepository.GetById(_sammy.Id);
+                var entity = userRepository.GetById(user.Id);
 
                 Assert.NotNull(entity);
             }
@@ -27,9 +25,10 @@ namespace DaGetV2.Dal.EF.Test
         [Fact]
         public void Add_Should_Add_Entity()
         {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
             var idUSer = Guid.NewGuid();
 
-            using (var context = new DaGetContext(_dbContextOptions))
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
                 var userRepository = context.GetUserRepository();
 
@@ -42,7 +41,7 @@ namespace DaGetV2.Dal.EF.Test
                 context.Commit();
             }
 
-            using (var context = new DaGetContext(_dbContextOptions))
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
                 var user = context.Users.FirstOrDefault(u => u.Id.Equals(idUSer));
 
@@ -56,35 +55,38 @@ namespace DaGetV2.Dal.EF.Test
         [Fact]
         public void Update_Should_Update_Entity()
         {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseSammyUser(dbName);
             var newUserName = "newUserName";
 
-            using (var context = new DaGetContext(_dbContextOptions))
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
                 var userRepository = context.GetUserRepository();
 
-                _sammy.UserName = newUserName;
-                userRepository.Update(_sammy);
+                user.UserName = newUserName;
+                userRepository.Update(user);
 
                 context.Commit();
             }
 
-            using (var context = new DaGetContext(_dbContextOptions))
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
-                var user = context.Users.FirstOrDefault(u => u.Id.Equals(_sammy.Id));
+                var updatedUser = context.Users.FirstOrDefault(u => u.Id.Equals(user.Id));
 
-                Assert.NotNull(user);
-                Assert.Equal(newUserName, user.UserName);
-                Assert.True(user.ModificationDate < DateTime.Now);
-                Assert.NotEqual(user.CreationDate, user.ModificationDate);
+                Assert.NotNull(updatedUser);
+                Assert.Equal(newUserName, updatedUser.UserName);
+                Assert.True(updatedUser.ModificationDate < DateTime.Now);
+                Assert.NotEqual(updatedUser.CreationDate, updatedUser.ModificationDate);
             }
-
-            ResetDataBase();
         }
 
         [Fact]
         public void Delete_Should_Delete_Entity()
         {
-            using (var context = new DaGetContext(_dbContextOptions))
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseSammyUser(dbName);
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
                 var numberOfUsers = context.Users.Count();
 
@@ -92,7 +94,7 @@ namespace DaGetV2.Dal.EF.Test
 
                 var userRepository = context.GetUserRepository();
 
-                userRepository.Delete(_sammy);
+                userRepository.Delete(user);
 
                 context.Commit();
 
@@ -105,9 +107,10 @@ namespace DaGetV2.Dal.EF.Test
         [Fact]
         public void GetAll_Should_Get_All_Entities()
         {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
             var expectedNumberOfUsers = 0;
 
-            using (var context = new DaGetContext(_dbContextOptions))
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
                 for (var i = 0; i < 50; i++)
                 {
@@ -126,7 +129,7 @@ namespace DaGetV2.Dal.EF.Test
                 expectedNumberOfUsers = context.Users.Count();
             }
 
-            using (var context = new DaGetContext(_dbContextOptions))
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
                 var userRepository = context.GetUserRepository();
 
