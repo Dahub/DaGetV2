@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DaGetV2.Dal.EF\DaGetV2.Dal.EF.csproj" />
     <ProjectReference Include="..\DaGetV2.Dal.Interface\DaGetV2.Dal.Interface.csproj" />
+    <ProjectReference Include="..\DaGetV2.Shared.TestTool\DaGetV2.Shared.TestTool.csproj" />
   </ItemGroup>
 
 </Project>

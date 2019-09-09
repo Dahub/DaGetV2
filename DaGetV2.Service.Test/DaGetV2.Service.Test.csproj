@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DaGetV2.Service\DaGetV2.Service.csproj" />
+    <ProjectReference Include="..\DaGetV2.Shared.TestTool\DaGetV2.Shared.TestTool.csproj" />
   </ItemGroup>
 
 </Project>

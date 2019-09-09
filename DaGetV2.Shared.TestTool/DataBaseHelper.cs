@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using DaGetV2.Dal.EF;
 using DaGetV2.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace DaGetV2.Dal.EF.Test
+namespace DaGetV2.Shared.TestTool
 {
     public class DataBaseHelper
     {
@@ -81,6 +80,30 @@ namespace DaGetV2.Dal.EF.Test
             }
 
             return sammy;
+        }
+
+        public BankAccountType UseBankAccountType(Guid dataBaseName)
+        {
+            var bankAccountType = new BankAccountType()
+            {
+                CreationDate = DateTime.Now,
+                Id = Guid.NewGuid(),
+                ModificationDate = DateTime.Now,
+                Wording = "Test bank account type"
+            };
+
+            var dbContextOptions = new DbContextOptionsBuilder<DaGetContext>()
+                               .UseInMemoryDatabase(databaseName: dataBaseName.ToString())
+                               .Options;
+
+            using (var context = new DaGetContext(dbContextOptions))
+            {
+                context.BankAccountTypes.Add(bankAccountType);
+
+                context.Commit();
+            }
+
+            return bankAccountType;
         }
 
         public BankAccount UserSammyBankAccount(Guid dataBaseName, Guid sammyId)

@@ -55,15 +55,15 @@ namespace DaGetV2.Service
                 return null;
             }
 
-            var isOwner = bankAccount.UsersBanksAccounts.FirstOrDefault(uba => uba.User.UserName.Equals(userName)).IsOwner;
+            var userBankAccount = bankAccount.UsersBanksAccounts.SingleOrDefault(uba => uba.User.UserName.Equals(userName));
 
             return new BankAccountDto()
             {
                 Id = bankAccount.Id.ToString(),
                 Balance = bankAccount.Balance,
                 BankAccountType = bankAccount.BankAccountType.Wording,
-                IsOwner = isOwner,
-                IsReadOnly = !isOwner,
+                IsOwner = userBankAccount.IsOwner,
+                IsReadOnly = userBankAccount.IsReadOnly,
                 Wording = bankAccount.Wording
             };
         }
