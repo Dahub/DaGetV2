@@ -11,7 +11,7 @@ namespace DaGetV2.Dal.EF.Test
         {
             var dbName = DataBaseHelper.Instance.NewDataBase();
             var user = DataBaseHelper.Instance.UseSammyUser(dbName);
-            DataBaseHelper.Instance.UserSammyBankAccount(dbName, user.Id);
+            DataBaseHelper.Instance.UseSammyBankAccount(dbName, user.Id);
 
             using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {

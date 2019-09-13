@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using DaGetV2.Service;
 using DaGetV2.Service.DTO;
 using Microsoft.AspNetCore.Hosting;
@@ -21,12 +22,20 @@ namespace DaGetV2.Api.Filters
 
         public override void OnException(ExceptionContext context)
         {
-           if (context.Exception is DaGetUnauthorizedException)
+            if (context.Exception is DaGetUnauthorizedException)
             {
                 _loggerFactory.CreateLogger<DaGetUnauthorizedException>().LogError(context.Exception, context.Exception.Message);
                 if (!context.HttpContext.Response.HasStarted)
                 {
-                    context.HttpContext.Response.StatusCode = 401;
+                    context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                }
+            }
+            else if (context.Exception is DaGetNotFoundException)
+            {
+                _loggerFactory.CreateLogger<DaGetNotFoundException>().LogError(context.Exception, context.Exception.Message);
+                if (!context.HttpContext.Response.HasStarted)
+                {
+                    context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 }
             }
             else
@@ -34,7 +43,7 @@ namespace DaGetV2.Api.Filters
                 _loggerFactory.CreateLogger<Exception>().LogError(context.Exception, context.Exception.Message);
                 if (!context.HttpContext.Response.HasStarted)
                 {
-                    context.HttpContext.Response.StatusCode = 500;
+                    context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 }
             }
 

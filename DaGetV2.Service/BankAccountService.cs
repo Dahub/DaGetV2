@@ -64,5 +64,42 @@ namespace DaGetV2.Service
 
             return bankAccountRepositoy.GetAllByUser(userName).ToList().ToDto(userName);
         }
+
+        public void Update(IContext context, string userName, EditBankAccountDto toEditBankAccount)
+        {
+            var bankAccountRepository = context.GetBankAccountRepository();
+            var operationTypeRepository = context.GetOperationTypeRepository();
+            var userBankAccountRepository = context.GetUserBankAccountRepository();
+            var userRepository = context.GetUserRepository();
+            var bankAccountTypeRepository = context.GetBankAccountTypeRepository();
+
+            var user = userRepository.GetByUserName(userName);
+
+            if (user == null)
+            {
+                throw new DaGetUnauthorizedException("Utilisateur inconnu");
+            }
+
+            var bankAccount = bankAccountRepository.GetById(toEditBankAccount.Id.Value);
+
+            if(bankAccount == null)
+            {
+                throw new DaGetNotFoundException("Compte en banque inconnu");
+            }
+
+            var userBankAccount = userBankAccountRepository.GetByIdUserAndIdBankAccount(user.Id, bankAccount.Id);
+
+            if(userBankAccount == null)
+            {
+                throw new DaGetNotFoundException("Compte en banque inconnu");
+            }
+
+            if(!userBankAccount.IsOwner || userBankAccount.IsReadOnly)
+            {
+                throw new DaGetUnauthorizedException("Opération interdite");
+            }
+
+        //    bankAccount.Balan
+        }
     }
 }

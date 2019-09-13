@@ -106,7 +106,7 @@ namespace DaGetV2.Shared.TestTool
             return bankAccountType;
         }
 
-        public BankAccount UserSammyBankAccount(Guid dataBaseName, Guid sammyId)
+        public BankAccount UseSammyBankAccount(Guid dataBaseName, Guid sammyId)
         {
             var bankAccountType = new BankAccountType()
             {

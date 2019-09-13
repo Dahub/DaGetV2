@@ -14,11 +14,35 @@ namespace DaGetV2.Service.Test
     public class BankAccountServiceTest
     {
         [Fact]
+        public void Add_With_Unknow_User_Should_Throw_Unauthorized_Exception()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var bankAccountType = DataBaseHelper.Instance.UseBankAccountType(dbName);
+            var bankAccountService = new BankAccountService();
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                Assert.Throws<DaGetUnauthorizedException>(() => bankAccountService.Add(context, "not exist", new CreateBankAccountDto()
+                {
+                    BankAccountTypeId = bankAccountType.Id,
+                    Wording = "test",
+                    InitialBalance = 0m,
+                    OperationsTypes = new List<string>()
+                    {
+                        "operation type est 1",
+                        "operation type est 2",
+                        "operation type est 3"
+                    }
+                }));
+            }
+        }
+
+        [Fact]
         public void Add_Should_Add_BankAccount()
         {
             var dbName = DataBaseHelper.Instance.NewDataBase();
             var user = DataBaseHelper.Instance.UseSammyUser(dbName);
-            var bankAccountTye = DataBaseHelper.Instance.UseBankAccountType(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseBankAccountType(dbName);
             var bankAccountService = new BankAccountService();
 
             var bankAccountWording = "test bank account";
@@ -28,7 +52,7 @@ namespace DaGetV2.Service.Test
             {
                 bankAccountService.Add(context, user.UserName, new CreateBankAccountDto()
                 {
-                    BankAccountTypeId = bankAccountTye.Id,
+                    BankAccountTypeId = bankAccountType.Id,
                     Wording = bankAccountWording,
                     InitialBalance = initialBalance,
                     OperationsTypes = new List<string>()
@@ -47,7 +71,7 @@ namespace DaGetV2.Service.Test
                 Assert.NotNull(bankAccountFromDb);
 
                 Assert.Equal(initialBalance, bankAccountFromDb.Balance);
-                Assert.Equal(bankAccountTye.Id, bankAccountFromDb.BankAccountTypeId);
+                Assert.Equal(bankAccountType.Id, bankAccountFromDb.BankAccountTypeId);
 
                 var userBankAccountFromDb = context.UserBankAccounts.SingleOrDefault(uba => uba.BankAccountId.Equals(bankAccountFromDb.Id));
 
