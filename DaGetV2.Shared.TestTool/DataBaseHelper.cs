@@ -8,9 +8,11 @@ namespace DaGetV2.Shared.TestTool
     public class DataBaseHelper
     {
         private static DataBaseHelper _helper;
+        private static Random _rand;
 
         private DataBaseHelper()
         {
+            _rand = new Random(DateTime.Now.Millisecond);
         }
 
         public static DataBaseHelper Instance
@@ -106,6 +108,33 @@ namespace DaGetV2.Shared.TestTool
             return bankAccountType;
         }
 
+        public Operation GenerateNewOperation(Guid dataBaseName, Guid bankAccountId)
+        {
+            var operation = new Operation()
+            {
+                Amount = GenerateNewAmount(),
+                BankAccountId = bankAccountId,
+                CreationDate = DateTime.Now,
+                Id = Guid.NewGuid(),
+                ModificationDate = DateTime.Now,
+                OperationDate = DateTime.Now,
+                OperationTypeId = Guid.NewGuid()
+            };
+
+            var dbContextOptions = new DbContextOptionsBuilder<DaGetContext>()
+                               .UseInMemoryDatabase(databaseName: dataBaseName.ToString())
+                               .Options;
+
+            using (var context = new DaGetContext(dbContextOptions))
+            {
+                context.Operations.Add(operation);
+
+                context.Commit();
+            }
+
+            return operation;
+        }
+
         public BankAccount UseSammyBankAccount(Guid dataBaseName, Guid sammyId)
         {
             var bankAccountType = new BankAccountType()
@@ -152,6 +181,12 @@ namespace DaGetV2.Shared.TestTool
             }
 
             return sammyBankAccount;
+        }
+
+        private static decimal GenerateNewAmount()
+        {
+            var amoutInt = _rand.Next(20000) - 10000;
+            return (decimal)amoutInt / 100;
         }
     }
 }

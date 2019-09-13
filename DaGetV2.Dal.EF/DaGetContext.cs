@@ -38,7 +38,7 @@ namespace DaGetV2.Dal.EF
             BuildTransfert(modelBuilder);
             BuildUser(modelBuilder);
             BuildUserBankAccount(modelBuilder);
-            
+
             // remove cascade delete default behavior
             var cascadeFKs = modelBuilder.Model.GetEntityTypes()
                .SelectMany(t => t.GetForeignKeys())
@@ -346,29 +346,16 @@ namespace DaGetV2.Dal.EF
             await SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public IUserRepository GetUserRepository()
-        {
-            return new UserRepository() { Context = this };
-        }
+        public IUserRepository GetUserRepository() => new UserRepository() { Context = this };
 
-        public IBankAccountRepository GetBankAccountRepository()
-        {
-            return new BankAccountRepository() { Context = this };
-        }
+        public IBankAccountRepository GetBankAccountRepository() => new BankAccountRepository() { Context = this };
 
-        public IBankAccountTypeRepository GetBankAccountTypeRepository()
-        {
-            return new BankAccountTypeRepository() { Context = this };
-        }
+        public IBankAccountTypeRepository GetBankAccountTypeRepository() => new BankAccountTypeRepository() { Context = this };
 
-        public IOperationTypeRepository GetOperationTypeRepository()
-        {
-            return new OperationTypeRepository() { Context = this };
-        }
+        public IOperationTypeRepository GetOperationTypeRepository() => new OperationTypeRepository() { Context = this };
 
-        public IUserBankAccountRepository GetUserBankAccountRepository()
-        {
-            return new UserBankAccountRepository() { Context = this };
-        }
+        public IUserBankAccountRepository GetUserBankAccountRepository() => new UserBankAccountRepository() { Context = this };
+
+        public IOperationRepository GetOperationRepository() => new OperationRepository() { Context = this };
     }
 }

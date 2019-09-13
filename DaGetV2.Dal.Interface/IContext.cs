@@ -18,5 +18,7 @@ namespace DaGetV2.Dal.Interface
         IOperationTypeRepository GetOperationTypeRepository();
         
         IUserBankAccountRepository GetUserBankAccountRepository();
+
+        IOperationRepository GetOperationRepository();
     }
 }

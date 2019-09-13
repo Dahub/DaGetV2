@@ -87,6 +87,13 @@ namespace DaGetV2.Service
                 throw new DaGetNotFoundException("Compte en banque inconnu");
             }
 
+            var bankAccountType = bankAccountTypeRepository.GetById(toEditBankAccount.BankAccountTypeId.Value);
+
+            if (bankAccountType == null)
+            {
+                throw new DaGetNotFoundException("Type de compte en banque inconnu");
+            }
+
             var userBankAccount = userBankAccountRepository.GetByIdUserAndIdBankAccount(user.Id, bankAccount.Id);
 
             if(userBankAccount == null)
@@ -99,7 +106,26 @@ namespace DaGetV2.Service
                 throw new DaGetUnauthorizedException("Opération interdite");
             }
 
-        //    bankAccount.Balan
+            if(toEditBankAccount.InitialBalance.HasValue && bankAccount.OpeningBalance != toEditBankAccount.InitialBalance.Value)
+            {
+                bankAccount.OpeningBalance = toEditBankAccount.InitialBalance.Value;
+                bankAccount.Balance = toEditBankAccount.InitialBalance.Value;
+                RebuildBalance(context, bankAccount);                
+            }
+
+            bankAccount.ModificationDate = DateTime.Now;
+            bankAccount.BankAccountTypeId = toEditBankAccount.BankAccountTypeId.Value;
+            bankAccount.Wording = toEditBankAccount.Wording;
+        }
+
+        private void RebuildBalance(IContext context, BankAccount bankAccount)
+        {
+            var operationRepository = context.GetOperationRepository();
+
+            foreach (var operation in operationRepository.GetAllByBankAccountId(bankAccount.Id))
+            {
+                bankAccount.Balance += operation.Amount;
+            }
         }
     }
 }
