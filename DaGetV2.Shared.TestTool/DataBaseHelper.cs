@@ -121,18 +121,23 @@ namespace DaGetV2.Shared.TestTool
                 OperationTypeId = Guid.NewGuid()
             };
 
-            var dbContextOptions = new DbContextOptionsBuilder<DaGetContext>()
-                               .UseInMemoryDatabase(databaseName: databaseName.ToString())
-                               .Options;
+            return AddOperation(databaseName, operation);
+        }
 
-            using (var context = new DaGetContext(dbContextOptions))
+        public Operation UseNewOperation(Guid databaseName, Guid bankAccountId, Guid operationTypeId)
+        {
+            var operation = new Operation()
             {
-                context.Operations.Add(operation);
+                Amount = GenerateNewAmount(),
+                BankAccountId = bankAccountId,
+                CreationDate = DateTime.Now,
+                Id = Guid.NewGuid(),
+                ModificationDate = DateTime.Now,
+                OperationDate = DateTime.Now,
+                OperationTypeId = operationTypeId
+            };
 
-                context.Commit();
-            }
-
-            return operation;
+            return AddOperation(databaseName, operation);
         }
 
         public OperationType UseNewOperationType(Guid databaseName, Guid bankAccountId)
@@ -212,6 +217,22 @@ namespace DaGetV2.Shared.TestTool
         {
             var amoutInt = _rand.Next(20000) - 10000;
             return (decimal)amoutInt / 100;
+        }
+
+        private static Operation AddOperation(Guid databaseName, Operation operation)
+        {
+            var dbContextOptions = new DbContextOptionsBuilder<DaGetContext>()
+                                           .UseInMemoryDatabase(databaseName: databaseName.ToString())
+                                           .Options;
+
+            using (var context = new DaGetContext(dbContextOptions))
+            {
+                context.Operations.Add(operation);
+
+                context.Commit();
+            }
+
+            return operation;
         }
     }
 }

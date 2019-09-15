@@ -27,5 +27,42 @@ namespace DaGetV2.Dal.EF.Test
                 Assert.Equal(3, operationTypes.Count());
             }
         }
+
+        [Fact]
+        public void OperationTypeHasOperations_Should_Return_True_When_Operations_Are_Presents()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+
+            var user = DataBaseHelper.Instance.UseSammyUser(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseSammyBankAccount(dbName, user.Id);
+
+            var operationType = DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
+            DataBaseHelper.Instance.UseNewOperation(dbName, bankAccount.Id, operationType.Id);
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                var operationTypeRepository = context.GetOperationTypeRepository();
+
+                Assert.True(operationTypeRepository.OperationTypeHasOperations(operationType.Id));
+            }
+        }
+
+        [Fact]
+        public void OperationTypeHasOperations_Should_Return_False_When_Operations_Are_Not_Presents()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+
+            var user = DataBaseHelper.Instance.UseSammyUser(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseSammyBankAccount(dbName, user.Id);
+
+            var operationType = DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                var operationTypeRepository = context.GetOperationTypeRepository();
+
+                Assert.False(operationTypeRepository.OperationTypeHasOperations(operationType.Id));
+            }
+        }
     }
 }

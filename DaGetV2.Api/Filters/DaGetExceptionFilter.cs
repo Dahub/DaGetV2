@@ -38,6 +38,14 @@ namespace DaGetV2.Api.Filters
                     context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 }
             }
+            else if (context.Exception is DaGetServiceException)
+            {
+                _loggerFactory.CreateLogger<DaGetServiceException>().LogError(context.Exception, context.Exception.Message);
+                if (!context.HttpContext.Response.HasStarted)
+                {
+                    context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                }
+            }
             else
             {
                 _loggerFactory.CreateLogger<Exception>().LogError(context.Exception, context.Exception.Message);

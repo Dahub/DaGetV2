@@ -152,6 +152,18 @@ namespace DaGetV2.Service
             }
 
             // all deleted operations types
+            var toDeleteOperationsTypes = operationTypes.
+                Where(ot => !toEditBankAccount.OperationsTypes.Where(eot => eot.Key.HasValue).Select(eot => eot.Key.Value).Contains(ot.Id));
+            foreach(var toDeleteOperationType in toDeleteOperationsTypes)
+            {
+                if(operationTypeRepository.OperationTypeHasOperations(toDeleteOperationType.Id))
+                {
+                    throw new DaGetServiceException($"Le type d'opération {toDeleteOperationType.Wording} possède des opérations associées");
+                }
+                operationTypeRepository.Delete(toDeleteOperationType);
+            }
+
+            context.Commit();
         }
 
         private void RebuildBalance(IContext context, BankAccount bankAccount)
