@@ -84,7 +84,7 @@ namespace DaGetV2.Shared.TestTool
             return sammy;
         }
 
-        public BankAccountType UseBankAccountType(Guid dataBaseName)
+        public BankAccountType UseBankAccountType(Guid databaseName)
         {
             var bankAccountType = new BankAccountType()
             {
@@ -95,7 +95,7 @@ namespace DaGetV2.Shared.TestTool
             };
 
             var dbContextOptions = new DbContextOptionsBuilder<DaGetContext>()
-                               .UseInMemoryDatabase(databaseName: dataBaseName.ToString())
+                               .UseInMemoryDatabase(databaseName: databaseName.ToString())
                                .Options;
 
             using (var context = new DaGetContext(dbContextOptions))
@@ -108,7 +108,7 @@ namespace DaGetV2.Shared.TestTool
             return bankAccountType;
         }
 
-        public Operation GenerateNewOperation(Guid dataBaseName, Guid bankAccountId)
+        public Operation UseNewOperation(Guid databaseName, Guid bankAccountId)
         {
             var operation = new Operation()
             {
@@ -122,7 +122,7 @@ namespace DaGetV2.Shared.TestTool
             };
 
             var dbContextOptions = new DbContextOptionsBuilder<DaGetContext>()
-                               .UseInMemoryDatabase(databaseName: dataBaseName.ToString())
+                               .UseInMemoryDatabase(databaseName: databaseName.ToString())
                                .Options;
 
             using (var context = new DaGetContext(dbContextOptions))
@@ -135,7 +135,32 @@ namespace DaGetV2.Shared.TestTool
             return operation;
         }
 
-        public BankAccount UseSammyBankAccount(Guid dataBaseName, Guid sammyId)
+        public OperationType UseNewOperationType(Guid databaseName, Guid bankAccountId)
+        {
+            var operationType = new OperationType()
+            {
+                BankAccountId = bankAccountId,
+                CreationDate = DateTime.Now,
+                Id = Guid.NewGuid(),
+                ModificationDate = DateTime.Now,
+                Wording = Guid.NewGuid().ToString()
+            };
+
+            var dbContextOptions = new DbContextOptionsBuilder<DaGetContext>()
+                               .UseInMemoryDatabase(databaseName: databaseName.ToString())
+                               .Options;
+
+            using (var context = new DaGetContext(dbContextOptions))
+            {
+                context.OperationTypes.Add(operationType);
+
+                context.Commit();
+            }
+
+            return operationType;
+        }
+
+        public BankAccount UseSammyBankAccount(Guid databaseName, Guid sammyId)
         {
             var bankAccountType = new BankAccountType()
             {
@@ -168,7 +193,7 @@ namespace DaGetV2.Shared.TestTool
             };
 
             var dbContextOptions = new DbContextOptionsBuilder<DaGetContext>()
-                               .UseInMemoryDatabase(databaseName: dataBaseName.ToString())
+                               .UseInMemoryDatabase(databaseName: databaseName.ToString())
                                .Options;
 
             using (var context = new DaGetContext(dbContextOptions))

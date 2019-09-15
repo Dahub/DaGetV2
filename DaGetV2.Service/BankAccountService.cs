@@ -10,7 +10,7 @@ namespace DaGetV2.Service
 {
     public class BankAccountService : BaseService, IBankAccountService
     {
-        public Guid Add(IContext context, string userName, CreateBankAccountDto toCreateBankAccount)
+        public Guid Create(IContext context, string userName, CreateBankAccountDto toCreateBankAccount)
         {
             var bankAccountId = Guid.NewGuid();
 
@@ -65,7 +65,7 @@ namespace DaGetV2.Service
             return bankAccountRepositoy.GetAllByUser(userName).ToList().ToDto(userName);
         }
 
-        public void Update(IContext context, string userName, EditBankAccountDto toEditBankAccount)
+        public void Update(IContext context, string userName, UpdateBankAccountDto toEditBankAccount)
         {
             var bankAccountRepository = context.GetBankAccountRepository();
             var operationTypeRepository = context.GetOperationTypeRepository();
@@ -116,6 +116,42 @@ namespace DaGetV2.Service
             bankAccount.ModificationDate = DateTime.Now;
             bankAccount.BankAccountTypeId = toEditBankAccount.BankAccountTypeId.Value;
             bankAccount.Wording = toEditBankAccount.Wording;
+
+            // manage operations types
+            var operationTypes = operationTypeRepository.GetAllByBankAccountId(bankAccount.Id);
+
+            // all news operations types
+            var newOperationsTypes = toEditBankAccount.OperationsTypes.Where(eot => !eot.Key.HasValue).Select(eot =>
+                new OperationType()
+                {
+                    BankAccountId = bankAccount.Id,
+                    CreationDate = DateTime.Now,
+                    ModificationDate = DateTime.Now,
+                    Id = Guid.NewGuid(),
+                    Wording = eot.Value
+                });
+            foreach(var newOperationType in newOperationsTypes)
+            {
+                operationTypeRepository.Add(newOperationType);
+            }
+
+            // all exiting operations types
+            var toUpdateOperationsTypes = operationTypes.
+                Where(ot => toEditBankAccount.OperationsTypes.Where(eot => eot.Key.HasValue).Select(eot => eot.Key).Contains(ot.Id));
+            foreach(var toUpdateOperationType in toUpdateOperationsTypes)
+            {
+                var newWording = toEditBankAccount.OperationsTypes.
+                    Where(eot => eot.Key.HasValue && eot.Key.Value.Equals(toUpdateOperationType.Id)).
+                    Select(eot => eot.Value).Single();
+                if(toUpdateOperationType.Wording != newWording)
+                {
+                    toUpdateOperationType.Wording = newWording;
+                    toUpdateOperationType.ModificationDate = DateTime.Now;
+                    operationTypeRepository.Update(toUpdateOperationType);
+                }
+            }
+
+            // all deleted operations types
         }
 
         private void RebuildBalance(IContext context, BankAccount bankAccount)

@@ -22,7 +22,7 @@ namespace DaGetV2.Service.Test
 
             using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
-                Assert.Throws<DaGetUnauthorizedException>(() => bankAccountService.Add(context, "not exist", new CreateBankAccountDto()
+                Assert.Throws<DaGetUnauthorizedException>(() => bankAccountService.Create(context, "not exist", new CreateBankAccountDto()
                 {
                     BankAccountTypeId = bankAccountType.Id,
                     Wording = "test",
@@ -50,7 +50,7 @@ namespace DaGetV2.Service.Test
 
             using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
-                bankAccountService.Add(context, user.UserName, new CreateBankAccountDto()
+                bankAccountService.Create(context, user.UserName, new CreateBankAccountDto()
                 {
                     BankAccountTypeId = bankAccountType.Id,
                     Wording = bankAccountWording,

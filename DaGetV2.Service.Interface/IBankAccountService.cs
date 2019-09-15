@@ -9,8 +9,8 @@ namespace DaGetV2.Service.Interface
     {
         IEnumerable<BankAccountDto> GetAll(IContext context, string userName);
 
-        Guid Add(IContext context, string userName, CreateBankAccountDto toCreateBankAccount);
+        Guid Create(IContext context, string userName, CreateBankAccountDto toCreateBankAccount);
 
-        void Update(IContext context, string userName, EditBankAccountDto toEditBankAccount);
+        void Update(IContext context, string userName, UpdateBankAccountDto toEditBankAccount);
     }
 }

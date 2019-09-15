@@ -5,7 +5,7 @@ using DaGetV2.Shared.ApiTool;
 
 namespace DaGetV2.Service.DTO
 {
-    public class EditBankAccountDto : IDto
+    public class UpdateBankAccountDto : IDto
     {
         [Required(ErrorMessage = "L'id de comtpe est obligatoire")]
         public Guid? Id { get; set; }
@@ -19,6 +19,6 @@ namespace DaGetV2.Service.DTO
         [Required(ErrorMessage = "Montant initial obligatoire")]
         public decimal? InitialBalance { get; set; }
 
-        public IList<KeyValuePair<Guid, string>> OperationsTypes { get; set; }
+        public IList<KeyValuePair<Guid?, string>> OperationsTypes { get; set; }
     }
 }

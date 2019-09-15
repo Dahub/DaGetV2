@@ -46,7 +46,7 @@ namespace DaGetV2.Api.Controllers
 
             using (var context = _contextFactory.CreateContext())
             {
-                createdBankAccountid = _service.Add(context, userName, toCreateBankAccount);
+                createdBankAccountid = _service.Create(context, userName, toCreateBankAccount);
             }
 
             var currentUrl = UriHelper.GetDisplayUrl(Request);

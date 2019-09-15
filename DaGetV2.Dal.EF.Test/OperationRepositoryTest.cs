@@ -14,9 +14,9 @@ namespace DaGetV2.Dal.EF.Test
             var user = DataBaseHelper.Instance.UseSammyUser(dbName);
             var bankAccount = DataBaseHelper.Instance.UseSammyBankAccount(dbName, user.Id);
 
-            DataBaseHelper.Instance.GenerateNewOperation(dbName, bankAccount.Id);
-            DataBaseHelper.Instance.GenerateNewOperation(dbName, bankAccount.Id);
-            DataBaseHelper.Instance.GenerateNewOperation(dbName, bankAccount.Id);
+            DataBaseHelper.Instance.UseNewOperation(dbName, bankAccount.Id);
+            DataBaseHelper.Instance.UseNewOperation(dbName, bankAccount.Id);
+            DataBaseHelper.Instance.UseNewOperation(dbName, bankAccount.Id);
 
             using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
