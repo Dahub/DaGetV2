@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using DaGetV2.Dal.EF;
 using DaGetV2.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -60,7 +61,7 @@ namespace DaGetV2.Shared.TestTool
             return new DaGetContext(dbContextOptions);
         }
 
-        public User UseSammyUser(Guid dataBaseName)
+        public User UseNewUser(Guid dataBaseName)
         {
             var sammy = new User()
             {
@@ -84,7 +85,7 @@ namespace DaGetV2.Shared.TestTool
             return sammy;
         }
 
-        public BankAccountType UseBankAccountType(Guid databaseName)
+        public BankAccountType UseNewBankAccountType(Guid databaseName)
         {
             var bankAccountType = new BankAccountType()
             {
@@ -165,30 +166,24 @@ namespace DaGetV2.Shared.TestTool
             return operationType;
         }
 
-        public BankAccount UseSammyBankAccount(Guid databaseName, Guid sammyId)
+        public BankAccount UseNewBankAccount(Guid databaseName, Guid sammyId, Guid bankAccountTypeId)
         {
-            var bankAccountType = new BankAccountType()
-            {
-                CreationDate = DateTime.Now,
-                Id = Guid.NewGuid(),
-                ModificationDate = DateTime.Now,
-                Wording = "Test bank account type"
-            };
+            var bankAccountAmount = GenerateNewAmount();
 
-            var sammyBankAccount = new BankAccount()
+            var bankAccount = new BankAccount()
             {
-                Balance = 150m,
-                BankAccountTypeId = bankAccountType.Id,
+                Balance = bankAccountAmount,
+                BankAccountTypeId = bankAccountTypeId,
                 CreationDate = DateTime.Now,
                 Id = Guid.NewGuid(),
                 ModificationDate = DateTime.Now,
-                OpeningBalance = 451.25m,
+                OpeningBalance = bankAccountAmount,
                 Wording = "Test bank account"
             };
 
-            var sammyUserBankAccount = new UserBankAccount()
+            var userBankAccount = new UserBankAccount()
             {
-                BankAccountId = sammyBankAccount.Id,
+                BankAccountId = bankAccount.Id,
                 CreationDate = DateTime.Now,
                 Id = Guid.NewGuid(),
                 IsOwner = true,
@@ -203,14 +198,13 @@ namespace DaGetV2.Shared.TestTool
 
             using (var context = new DaGetContext(dbContextOptions))
             {
-                context.BankAccountTypes.Add(bankAccountType);
-                context.BankAccounts.Add(sammyBankAccount);
-                context.UserBankAccounts.Add(sammyUserBankAccount);
+                context.BankAccounts.Add(bankAccount);
+                context.UserBankAccounts.Add(userBankAccount);
 
                 context.Commit();
             }
 
-            return sammyBankAccount;
+            return bankAccount;
         }
 
         private static decimal GenerateNewAmount()
@@ -228,6 +222,10 @@ namespace DaGetV2.Shared.TestTool
             using (var context = new DaGetContext(dbContextOptions))
             {
                 context.Operations.Add(operation);
+
+                var bankAccount = context.BankAccounts.Single(ba => ba.Id.Equals(operation.BankAccountId));
+                bankAccount.Balance += operation.Amount;
+                context.BankAccounts.Update(bankAccount);
 
                 context.Commit();
             }

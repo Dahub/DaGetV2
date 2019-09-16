@@ -10,8 +10,9 @@ namespace DaGetV2.Dal.EF.Test
         public void GetByIdUserAndIdBankAccount_Should_Return_Bank_Account()
         {
             var dbName = DataBaseHelper.Instance.NewDataBase();
-            var user = DataBaseHelper.Instance.UseSammyUser(dbName);
-            var bankAccount = DataBaseHelper.Instance.UseSammyBankAccount(dbName, user.Id);
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
 
             using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {

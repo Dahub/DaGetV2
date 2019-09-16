@@ -11,8 +11,9 @@ namespace DaGetV2.Dal.EF.Test
         {
             var dbName = DataBaseHelper.Instance.NewDataBase();
 
-            var user = DataBaseHelper.Instance.UseSammyUser(dbName);
-            var bankAccount = DataBaseHelper.Instance.UseSammyBankAccount(dbName, user.Id);
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
 
             DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
             DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
@@ -33,8 +34,9 @@ namespace DaGetV2.Dal.EF.Test
         {
             var dbName = DataBaseHelper.Instance.NewDataBase();
 
-            var user = DataBaseHelper.Instance.UseSammyUser(dbName);
-            var bankAccount = DataBaseHelper.Instance.UseSammyBankAccount(dbName, user.Id);
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
 
             var operationType = DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
             DataBaseHelper.Instance.UseNewOperation(dbName, bankAccount.Id, operationType.Id);
@@ -52,8 +54,9 @@ namespace DaGetV2.Dal.EF.Test
         {
             var dbName = DataBaseHelper.Instance.NewDataBase();
 
-            var user = DataBaseHelper.Instance.UseSammyUser(dbName);
-            var bankAccount = DataBaseHelper.Instance.UseSammyBankAccount(dbName, user.Id);
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
 
             var operationType = DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
 

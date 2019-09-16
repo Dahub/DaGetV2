@@ -12,7 +12,7 @@ namespace DaGetV2.Dal.EF.Test
         public void GetById_Should_Get_Entity()
         {
             var dbName = DataBaseHelper.Instance.NewDataBase();
-            var user = DataBaseHelper.Instance.UseSammyUser(dbName);
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
 
             using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
@@ -57,7 +57,7 @@ namespace DaGetV2.Dal.EF.Test
         public void Update_Should_Update_Entity()
         {
             var dbName = DataBaseHelper.Instance.NewDataBase();
-            var user = DataBaseHelper.Instance.UseSammyUser(dbName);
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
             var newUserName = "newUserName";
 
             using (var context = DataBaseHelper.Instance.CreateContext(dbName))
@@ -85,7 +85,7 @@ namespace DaGetV2.Dal.EF.Test
         public void Delete_Should_Delete_Entity()
         {
             var dbName = DataBaseHelper.Instance.NewDataBase();
-            var user = DataBaseHelper.Instance.UseSammyUser(dbName);
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
 
             using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {

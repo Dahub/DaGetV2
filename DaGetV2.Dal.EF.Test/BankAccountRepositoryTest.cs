@@ -4,14 +4,15 @@ using Xunit;
 
 namespace DaGetV2.Dal.EF.Test
 {
-    public class BankAccountepositoryTest
+    public class BankAccountRepositoryTest
     {     
         [Fact]
         public void GetAllByUser_Should_Return_Banks_Accounts_With_Type_And_Users_Bank_Account()
         {
             var dbName = DataBaseHelper.Instance.NewDataBase();
-            var user = DataBaseHelper.Instance.UseSammyUser(dbName);
-            DataBaseHelper.Instance.UseSammyBankAccount(dbName, user.Id);
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id ,bankAccountType.Id);
 
             using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {

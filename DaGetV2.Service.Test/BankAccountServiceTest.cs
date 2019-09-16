@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using DaGetV2.Dal.Interface;
 using DaGetV2.Dal.Interface.Repositories;
 using DaGetV2.Domain;
@@ -14,15 +15,15 @@ namespace DaGetV2.Service.Test
     public class BankAccountServiceTest
     {
         [Fact]
-        public void Add_With_Unknow_User_Should_Throw_Unauthorized_Exception()
+        public void Add_With_Unknow_User_Should_Throw_DaGet_Unauthorized_Exception()
         {
             var dbName = DataBaseHelper.Instance.NewDataBase();
-            var bankAccountType = DataBaseHelper.Instance.UseBankAccountType(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
             var bankAccountService = new BankAccountService();
 
             using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
-                Assert.Throws<DaGetUnauthorizedException>(() => bankAccountService.Create(context, "not exist", new CreateBankAccountDto()
+                Assert.Throws<DaGetUnauthorizedException>(() => bankAccountService.Create(context, Guid.NewGuid().ToString(), new CreateBankAccountDto()
                 {
                     BankAccountTypeId = bankAccountType.Id,
                     Wording = "test",
@@ -41,8 +42,8 @@ namespace DaGetV2.Service.Test
         public void Add_Should_Add_BankAccount()
         {
             var dbName = DataBaseHelper.Instance.NewDataBase();
-            var user = DataBaseHelper.Instance.UseSammyUser(dbName);
-            var bankAccountType = DataBaseHelper.Instance.UseBankAccountType(dbName);
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
             var bankAccountService = new BankAccountService();
 
             var bankAccountWording = "test bank account";
@@ -200,6 +201,83 @@ namespace DaGetV2.Service.Test
 
             Assert.Equal(secondUserBankAccount.IsReadOnly, myBankAccount.IsReadOnly);
             Assert.Equal(secondBankAccount.Wording, myBankAccount.Wording);
+        }
+
+        [Fact]
+        public void Update_With_Unknow_User_Should_Throw_DaGet_Unauthorized_Exception()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
+            var bankAccountService = new BankAccountService();
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                Assert.Throws<DaGetUnauthorizedException>(() => bankAccountService.Update(context, Guid.NewGuid().ToString(), new UpdateBankAccountDto()
+                {
+                   Id = bankAccount.Id
+                }));
+            }
+        }
+
+        [Fact]
+        public void Update_Should_Update_Bank_Account()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
+            var operationType = DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
+
+            var operation1 = DataBaseHelper.Instance.UseNewOperation(dbName, bankAccount.Id, operationType.Id);
+            var operation2 = DataBaseHelper.Instance.UseNewOperation(dbName, bankAccount.Id, operationType.Id);
+            var operation3 = DataBaseHelper.Instance.UseNewOperation(dbName, bankAccount.Id, operationType.Id);
+
+            var bankAccountService = new BankAccountService();
+
+            var newBankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var newWording = Guid.NewGuid().ToString();
+            var newExistingOperationTypeWording = Guid.NewGuid().ToString();
+            var newOperationTypeWording = Guid.NewGuid().ToString();
+            var expectingDeltaInBalance = 250.25m;
+
+            Thread.Sleep(1);
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                bankAccountService.Update(context, user.UserName, new UpdateBankAccountDto()
+                {
+                    Id = bankAccount.Id,
+                    BankAccountTypeId = newBankAccountType.Id,
+                    InitialBalance = bankAccount.OpeningBalance + expectingDeltaInBalance,
+                    OperationsTypes = new List<KeyValuePair<Guid?, string>>()
+                    {
+                        new KeyValuePair<Guid?, string>(operationType.Id, newExistingOperationTypeWording),
+                        new KeyValuePair<Guid?, string>(null, newOperationTypeWording)
+                    },
+                    Wording = newWording
+                });
+            }
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                var bankAccountFromDb = context.BankAccounts.SingleOrDefault(ba => ba.Id.Equals(bankAccount.Id));
+
+                Assert.NotNull(bankAccountFromDb);
+                Assert.Equal(bankAccount.OpeningBalance + expectingDeltaInBalance, bankAccountFromDb.OpeningBalance);
+                Assert.Equal(bankAccount.Balance + expectingDeltaInBalance + operation1.Amount + operation2.Amount + operation3.Amount, bankAccountFromDb.Balance);
+                Assert.Equal(newBankAccountType.Id, bankAccountFromDb.BankAccountTypeId);
+                Assert.Equal(bankAccount.CreationDate, bankAccountFromDb.CreationDate);
+                Assert.True(bankAccount.ModificationDate < bankAccountFromDb.ModificationDate);
+
+                var operationsTypesFromDbs = context.OperationTypes.Where(ot => ot.BankAccountId.Equals(bankAccount.Id));
+
+                Assert.NotEmpty(operationsTypesFromDbs);
+                Assert.Equal(2, operationsTypesFromDbs.Count());
+                Assert.True(operationsTypesFromDbs.Any(ot => ot.Wording.Equals(newOperationTypeWording)));
+                Assert.True(operationsTypesFromDbs.Any(ot => ot.Wording.Equals(newExistingOperationTypeWording)));
+            }
         }
     }
 }

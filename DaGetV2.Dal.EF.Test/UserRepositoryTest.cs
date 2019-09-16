@@ -16,7 +16,7 @@ namespace DaGetV2.Dal.EF.Test
         public void UserExists_Should_Return_True_Or_False_When_Ask_For_User(string userName, bool expected)
         {
             var dbName = DataBaseHelper.Instance.NewDataBase();
-            DataBaseHelper.Instance.UseSammyUser(dbName);
+            DataBaseHelper.Instance.UseNewUser(dbName);
 
             using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
@@ -32,7 +32,7 @@ namespace DaGetV2.Dal.EF.Test
         public void GetByUserName_Should_Return_User_When_User_Exist()
         {
             var dbName = DataBaseHelper.Instance.NewDataBase();
-            var user = DataBaseHelper.Instance.UseSammyUser(dbName);
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
 
             using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
