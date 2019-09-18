@@ -65,6 +65,36 @@ namespace DaGetV2.Service
             return bankAccountRepositoy.GetAllByUser(userName).ToList().ToDto(userName);
         }
 
+        public BankAccountDto GetById(IContext context, string userName, Guid id)
+        {
+            var bankAccountRepositoy = context.GetBankAccountRepository();
+            var userBankAccountRepository = context.GetUserBankAccountRepository();
+            var userRepository = context.GetUserRepository();
+
+            var user = userRepository.GetByUserName(userName);
+
+            if (user == null)
+            {
+                throw new DaGetUnauthorizedException("Utilisateur inconnu");
+            }
+
+            var bankAccount = bankAccountRepositoy.GetById(id);
+
+            if (bankAccount == null)
+            {
+                throw new DaGetNotFoundException("Compte en banque inconnu");
+            }
+
+            var userBankAccount = userBankAccountRepository.GetByIdUserAndIdBankAccount(user.Id, bankAccount.Id);
+
+            if (userBankAccount == null)
+            {
+                throw new DaGetNotFoundException("Compte en banque inconnu");
+            }
+
+            return bankAccount.ToDto(userName);
+        }
+
         public void Update(IContext context, string userName, UpdateBankAccountDto toEditBankAccount)
         {
             var bankAccountRepository = context.GetBankAccountRepository();

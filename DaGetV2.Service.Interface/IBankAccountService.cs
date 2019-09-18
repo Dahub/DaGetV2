@@ -12,5 +12,7 @@ namespace DaGetV2.Service.Interface
         Guid Create(IContext context, string userName, CreateBankAccountDto toCreateBankAccount);
 
         void Update(IContext context, string userName, UpdateBankAccountDto toEditBankAccount);
+
+        BankAccountDto GetById(IContext context, string userName, Guid id);
     }
 }

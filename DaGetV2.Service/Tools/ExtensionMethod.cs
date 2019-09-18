@@ -61,6 +61,8 @@ namespace DaGetV2.Service
             {
                 Id = bankAccount.Id.ToString(),
                 Balance = bankAccount.Balance,
+                InitialBalance = bankAccount.OpeningBalance,
+                BankAccountTypeId = bankAccount.BankAccountTypeId.ToString(),
                 BankAccountType = bankAccount.BankAccountType.Wording,
                 IsOwner = userBankAccount.IsOwner,
                 IsReadOnly = userBankAccount.IsReadOnly,

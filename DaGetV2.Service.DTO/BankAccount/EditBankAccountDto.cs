@@ -7,6 +7,11 @@ namespace DaGetV2.Service.DTO
 {
     public class UpdateBankAccountDto : IDto
     {
+        public UpdateBankAccountDto()
+        {
+            OperationsTypes = new List<KeyValuePair<Guid?, string>>();
+        }
+
         [Required(ErrorMessage = "L'id de comtpe est obligatoire")]
         public Guid? Id { get; set; }
 

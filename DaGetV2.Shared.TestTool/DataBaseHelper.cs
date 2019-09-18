@@ -63,26 +63,20 @@ namespace DaGetV2.Shared.TestTool
 
         public User UseNewUser(Guid dataBaseName)
         {
-            var sammy = new User()
+            return UseNewUser(dataBaseName, Guid.NewGuid().ToString());
+        }
+
+        public User UseNewUser(Guid dataBaseName, string userName)
+        {
+            var user = new User()
             {
                 CreationDate = DateTime.Now,
                 Id = Guid.NewGuid(),
                 ModificationDate = DateTime.Now,
-                UserName = "Sammy"
+                UserName = userName
             };
 
-            var dbContextOptions = new DbContextOptionsBuilder<DaGetContext>()
-                                .UseInMemoryDatabase(databaseName: dataBaseName.ToString())
-                                .Options;
-
-            using (var context = new DaGetContext(dbContextOptions))
-            {
-                context.Users.Add(sammy);
-
-                context.Commit();
-            }
-
-            return sammy;
+            return AddUser(dataBaseName, user);
         }
 
         public BankAccountType UseNewBankAccountType(Guid databaseName)
@@ -166,7 +160,7 @@ namespace DaGetV2.Shared.TestTool
             return operationType;
         }
 
-        public BankAccount UseNewBankAccount(Guid databaseName, Guid sammyId, Guid bankAccountTypeId)
+        public BankAccount UseNewBankAccount(Guid databaseName, Guid userId, Guid bankAccountTypeId)
         {
             var bankAccountAmount = GenerateNewAmount();
 
@@ -189,7 +183,7 @@ namespace DaGetV2.Shared.TestTool
                 IsOwner = true,
                 IsReadOnly = false,
                 ModificationDate = DateTime.Now,
-                UserId = sammyId
+                UserId = userId
             };
 
             var dbContextOptions = new DbContextOptionsBuilder<DaGetContext>()
@@ -232,5 +226,22 @@ namespace DaGetV2.Shared.TestTool
 
             return operation;
         }
+
+        private static User AddUser(Guid dataBaseName, User user)
+        {
+            var dbContextOptions = new DbContextOptionsBuilder<DaGetContext>()
+                                            .UseInMemoryDatabase(databaseName: dataBaseName.ToString())
+                                            .Options;
+
+            using (var context = new DaGetContext(dbContextOptions))
+            {
+                context.Users.Add(user);
+
+                context.Commit();
+            }
+
+            return user;
+        }
+
     }
 }

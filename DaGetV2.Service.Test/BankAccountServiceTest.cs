@@ -256,12 +256,38 @@ namespace DaGetV2.Service.Test
 
             using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
-                Assert.Throws<DaGetUnauthorizedException>(() => bankAccountService.Update(context, Guid.NewGuid().ToString(), new UpdateBankAccountDto()
+                Assert.Throws<DaGetNotFoundException>(() => bankAccountService.Update(context, user.UserName, new UpdateBankAccountDto()
                 {
                     Id = bankAccount.Id,
                     BankAccountTypeId = Guid.NewGuid(),
                     InitialBalance = 0m,
                     Wording = Guid.NewGuid().ToString()
+                }));
+            }
+        }
+
+        [Fact]
+        public void Update_With_Delete_Used_Operation_Type_Should_Throw_Daget_Service_Exception()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);           
+            var operationType = DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
+
+            DataBaseHelper.Instance.UseNewOperation(dbName, bankAccount.Id, operationType.Id);
+
+            var bankAccountService = new BankAccountService();
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                Assert.Throws<DaGetServiceException>(() => bankAccountService.Update(context, user.UserName, new UpdateBankAccountDto()
+                {
+                    Id = bankAccount.Id,
+                    BankAccountTypeId = bankAccountType.Id,
+                    InitialBalance = 0m,
+                    Wording = Guid.NewGuid().ToString(),
+                    OperationsTypes = new List<KeyValuePair<Guid?, string>>()
                 }));
             }
         }
@@ -322,6 +348,58 @@ namespace DaGetV2.Service.Test
                 Assert.Equal(2, operationsTypesFromDbs.Count());
                 Assert.True(operationsTypesFromDbs.Any(ot => ot.Wording.Equals(newOperationTypeWording)));
                 Assert.True(operationsTypesFromDbs.Any(ot => ot.Wording.Equals(newExistingOperationTypeWording)));
+            }
+        }
+
+        [Fact]
+        public void GetById_Should_Return_Bank_Account()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
+
+            var bankAccountService = new BankAccountService();
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                var bankAccountFromDb = bankAccountService.GetById(context, user.UserName, bankAccount.Id);
+
+                Assert.NotNull(bankAccountFromDb);
+            }
+        }
+
+        [Fact]
+        public void GetById_Should_Return_DaGet_Not_Found_Exception_Exception_When_User_Try_To_Get_Another_User_Bank_Account()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var user2 = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
+            var bankAccount2 = DataBaseHelper.Instance.UseNewBankAccount(dbName, user2.Id, bankAccountType.Id);
+
+            var bankAccountService = new BankAccountService();
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                Assert.Throws<DaGetNotFoundException>(() => bankAccountService.GetById(context, user2.UserName, bankAccount.Id));
+            }
+        }
+
+        [Fact]
+        public void GetById_Should_Return_DaGet_Not_Found_Exception_When_Bank_Account_Dont_Exists()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
+
+            var bankAccountService = new BankAccountService();
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                Assert.Throws<DaGetNotFoundException>(() => bankAccountService.GetById(context, user.UserName, Guid.NewGuid()));
             }
         }
     }

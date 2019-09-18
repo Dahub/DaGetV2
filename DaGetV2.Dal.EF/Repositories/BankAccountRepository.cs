@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DaGetV2.Dal.Interface.Repositories;
 using DaGetV2.Domain;
@@ -15,5 +16,13 @@ namespace DaGetV2.Dal.EF.Repositories
                 Include(ba => ba.BankAccountType).
                 Include(ba => ba.UsersBanksAccounts).
                 ThenInclude(uba => uba.User);
+
+        public override BankAccount GetById(Guid id)
+            => Context.UserBankAccounts.
+                Where(uba => uba.BankAccountId.Equals(id)).
+                Select(uba => uba.BankAccount).
+                Include(ba => ba.BankAccountType).
+                Include(ba => ba.UsersBanksAccounts).
+                ThenInclude(uba => uba.User).SingleOrDefault();
     }
 }

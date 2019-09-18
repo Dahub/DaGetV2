@@ -31,5 +31,26 @@ namespace DaGetV2.Dal.EF.Test
                 Assert.NotNull(bankAccount.UsersBanksAccounts.First().User);
             }
         }
+
+        [Fact]
+        public void GetById_Should_Return_Bank_Account_With_Type_And_Users_Bank_Account()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                var bankAccountRepository = context.GetBankAccountRepository();
+                var bankAccountFromDb = bankAccountRepository.GetById(bankAccount.Id);
+
+                Assert.NotNull(bankAccountFromDb);
+                Assert.NotNull(bankAccountFromDb.BankAccountType);
+                Assert.NotNull(bankAccountFromDb.UsersBanksAccounts);
+                Assert.NotEmpty(bankAccountFromDb.UsersBanksAccounts);
+                Assert.NotNull(bankAccountFromDb.UsersBanksAccounts.First().User);
+            }
+        }
     }
 }

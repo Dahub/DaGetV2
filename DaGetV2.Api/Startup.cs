@@ -1,4 +1,5 @@
-﻿using DaGetV2.Api.Filters;
+﻿using System.IO;
+using DaGetV2.Api.Filters;
 using DaGetV2.Dal.EF;
 using DaGetV2.Dal.Interface;
 using DaGetV2.Service;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace DaGetV2.Api
 {
@@ -49,6 +51,13 @@ namespace DaGetV2.Api
                 Configuration = conf
             });
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "DaGet Gui API", Version = "v1" });
+                var xmlPath = Path.ChangeExtension(typeof(Startup).Assembly.Location, ".xml");
+                c.IncludeXmlComments(xmlPath);
+            });
+
             services
                 .AddMvc(options => options.Filters.Add(new DaGetExceptionFilter(CurrentEnvironment, loggerServiceFactory)))
                 .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
@@ -69,6 +78,12 @@ namespace DaGetV2.Api
 
             loggerFactory.AddNLog();
             NLog.LogManager.LoadConfiguration("nlog.config");
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("../swagger/v1/swagger.json", "DaOAuth Gui API");
+            });
 
             app.UseMiddleware<DaOAuthIntrospectionMiddleware>();            
             app.UseHttpsRedirection();

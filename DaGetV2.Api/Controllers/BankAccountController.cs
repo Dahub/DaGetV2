@@ -38,6 +38,20 @@ namespace DaGetV2.Api.Controllers
             return Ok(bankAccounts.ToListResult());
         }
 
+        [HttpGet]
+        [Route("{id}")]
+        public IActionResult GetById([FromHeader(Name = "username")] string userName, Guid id)
+        {
+            BankAccountDto bankAccount;
+
+            using (var context = _contextFactory.CreateContext())
+            {
+                bankAccount = _service.GetById(context, userName, id);
+            }
+
+            return Ok(bankAccount);
+        }
+
         [HttpPost]
         [Route("")]
         public IActionResult Post([FromHeader(Name = "username")] string userName, CreateBankAccountDto toCreateBankAccount)
@@ -51,6 +65,18 @@ namespace DaGetV2.Api.Controllers
 
             var currentUrl = UriHelper.GetDisplayUrl(Request);
             return Created($"{currentUrl}/{createdBankAccountid}", null);
+        }
+
+        [HttpPut]
+        [Route("")]
+        public IActionResult Put([FromHeader(Name = "username")] string userName, UpdateBankAccountDto toUpdateBankAccount)
+        {
+            using (var context = _contextFactory.CreateContext())
+            {
+                _service.Update(context, userName, toUpdateBankAccount);
+            }
+
+            return Ok();
         }
     }
 }

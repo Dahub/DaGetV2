@@ -4,8 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DaGetV2.Gui.Models
 {
-    public class BankAccountCreateModel
+    public class BankAccountModel
     {
+        public Guid? Id { get; set; }
+
         [Required(ErrorMessage = "Le nom du compte est obligatoire")]
         public string Wording { get; set; }
 

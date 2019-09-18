@@ -7,8 +7,12 @@ namespace DaGetV2.Service.DTO
         public string Id { get; set; }
 
         public decimal Balance { get; set; }
-        
+
+        public decimal InitialBalance { get; set; }
+
         public string Wording { get; set; }
+        
+        public string BankAccountTypeId { get; set; }
 
         public string BankAccountType { get; set; }
 
