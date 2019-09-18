@@ -26,13 +26,13 @@ namespace DaGetV2.Service.Test
                 Assert.Throws<DaGetUnauthorizedException>(() => bankAccountService.Create(context, Guid.NewGuid().ToString(), new CreateBankAccountDto()
                 {
                     BankAccountTypeId = bankAccountType.Id,
-                    Wording = "test",
+                    Wording = Guid.NewGuid().ToString(),
                     InitialBalance = 0m,
                     OperationsTypes = new List<string>()
                     {
-                        "operation type est 1",
-                        "operation type est 2",
-                        "operation type est 3"
+                        Guid.NewGuid().ToString(),
+                        Guid.NewGuid().ToString(),
+                        Guid.NewGuid().ToString()
                     }
                 }));
             }
@@ -216,7 +216,52 @@ namespace DaGetV2.Service.Test
             {
                 Assert.Throws<DaGetUnauthorizedException>(() => bankAccountService.Update(context, Guid.NewGuid().ToString(), new UpdateBankAccountDto()
                 {
-                   Id = bankAccount.Id
+                   Id = bankAccount.Id,
+                   BankAccountTypeId = bankAccountType.Id,
+                   InitialBalance = 0m,
+                   Wording = Guid.NewGuid().ToString()
+                }));
+            }
+        }
+
+        [Fact]
+        public void Update_With_Unknow_Bank_Account_Should_Throw_DaGet_Not_Found_Exception()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
+            var bankAccountService = new BankAccountService();
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                Assert.Throws<DaGetUnauthorizedException>(() => bankAccountService.Update(context, Guid.NewGuid().ToString(), new UpdateBankAccountDto()
+                {
+                    Id = Guid.NewGuid(),
+                    BankAccountTypeId = bankAccountType.Id,
+                    InitialBalance = 0m,
+                    Wording = Guid.NewGuid().ToString()
+                }));
+            }
+        }
+
+        [Fact]
+        public void Update_With_Unknow_Bank_Account_Type_Should_Throw_DaGet_Not_Found_Exception()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
+            var bankAccountService = new BankAccountService();
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                Assert.Throws<DaGetUnauthorizedException>(() => bankAccountService.Update(context, Guid.NewGuid().ToString(), new UpdateBankAccountDto()
+                {
+                    Id = bankAccount.Id,
+                    BankAccountTypeId = Guid.NewGuid(),
+                    InitialBalance = 0m,
+                    Wording = Guid.NewGuid().ToString()
                 }));
             }
         }
@@ -242,7 +287,7 @@ namespace DaGetV2.Service.Test
             var newOperationTypeWording = Guid.NewGuid().ToString();
             var expectingDeltaInBalance = 250.25m;
 
-            Thread.Sleep(1);
+            Thread.Sleep(1); // ensure modification date will be greater than creation date
 
             using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
