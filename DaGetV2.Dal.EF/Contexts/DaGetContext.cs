@@ -265,22 +265,7 @@ namespace DaGetV2.Dal.EF
                 .IsRequired();
             modelBuilder.Entity<BankAccountType>()
                 .HasMany<BankAccount>(bat => bat.BanksAccounts)
-                .WithOne(ba => ba.BankAccountType);
-            modelBuilder.Entity<BankAccountType>()
-                .HasData(new BankAccountType()
-                {
-                    Id = BankAccountTypeIds.Current,
-                    Wording = "Courant",
-                    CreationDate = DateTime.Now,
-                    ModificationDate = DateTime.Now
-                }, new BankAccountType()
-                {
-                    Id = BankAccountTypeIds.Saving,
-                    Wording = "Epargne",
-                    CreationDate = DateTime.Now,
-                    ModificationDate = DateTime.Now
-                });
-            ;
+                .WithOne(ba => ba.BankAccountType);         
         }
 
         private static void BuildBankAccount(ModelBuilder modelBuilder)

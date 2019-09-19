@@ -1,9 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using DaGetV2.Api.Filters;
 using DaGetV2.Dal.EF;
 using DaGetV2.Dal.Interface;
+using DaGetV2.Domain;
 using DaGetV2.Service;
 using DaGetV2.Service.Interface;
+using DaGetV2.Shared.Constant;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +19,7 @@ using Swashbuckle.AspNetCore.Swagger;
 namespace DaGetV2.Api
 {
     public class Startup
-    { 
+    {
         private IHostingEnvironment CurrentEnvironment { get; set; }
 
         public IConfiguration Configuration { get; }
@@ -25,18 +28,24 @@ namespace DaGetV2.Api
         {
             Configuration = configuration;
             CurrentEnvironment = env;
-        }        
+        }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var cs = Configuration.GetConnectionString("DaGetConnexionString");
             services.Configure<AppConfiguration>(Configuration.GetSection("AppConfiguration"));
             var conf = Configuration.GetSection("AppConfiguration").Get<AppConfiguration>();
 
             var serviceProvider = services.BuildServiceProvider();
             var loggerServiceFactory = serviceProvider.GetService<ILoggerFactory>();
-
-            services.AddSingleton<IContextFactory>(cf => new EfContextFactory(cs));
+            
+            if(conf.DataBaseType.Equals(DataBaseType.CosmosDb))
+            {
+                services.AddSingleton(cf => BuildCosmosDbEfContextFactory());
+            }
+            else
+            {
+                services.AddSingleton(cf => BuildSqlServerDbEfContextFactory());
+            }     
 
             services.AddTransient<IBankAccountService>(bas => new BankAccountService()
             {
@@ -64,6 +73,45 @@ namespace DaGetV2.Api
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
+        private IContextFactory BuildCosmosDbEfContextFactory()
+        {
+            var cosmosSettings = Configuration.GetSection("CosmosSettings").Get<CosmosSettings>();
+            var contextFactory = new CosmosDbEfContextFactory(
+                 cosmosSettings.ServiceEndpoint,
+                 cosmosSettings.PrimaryKey,
+                 cosmosSettings.DatabaseName);
+
+            using (var context = (DaGetContext)contextFactory.CreateContext())
+            {
+                if (context.Database.EnsureCreated())
+                {
+                    context.BankAccountTypes.Add(new BankAccountType()
+                    {
+                        Id = BankAccountTypeIds.Current,
+                        Wording = "Courant",
+                        CreationDate = DateTime.Now,
+                        ModificationDate = DateTime.Now
+                    });
+                    context.BankAccountTypes.Add(new BankAccountType()
+                    {
+                        Id = BankAccountTypeIds.Saving,
+                        Wording = "Epargne",
+                        CreationDate = DateTime.Now,
+                        ModificationDate = DateTime.Now
+                    });
+                    context.Commit();
+                }
+            }
+
+            return contextFactory;
+        }
+
+        private IContextFactory BuildSqlServerDbEfContextFactory()
+        {
+            var cs = Configuration.GetConnectionString("DaGetConnexionString");
+            return new SqlServerEfContextFactory(cs);
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
@@ -85,7 +133,7 @@ namespace DaGetV2.Api
                 c.SwaggerEndpoint("../swagger/v1/swagger.json", "DaOAuth Gui API");
             });
 
-            app.UseMiddleware<DaOAuthIntrospectionMiddleware>();            
+            app.UseMiddleware<DaOAuthIntrospectionMiddleware>();
             app.UseHttpsRedirection();
             app.UseMvc();
         }

@@ -82,18 +82,25 @@ namespace DaGetV2.Api
             {
                 using (var dbContext = _contextFactory.CreateContext())
                 {
-                    var userRepository = dbContext.GetUserRepository();
-
-                    if (!userRepository.UserExists(responseContent.name))
+                    try
                     {
-                        userRepository.Add(new Domain.User()
-                        {
-                            Id = Guid.NewGuid(),
-                            CreationDate = DateTime.Now,
-                            UserName = responseContent.name
-                        });
+                        var userRepository = dbContext.GetUserRepository();
 
-                        dbContext.Commit();
+                        if (!userRepository.UserExists(responseContent.name))
+                        {
+                            userRepository.Add(new Domain.User()
+                            {
+                                Id = Guid.NewGuid(),
+                                CreationDate = DateTime.Now,
+                                UserName = responseContent.name
+                            });
+
+                            dbContext.Commit();
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        var tt = ex;
                     }
                 }
                 _persistedUsers.TryAdd(responseContent.name, true);

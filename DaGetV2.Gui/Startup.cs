@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -99,7 +100,13 @@ namespace DaGetV2.Gui
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            app.UseAuthentication();            
+            app.UseAuthentication();
+
+            var cultureInfo = new CultureInfo("fr-FR");
+            cultureInfo.NumberFormat.NumberGroupSeparator = ".";
+
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
             app.UseMvc(routes =>
             {

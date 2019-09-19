@@ -64,7 +64,7 @@ namespace DaGetV2.Gui.Controllers
                 return Unauthorized();
             }
 
-            return View();
+            return RedirectToAction("IndexAsync", "Home");
         }
 
         [HttpGet]
