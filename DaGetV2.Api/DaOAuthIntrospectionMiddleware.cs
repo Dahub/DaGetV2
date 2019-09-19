@@ -15,7 +15,7 @@ namespace DaGetV2.Api
 {
     public class DaOAuthIntrospectionMiddleware
     {
-        private static readonly ConcurrentDictionary<string, bool>  _persistedUsers = new ConcurrentDictionary<string, bool>();
+        private static readonly ConcurrentDictionary<string, bool> _persistedUsers = new ConcurrentDictionary<string, bool>();
 
         private readonly RequestDelegate _next;
         private readonly IContextFactory _contextFactory;
@@ -82,25 +82,18 @@ namespace DaGetV2.Api
             {
                 using (var dbContext = _contextFactory.CreateContext())
                 {
-                    try
-                    {
-                        var userRepository = dbContext.GetUserRepository();
+                    var userRepository = dbContext.GetUserRepository();
 
-                        if (!userRepository.UserExists(responseContent.name))
+                    if (!userRepository.UserExists(responseContent.name))
+                    {
+                        userRepository.Add(new Domain.User()
                         {
-                            userRepository.Add(new Domain.User()
-                            {
-                                Id = Guid.NewGuid(),
-                                CreationDate = DateTime.Now,
-                                UserName = responseContent.name
-                            });
+                            Id = Guid.NewGuid(),
+                            CreationDate = DateTime.Now,
+                            UserName = responseContent.name
+                        });
 
-                            dbContext.Commit();
-                        }
-                    }
-                    catch(Exception ex)
-                    {
-                        var tt = ex;
+                        dbContext.Commit();
                     }
                 }
                 _persistedUsers.TryAdd(responseContent.name, true);
@@ -111,7 +104,7 @@ namespace DaGetV2.Api
         {
             context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
             await context.Response.WriteAsync("access_token header missing or invalid token");
-            
+
             await Task.CompletedTask;
         }
 
@@ -126,7 +119,7 @@ namespace DaGetV2.Api
             public string client_id { get; set; }
 
             public string name { get; set; }
-            
+
             public string scope { get; set; }
         }
     }
