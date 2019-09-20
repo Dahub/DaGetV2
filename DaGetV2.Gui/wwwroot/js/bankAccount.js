@@ -1,6 +1,6 @@
 ﻿$("#postForm").click(function () {   
     preparOperationTypesForPost();
-    $("#createBankAccountForm").submit();
+    $("#bankAccountForm").submit();
 });
 
 $('#addOperationType').click(function () {

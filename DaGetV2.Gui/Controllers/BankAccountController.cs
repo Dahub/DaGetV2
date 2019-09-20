@@ -67,6 +67,27 @@ namespace DaGetV2.Gui.Controllers
             return RedirectToAction("IndexAsync", "Home");
         }
 
+        [HttpPost]
+        [Route("/BankAccount/Edit")]
+        public async Task<IActionResult> EditAsync(BankAccountModel model)
+        {
+            var updateBankAccountResponse = await PutToApi("bankAccount", new UpdateBankAccountDto()
+            {
+                Id = model.Id,
+                BankAccountTypeId = model.BankAccountTypeId,
+                InitialBalance = model.InitialBalance,
+                OperationsTypes = model.OperationTypes.ToList(),
+                Wording = model.Wording
+            });
+
+            if (updateBankAccountResponse.StatusCode.Equals(HttpStatusCode.Unauthorized))
+            {
+                return Unauthorized();
+            }
+
+            return RedirectToAction("IndexAsync", "Home");
+        }
+
         [HttpGet]
         [Route("/BankAccount/Edit/{id}")]
         public async Task<IActionResult> EditAsync(Guid id)

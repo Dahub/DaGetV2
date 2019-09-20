@@ -5,10 +5,10 @@
     Layout = "_layout";
 }
 
-<h1>Création d'un nouveau compte en banque</h1>
+<h1>Modification du compte @Model.Wording</h1>
 <hr />
 
-<form action="Create" id="bankAccountForm" method="post">
+<form action="/BankAccount/Edit" id="bankAccountForm" method="post">
 
     @{
         int count = 0;
@@ -39,6 +39,8 @@
         <div class="col">
 
             <h3>Informations générales</h3>
+
+            @Html.HiddenFor(model => model.Id)
 
             <div class="form-group">
                 <label class="control-label">Libellé</label>

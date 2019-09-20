@@ -30,14 +30,12 @@ namespace DaGetV2.Gui
             services.Configure<AppConfiguration>(Configuration.GetSection("AppConfiguration"));
             var conf = Configuration.GetSection("AppConfiguration").Get<AppConfiguration>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = "DaOAuth";
-            })            
+            })
            .AddCookie(options =>
            {
                options.Events.OnValidatePrincipal = context =>
@@ -68,7 +66,7 @@ namespace DaGetV2.Gui
                options.Scope.Add("RW_bank_account");
                options.Scope.Add("RW_operation");
                options.Scope.Add("RW_operation_type");
-       
+
                options.SaveTokens = true;
 
                options.Events = new OAuthEvents
@@ -83,7 +81,12 @@ namespace DaGetV2.Gui
                        await Task.CompletedTask;
                    }
                };
-           });
+            });
+       
+            services.AddMvc((options) =>
+            {
+                options.ModelBinderProviders.Insert(0, new CustomBinderProvider());
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
@@ -102,12 +105,6 @@ namespace DaGetV2.Gui
             app.UseCookiePolicy();
             app.UseAuthentication();
 
-            var cultureInfo = new CultureInfo("fr-FR");
-            cultureInfo.NumberFormat.NumberGroupSeparator = ".";
-
-            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
-            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -115,5 +112,5 @@ namespace DaGetV2.Gui
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
-    }       
+    }
 }

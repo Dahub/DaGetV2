@@ -72,6 +72,7 @@ namespace DaGetV2.Service.Test
                 Assert.NotNull(bankAccountFromDb);
 
                 Assert.Equal(initialBalance, bankAccountFromDb.Balance);
+                Assert.Equal(initialBalance, bankAccountFromDb.OpeningBalance);
                 Assert.Equal(bankAccountType.Id, bankAccountFromDb.BankAccountTypeId);
 
                 var userBankAccountFromDb = context.UserBankAccounts.SingleOrDefault(uba => uba.BankAccountId.Equals(bankAccountFromDb.Id));

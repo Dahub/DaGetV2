@@ -29,6 +29,7 @@ namespace DaGetV2.Service
             bankAccountRepository.Add(new BankAccount()
             {
                 Balance = toCreateBankAccount.InitialBalance.Value,
+                OpeningBalance = toCreateBankAccount.InitialBalance.Value,
                 BankAccountTypeId = toCreateBankAccount.BankAccountTypeId.Value,
                 Id = bankAccountId,
                 Wording = toCreateBankAccount.Wording
