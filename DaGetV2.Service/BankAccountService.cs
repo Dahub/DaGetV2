@@ -150,7 +150,7 @@ namespace DaGetV2.Service
 
             // manage operations types
             var operationTypes = operationTypeRepository.GetAllByBankAccountId(bankAccount.Id);
-            var toDeleteOperationsTypes = operationTypes.Where(ot => toEditBankAccount.OperationsTypes.Where(eot => eot.Key.HasValue).Select(eot => eot.Key.Value).Contains(ot.Id));
+            var toDeleteOperationsTypes = operationTypes.Where(ot => !(toEditBankAccount.OperationsTypes.Where(eot => eot.Key.HasValue).Select(eot => eot.Key.Value).Contains(ot.Id)));
             var toUpdateOperationsTypes = operationTypes.Where(ot => toEditBankAccount.OperationsTypes.Where(eot => eot.Key.HasValue).Select(eot => eot.Key.Value).Contains(ot.Id));
             var newOperationsTypes = toEditBankAccount.OperationsTypes.Where(eot => !eot.Key.HasValue).Select(eot =>
                 new OperationType()
