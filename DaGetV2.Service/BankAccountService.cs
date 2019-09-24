@@ -150,8 +150,8 @@ namespace DaGetV2.Service
 
             // manage operations types
             var operationTypes = operationTypeRepository.GetAllByBankAccountId(bankAccount.Id);
-
-            // all news operations types
+            var toDeleteOperationsTypes = operationTypes.Where(ot => toEditBankAccount.OperationsTypes.Where(eot => eot.Key.HasValue).Select(eot => eot.Key.Value).Contains(ot.Id));
+            var toUpdateOperationsTypes = operationTypes.Where(ot => toEditBankAccount.OperationsTypes.Where(eot => eot.Key.HasValue).Select(eot => eot.Key.Value).Contains(ot.Id));
             var newOperationsTypes = toEditBankAccount.OperationsTypes.Where(eot => !eot.Key.HasValue).Select(eot =>
                 new OperationType()
                 {
@@ -161,14 +161,12 @@ namespace DaGetV2.Service
                     Id = Guid.NewGuid(),
                     Wording = eot.Value
                 });
+
             foreach(var newOperationType in newOperationsTypes)
             {
                 operationTypeRepository.Add(newOperationType);
             }
-
-            // all exiting operations types
-            var toUpdateOperationsTypes = operationTypes.
-                Where(ot => toEditBankAccount.OperationsTypes.Where(eot => eot.Key.HasValue).Select(eot => eot.Key).Contains(ot.Id));
+          
             foreach(var toUpdateOperationType in toUpdateOperationsTypes)
             {
                 var newWording = toEditBankAccount.OperationsTypes.
@@ -182,9 +180,7 @@ namespace DaGetV2.Service
                 }
             }
 
-            // all deleted operations types
-            var toDeleteOperationsTypes = operationTypes.
-                Where(ot => !toEditBankAccount.OperationsTypes.Where(eot => eot.Key.HasValue).Select(eot => eot.Key.Value).Contains(ot.Id));
+         
             foreach(var toDeleteOperationType in toDeleteOperationsTypes)
             {
                 if(operationTypeRepository.OperationTypeHasOperations(toDeleteOperationType.Id))

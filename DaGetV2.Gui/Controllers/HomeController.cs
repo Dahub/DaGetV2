@@ -17,7 +17,6 @@ namespace DaGetV2.Gui.Controllers
     {
         public HomeController(IConfiguration configuration) : base(configuration)
         {
-
         }
 
         [HttpGet]
@@ -25,9 +24,7 @@ namespace DaGetV2.Gui.Controllers
         public async Task<IActionResult> IndexAsync()
         {
             var response = await GetToApi("bankaccount");
-
             var responseContent = await response.Content.ReadAsStringAsync();
-
             var bankAccounts = JsonConvert.DeserializeObject<ListResult<BankAccountDto>>(responseContent);
 
             return View("Index", new HomeIndexModel()

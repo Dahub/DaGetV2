@@ -26,17 +26,8 @@ namespace DaGetV2.Gui.Controllers
         public async Task<IActionResult> CreateAsync()
         {
             var operationTypeResponse = await GetToApi("operationtype");
-            if(operationTypeResponse.StatusCode.Equals(HttpStatusCode.Unauthorized))
-            {
-                return Unauthorized();
-            }
             var operationTypeResponseContent = await operationTypeResponse.Content.ReadAsStringAsync();
-            if (operationTypeResponse.StatusCode.Equals(HttpStatusCode.Unauthorized))
-            {
-                return Unauthorized();
-            }
             var operationTypes = JsonConvert.DeserializeObject<ListResult<OperationTypeDto>>(operationTypeResponseContent);
-
             var bankAccountTypeResponse = await GetToApi("bankaccounttype");
             var bankAccountTypeResponseContent = await bankAccountTypeResponse.Content.ReadAsStringAsync();
             var bankAccountTypes = JsonConvert.DeserializeObject<ListResult<BankAccountTypeDto>>(bankAccountTypeResponseContent);
@@ -59,10 +50,6 @@ namespace DaGetV2.Gui.Controllers
                 OperationsTypes = model.OperationTypes.Select(ot => ot.Value),
                 Wording = model.Wording
             });
-            if (createBankAccountResponse.StatusCode.Equals(HttpStatusCode.Unauthorized))
-            {
-                return Unauthorized();
-            }
 
             return RedirectToAction("IndexAsync", "Home");
         }
@@ -71,7 +58,7 @@ namespace DaGetV2.Gui.Controllers
         [Route("/BankAccount/Edit")]
         public async Task<IActionResult> EditAsync(BankAccountModel model)
         {
-            var updateBankAccountResponse = await PutToApi("bankAccount", new UpdateBankAccountDto()
+            _ = await PutToApi("bankAccount", new UpdateBankAccountDto()
             {
                 Id = model.Id,
                 BankAccountTypeId = model.BankAccountTypeId,
@@ -79,11 +66,6 @@ namespace DaGetV2.Gui.Controllers
                 OperationsTypes = model.OperationTypes.ToList(),
                 Wording = model.Wording
             });
-
-            if (updateBankAccountResponse.StatusCode.Equals(HttpStatusCode.Unauthorized))
-            {
-                return Unauthorized();
-            }
 
             return RedirectToAction("IndexAsync", "Home");
         }
@@ -93,31 +75,12 @@ namespace DaGetV2.Gui.Controllers
         public async Task<IActionResult> EditAsync(Guid id)
         {
             var operationTypeResponse = await GetToApi("operationtype");
-            if (operationTypeResponse.StatusCode.Equals(HttpStatusCode.Unauthorized))
-            {
-                return Unauthorized();
-            }
             var operationTypeResponseContent = await operationTypeResponse.Content.ReadAsStringAsync();
-            if (operationTypeResponse.StatusCode.Equals(HttpStatusCode.Unauthorized))
-            {
-                return Unauthorized();
-            }
             var operationTypes = JsonConvert.DeserializeObject<ListResult<OperationTypeDto>>(operationTypeResponseContent);
-
             var bankAccountTypeResponse = await GetToApi("bankaccounttype");
-            if (bankAccountTypeResponse.StatusCode.Equals(HttpStatusCode.Unauthorized))
-            {
-                return Unauthorized();
-            }
-
             var bankAccountTypeResponseContent = await bankAccountTypeResponse.Content.ReadAsStringAsync();
             var bankAccountTypes = JsonConvert.DeserializeObject<ListResult<BankAccountTypeDto>>(bankAccountTypeResponseContent);
-
             var bankAccountResponse = await GetToApi($"bankaccount/{id}");
-            if (bankAccountResponse.StatusCode.Equals(HttpStatusCode.Unauthorized))
-            {
-                return Unauthorized();
-            }
             var bankAccountResponseContent = await bankAccountResponse.Content.ReadAsStringAsync();
             var bankAccount = JsonConvert.DeserializeObject<BankAccountDto>(bankAccountResponseContent);            
 
@@ -134,9 +97,7 @@ namespace DaGetV2.Gui.Controllers
 
         private static Guid? GuidFromString(string guid)
         {
-            Guid result;          
-          
-            if (!Guid.TryParse(guid, out result))
+            if (!Guid.TryParse(guid, out var result))
             {
                 return null;
             }

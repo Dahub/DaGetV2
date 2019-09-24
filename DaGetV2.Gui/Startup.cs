@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -82,10 +81,11 @@ namespace DaGetV2.Gui
                    }
                };
             });
-       
-            services.AddMvc((options) =>
+
+            services.AddMvc(options =>
             {
                 options.ModelBinderProviders.Insert(0, new CustomBinderProvider());
+                options.Filters.Add(new UnauthorizedHandler());
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

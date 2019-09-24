@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ namespace DaGetV2.Gui
 
         protected async Task<HttpResponseMessage> GetToApi(string route)
         {
-            return await GetToApi(route, null);
+            return await GetToApi(route, null);            
         }
 
         protected async Task<HttpResponseMessage> GetToApi(string route, NameValueCollection queryParams)
@@ -29,30 +30,58 @@ namespace DaGetV2.Gui
 
             AddAccessTokenHeader();
 
-            return await _client.GetAsync(myUri);
+            var response = await _client.GetAsync(myUri);
+
+            if (response.StatusCode.Equals(HttpStatusCode.Unauthorized))
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            return response;
         }
 
         protected async Task<HttpResponseMessage> PutToApi(string route, object data)
         {
             AddAccessTokenHeader();
 
-            return await _client.PutAsJsonAsync(
+            var response = await _client.PutAsJsonAsync(
                 $"{_appConfiguration.DaGetApiUrl}/{route}", data);
+
+            if (response.StatusCode.Equals(HttpStatusCode.Unauthorized))
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            return response;
         }
         protected async Task<HttpResponseMessage> PostToApi(string route, object data)
         {
             AddAccessTokenHeader();
 
-            return await _client.PostAsJsonAsync(
+            var response = await _client.PostAsJsonAsync(
                 $"{_appConfiguration.DaGetApiUrl}/{route}", data);
+
+            if(response.StatusCode.Equals(HttpStatusCode.Unauthorized))
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            return response;
         }
 
         protected async Task<HttpResponseMessage> DeleteToApi(string route)
         {
             AddAccessTokenHeader();
 
-            return await _client.DeleteAsync(
+            var response = await _client.DeleteAsync(
                $"{_appConfiguration.DaGetApiUrl}/{route}");
+
+            if (response.StatusCode.Equals(HttpStatusCode.Unauthorized))
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            return response;
         }
 
         protected async Task<HttpResponseMessage> HeadToApi(string route)
@@ -66,11 +95,18 @@ namespace DaGetV2.Gui
 
             AddAccessTokenHeader();
 
-            return await _client.SendAsync(new HttpRequestMessage()
+            var response = await _client.SendAsync(new HttpRequestMessage()
             {
                 Method = HttpMethod.Head,
                 RequestUri = myUri
             });
+
+            if (response.StatusCode.Equals(HttpStatusCode.Unauthorized))
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            return response;
         }
 
         private void AddAccessTokenHeader()
