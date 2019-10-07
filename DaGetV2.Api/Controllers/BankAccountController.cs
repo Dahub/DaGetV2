@@ -14,13 +14,16 @@ namespace DaGetV2.Api.Controllers
     public class BankAccountController : ControllerBase
     {
         private readonly IBankAccountService _service;
+        private readonly IOperationTypeService _operationTypeService;
         private readonly IContextFactory _contextFactory;
 
         public BankAccountController(
             [FromServices] IContextFactory contextFactory, 
-            [FromServices] IBankAccountService bankAccountService)
+            [FromServices] IBankAccountService bankAccountService,
+            [FromServices] IOperationTypeService operationTypeService)
         {
             _service = bankAccountService;
+            _operationTypeService = operationTypeService;
             _contextFactory = contextFactory;
         }
 
@@ -50,6 +53,20 @@ namespace DaGetV2.Api.Controllers
             }
 
             return Ok(bankAccount);
+        }
+
+        [HttpGet]
+        [Route("{id}/operationsTypes")]
+        public IActionResult GetOperationsTypesByBankAccountId([FromHeader(Name = "username")] string userName, Guid id)
+        {
+            IEnumerable<OperationTypeDto> operationsTypes;
+
+            using (var context = _contextFactory.CreateContext())
+            {
+                operationsTypes = _operationTypeService.GetBankAccountOperationsType(context, userName, id);
+            }
+
+            return Ok(operationsTypes.ToListResult());
         }
 
         [HttpPost]

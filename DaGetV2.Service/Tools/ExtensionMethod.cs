@@ -3,11 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using DaGetV2.Domain;
 using DaGetV2.Service.DTO;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DaGetV2.Service
 {
     public static class ExtensionMethod
     {
+        public static IEnumerable<OperationTypeDto> ToDto(this IEnumerable<OperationType> operationsTypes)
+        {
+            if (operationsTypes == null)
+            {
+                yield break;
+            }
+
+            foreach (var operationType in operationsTypes)
+            {
+                yield return operationType.ToDto();
+            }
+        }
+
+        public static OperationTypeDto ToDto(this OperationType operationType)
+        {
+            if (operationType == null)
+            {
+                return null;
+            }
+
+            return new OperationTypeDto()
+            {
+                Id = operationType.Id,
+                Wording = operationType.Wording
+            };
+        }
+
         public static IEnumerable<BankAccountTypeDto> ToDto(this IEnumerable<BankAccountType> bankAccountTypes)
         {
             if (bankAccountTypes == null)

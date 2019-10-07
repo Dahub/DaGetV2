@@ -62,36 +62,15 @@ namespace DaGetV2.Service
         public IEnumerable<BankAccountDto> GetAll(IContext context, string userName)
         {
             var bankAccountRepositoy = context.GetBankAccountRepository();
-
             return bankAccountRepositoy.GetAllByUser(userName).ToList().ToDto(userName);
         }
 
         public BankAccountDto GetById(IContext context, string userName, Guid id)
         {
             var bankAccountRepositoy = context.GetBankAccountRepository();
-            var userBankAccountRepository = context.GetUserBankAccountRepository();
-            var userRepository = context.GetUserRepository();
-
-            var user = userRepository.GetByUserName(userName);
-
-            if (user == null)
-            {
-                throw new DaGetUnauthorizedException("Utilisateur inconnu");
-            }
-
             var bankAccount = bankAccountRepositoy.GetById(id);
 
-            if (bankAccount == null)
-            {
-                throw new DaGetNotFoundException("Compte en banque inconnu");
-            }
-
-            var userBankAccount = userBankAccountRepository.GetByIdUserAndIdBankAccount(user.Id, bankAccount.Id);
-
-            if (userBankAccount == null)
-            {
-                throw new DaGetNotFoundException("Compte en banque inconnu");
-            }
+            CheckIfUserCanAccesBankAccount(context, userName, bankAccount);
 
             return bankAccount.ToDto(userName);
         }
@@ -100,23 +79,10 @@ namespace DaGetV2.Service
         {
             var bankAccountRepository = context.GetBankAccountRepository();
             var operationTypeRepository = context.GetOperationTypeRepository();
-            var userBankAccountRepository = context.GetUserBankAccountRepository();
-            var userRepository = context.GetUserRepository();
             var bankAccountTypeRepository = context.GetBankAccountTypeRepository();
-
-            var user = userRepository.GetByUserName(userName);
-
-            if (user == null)
-            {
-                throw new DaGetUnauthorizedException("Utilisateur inconnu");
-            }
-
             var bankAccount = bankAccountRepository.GetById(toEditBankAccount.Id.Value);
 
-            if(bankAccount == null)
-            {
-                throw new DaGetNotFoundException("Compte en banque inconnu");
-            }
+            CheckIfUserCanAccesBankAccount(context, userName, bankAccount, true);
 
             var bankAccountType = bankAccountTypeRepository.GetById(toEditBankAccount.BankAccountTypeId.Value);
 
@@ -124,19 +90,7 @@ namespace DaGetV2.Service
             {
                 throw new DaGetNotFoundException("Type de compte en banque inconnu");
             }
-
-            var userBankAccount = userBankAccountRepository.GetByIdUserAndIdBankAccount(user.Id, bankAccount.Id);
-
-            if(userBankAccount == null)
-            {
-                throw new DaGetNotFoundException("Compte en banque inconnu");
-            }
-
-            if(!userBankAccount.IsOwner || userBankAccount.IsReadOnly)
-            {
-                throw new DaGetUnauthorizedException("Opération interdite");
-            }
-
+           
             if(toEditBankAccount.InitialBalance.HasValue && bankAccount.OpeningBalance != toEditBankAccount.InitialBalance.Value)
             {
                 bankAccount.OpeningBalance = toEditBankAccount.InitialBalance.Value;
@@ -179,7 +133,6 @@ namespace DaGetV2.Service
                     operationTypeRepository.Update(toUpdateOperationType);
                 }
             }
-
          
             foreach(var toDeleteOperationType in toDeleteOperationsTypes)
             {

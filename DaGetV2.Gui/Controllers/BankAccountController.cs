@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using DaGetV2.Gui.Models;
 using DaGetV2.Service.DTO;
-using DaGetV2.Shared.ApiTool;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 
 namespace DaGetV2.Gui.Controllers
 {
@@ -25,12 +22,8 @@ namespace DaGetV2.Gui.Controllers
         [Route("/BankAccount/Create")]
         public async Task<IActionResult> CreateAsync()
         {
-            var operationTypeResponse = await GetToApi("operationtype");
-            var operationTypeResponseContent = await operationTypeResponse.Content.ReadAsStringAsync();
-            var operationTypes = JsonConvert.DeserializeObject<ListResult<OperationTypeDto>>(operationTypeResponseContent);
-            var bankAccountTypeResponse = await GetToApi("bankaccounttype");
-            var bankAccountTypeResponseContent = await bankAccountTypeResponse.Content.ReadAsStringAsync();
-            var bankAccountTypes = JsonConvert.DeserializeObject<ListResult<BankAccountTypeDto>>(bankAccountTypeResponseContent);
+            var operationTypes = await GetListToApi<OperationTypeDto>("operationtype"); 
+            var bankAccountTypes = await GetListToApi<BankAccountTypeDto>("bankaccounttype");
         
             return View("Create", new BankAccountModel()
             {
@@ -79,15 +72,9 @@ namespace DaGetV2.Gui.Controllers
         [Route("/BankAccount/Edit/{id}")]
         public async Task<IActionResult> EditAsync(Guid id)
         {
-            var operationTypeResponse = await GetToApi("operationtype");
-            var operationTypeResponseContent = await operationTypeResponse.Content.ReadAsStringAsync();
-            var operationTypes = JsonConvert.DeserializeObject<ListResult<OperationTypeDto>>(operationTypeResponseContent);
-            var bankAccountTypeResponse = await GetToApi("bankaccounttype");
-            var bankAccountTypeResponseContent = await bankAccountTypeResponse.Content.ReadAsStringAsync();
-            var bankAccountTypes = JsonConvert.DeserializeObject<ListResult<BankAccountTypeDto>>(bankAccountTypeResponseContent);
-            var bankAccountResponse = await GetToApi($"bankaccount/{id}");
-            var bankAccountResponseContent = await bankAccountResponse.Content.ReadAsStringAsync();
-            var bankAccount = JsonConvert.DeserializeObject<BankAccountDto>(bankAccountResponseContent);            
+            var operationTypes = await GetListToApi<OperationTypeDto>($"bankaccount/{id}/operationstypes");
+            var bankAccountTypes = await GetListToApi<BankAccountTypeDto>("bankaccounttype");
+            var bankAccount = await GetToApi<BankAccountDto>($"bankaccount/{id}");
 
             return View("Edit", new BankAccountModel()
             {

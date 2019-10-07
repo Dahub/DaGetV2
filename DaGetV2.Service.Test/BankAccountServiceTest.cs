@@ -236,7 +236,7 @@ namespace DaGetV2.Service.Test
 
             using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
-                Assert.Throws<DaGetUnauthorizedException>(() => bankAccountService.Update(context, Guid.NewGuid().ToString(), new UpdateBankAccountDto()
+                Assert.Throws<DaGetNotFoundException>(() => bankAccountService.Update(context, Guid.NewGuid().ToString(), new UpdateBankAccountDto()
                 {
                     Id = Guid.NewGuid(),
                     BankAccountTypeId = bankAccountType.Id,
