@@ -5,8 +5,7 @@
     Layout = "_layout";
 }
 
-<h1>Création d'un nouveau compte en banque</h1>
-<hr />
+<h3>Création d'un nouveau compte en banque</h3>
 
 <form action="Create" id="bankAccountForm" method="post">
 
@@ -16,7 +15,6 @@
         {
             <input type="hidden" name="BankAccountTypes[@count].Key" value="@bankAccountType.Key" />
             <input type="hidden" name="BankAccountTypes[@count].Value" value="@bankAccountType.Value" />
-
             count++;
         }
     }
@@ -27,44 +25,44 @@
             @foreach (var operationType in Model.OperationTypes)
             {
                 <input type="hidden" name="OperationTypes[@count].Key" value="@operationType.Key" />
-
                 <input type="hidden" name="OperationTypes[@count].Value" value="@operationType.Value" />
-
                 count++;
             }
         }
     </div>
 
+
     <div class="row">
-        <div class="col">
-
-            <h3>Informations générales</h3>
-
-            <div class="form-group">
-                <label class="control-label">Libellé</label>
-                @Html.TextBoxFor(model => model.Wording, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Wording, "", new { @class = "text-danger" })
+        <div class="col s6">
+            <div class="section">
+                <h5>Informations générales</h5>
             </div>
 
-            <div class="form-group">
-                <label class="control-label">Montant initial</label>
-                @Html.TextBoxFor(model => model.InitialBalance, new { type = "number", step = "0.01", @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.InitialBalance, "", new { @class = "text-danger" })
+            <div class="input-field col s12">
+                @Html.TextBoxFor(model => model.Wording, new { type = "text", @class = "validate" })
+                @Html.LabelFor(model => model.Wording)
+                @Html.ValidationMessageFor(model => model.Wording, "", new { @class = "red-text text-darken-4" })
             </div>
 
-            <div class="form-group">
-                <label class="control-label">Type de compte</label>
-                @Html.DropDownListFor(model => model.BankAccountTypeId, Model.BankAccountTypes.Select(bat => new SelectListItem(bat.Value, bat.Key.ToString())), null, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.BankAccountTypeId, "", new { @class = "text-danger" })
+            <div class="input-field col s12">
+                @Html.TextBoxFor(model => model.InitialBalance, new { type = "number", step = "0.01", @class = "validate" })
+                @Html.LabelFor(model => model.InitialBalance)
+                @Html.ValidationMessageFor(model => model.InitialBalance, "", new { @class = "red-text text-darken-4" })
             </div>
 
+            <div class="input-field col s12">
+                @Html.DropDownListFor(model => model.BankAccountTypeId, Model.BankAccountTypes.Select(bat => new SelectListItem(bat.Value, bat.Key.ToString())))
+                @Html.LabelFor(model => model.BankAccountTypeId)
+                @Html.ValidationMessageFor(model => model.BankAccountTypeId, "", new { @class = "red-text text-darken-4" })
+            </div>
         </div>
+        <div class="col s6">
+            <div class="section">
+                <h5>Types d'opérations</h5>
+            </div>
 
-        <div class="col">
-            <h3>Types d'opération</h3>
-            <br />
-            <table class="table">
-                <thead class="thead-dark">
+            <table class="striped">
+                <thead>
                     <tr>
                         <th>
                             Libellé
@@ -88,23 +86,26 @@
                     }
                 </tbody>
             </table>
-
-            <button id="addOperationType" type="button" class="btn btn-lg btn-block btn-secondary">Nouveau type d'opération</button>
-
+            <button id="addOperationType" type="button" class="waves-effect waves-light btn-small">Nouveau type d'opération</button>
         </div>
-        <div class="w-100"></div>
-
-        <br />
-        <div class="col-3">
-            <a href="/Home/Index" class="btn btn-lg btn-secondary btn-block">Annuler</a>
-        </div>
-        <div class="col-9">
-            <input id="postForm" value="Valider" class="btn btn-lg btn-primary btn-block" />
-        </div>
-
     </div>
+
+    <div class="row">
+        <div class="col s6">
+            <a href="/Home/Index" class="btn btn-block btn-large waves-effect waves-light">Annuler</a>
+        </div>
+        <div class="col s6">
+            <a id="postForm" class="btn btn-block btn-large waves-effect waves-light">Valider</a>
+        </div>
+    </div>
+
 </form>
 
 @section Scripts{
     <script src="~/js/bankAccount.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('select').formSelect();
+        });
+    </script>
 }

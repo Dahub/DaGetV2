@@ -29,7 +29,7 @@ namespace DaGetV2.Gui.Controllers
 
             return View("Index", new HomeIndexModel()
             {
-                BankAccountSummaries = bankAccounts.Datas.Select(ba =>
+                PersonnalsCurrentBankAccounts = bankAccounts.Datas.Where(ba => ba.IsOwner && ba.BankAccountTypeId.Equals(BankAccountType.Current)).Select(ba =>
                     new BankAccountSummary()
                     {
                         Balance = ba.Balance,
@@ -38,7 +38,37 @@ namespace DaGetV2.Gui.Controllers
                         IsOwner = ba.IsOwner,
                         IsReadOnly = ba.IsReadOnly,
                         Wording = ba.Wording
-                    })
+                    }),
+                PersonnalsSavingBankAccounts = bankAccounts.Datas.Where(ba => ba.IsOwner && ba.BankAccountTypeId.Equals(BankAccountType.Saving)).Select(ba =>
+                    new BankAccountSummary()
+                    {
+                        Balance = ba.Balance,
+                        BankAccountType = ba.BankAccountType,
+                        Id = ba.Id,
+                        IsOwner = ba.IsOwner,
+                        IsReadOnly = ba.IsReadOnly,
+                        Wording = ba.Wording
+                    }),
+                SharedsCurrentBankAccounts = bankAccounts.Datas.Where(ba => !ba.IsOwner && ba.BankAccountTypeId.Equals(BankAccountType.Current)).Select(ba =>
+                    new BankAccountSummary()
+                    {
+                        Balance = ba.Balance,
+                        BankAccountType = ba.BankAccountType,
+                        Id = ba.Id,
+                        IsOwner = ba.IsOwner,
+                        IsReadOnly = ba.IsReadOnly,
+                        Wording = ba.Wording
+                    }),
+                SharedsSavingBankAccounts = bankAccounts.Datas.Where(ba => !ba.IsOwner && ba.BankAccountTypeId.Equals(BankAccountType.Saving)).Select(ba =>
+                    new BankAccountSummary()
+                    {
+                        Balance = ba.Balance,
+                        BankAccountType = ba.BankAccountType,
+                        Id = ba.Id,
+                        IsOwner = ba.IsOwner,
+                        IsReadOnly = ba.IsReadOnly,
+                        Wording = ba.Wording
+                    }),
             });
         }
 

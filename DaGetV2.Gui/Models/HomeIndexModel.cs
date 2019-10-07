@@ -6,10 +6,19 @@ namespace DaGetV2.Gui.Models
     {
         public HomeIndexModel()
         {
-            BankAccountSummaries = new List<BankAccountSummary>();
+            PersonnalsCurrentBankAccounts = new List<BankAccountSummary>();
+            PersonnalsSavingBankAccounts = new List<BankAccountSummary>();
+            SharedsCurrentBankAccounts = new List<BankAccountSummary>();
+            SharedsSavingBankAccounts = new List<BankAccountSummary>();
         }
 
-        public IEnumerable<BankAccountSummary> BankAccountSummaries { get; set; }
+        public IEnumerable<BankAccountSummary> PersonnalsCurrentBankAccounts { get; set; }
+
+        public IEnumerable<BankAccountSummary> PersonnalsSavingBankAccounts { get; set; }
+
+        public IEnumerable<BankAccountSummary> SharedsCurrentBankAccounts { get; set; }
+
+        public IEnumerable<BankAccountSummary> SharedsSavingBankAccounts { get; set; }
     }
 
     public class BankAccountSummary

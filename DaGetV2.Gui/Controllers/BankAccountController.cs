@@ -43,6 +43,11 @@ namespace DaGetV2.Gui.Controllers
         [Route("/BankAccount/Create")]
         public async Task<IActionResult> CreateAsync(BankAccountModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("Create", model);
+            }
+
             var createBankAccountResponse = await PostToApi("bankAccount", new CreateBankAccountDto()
             {
                 BankAccountTypeId = model.BankAccountTypeId,
