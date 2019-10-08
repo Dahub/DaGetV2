@@ -8,6 +8,8 @@
 <h3>Modification du compte @Model.Wording</h3>
 
 <form action="/BankAccount/Edit" id="bankAccountForm" method="post">
+    
+    @Html.HiddenFor(m => m.Id)
 
     @{
         int count = 0;

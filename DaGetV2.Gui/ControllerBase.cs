@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using DaGetV2.Service.DTO;
 using DaGetV2.Shared.ApiTool;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -18,7 +16,7 @@ namespace DaGetV2.Gui
         protected readonly AppConfiguration _appConfiguration;
         private readonly HttpClient _client = new HttpClient();
 
-        public ControllerBase(IConfiguration configuration) 
+        protected ControllerBase(IConfiguration configuration) 
         {
             _appConfiguration = configuration.GetSection("AppConfiguration").Get<AppConfiguration>();
         }

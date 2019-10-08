@@ -56,7 +56,7 @@ namespace DaGetV2.Gui.Controllers
         [Route("/BankAccount/Edit")]
         public async Task<IActionResult> EditAsync(BankAccountModel model)
         {
-            _ = await PutToApi("bankAccount", new UpdateBankAccountDto()
+            var response = await PutToApi("bankAccount", new UpdateBankAccountDto()
             {
                 Id = model.Id,
                 BankAccountTypeId = model.BankAccountTypeId,
