@@ -12,21 +12,21 @@
         <div class="section">
             <h5>Comptes courants</h5>
         </div>
-        @Html.Partial("_bankAccountSummary", Model.PersonnalsCurrentBankAccounts)
+        @await Html.PartialAsync("_bankAccountSummary", Model.PersonnalsCurrentBankAccounts)
     </div>
 
     <div class="col s6">
         <div class="section">
             <h5>Comptes épargnes</h5>
         </div>
-        @Html.Partial("_bankAccountSummary", Model.PersonnalsSavingBankAccounts)
+        @await Html.PartialAsync("_bankAccountSummary", Model.PersonnalsSavingBankAccounts)
 
     </div>
 </div>
 
 <div class="row">
-    @Html.Partial("_bankAccountSummaryTotal", Model.PersonnalsCurrentBankAccounts)
-    @Html.Partial("_bankAccountSummaryTotal", Model.PersonnalsSavingBankAccounts)
+    @await Html.PartialAsync("_bankAccountSummaryTotal", Model.PersonnalsCurrentBankAccounts)
+    @await Html.PartialAsync("_bankAccountSummaryTotal", Model.PersonnalsSavingBankAccounts)
 </div>
 
 <div class="divider"></div>
@@ -40,14 +40,14 @@
         <div class="section">
             <h5>Comptes courants</h5>
         </div>
-        @Html.Partial("_bankAccountSummary", Model.SharedsCurrentBankAccounts)
+        @await Html.PartialAsync("_bankAccountSummary", Model.SharedsCurrentBankAccounts)
     </div>
     
     <div class="col s6">
         <div class="section">
             <h5>Comptes épargnes</h5>
         </div>
-        @Html.Partial("_bankAccountSummary", Model.SharedsSavingBankAccounts)
+        @await Html.PartialAsync("_bankAccountSummary", Model.SharedsSavingBankAccounts)
     </div>
 
 </div>

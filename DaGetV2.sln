@@ -43,6 +43,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DaGetV2.Shared.ApiTool", "D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DaGetV2.Shared.TestTool", "DaGetV2.Shared.TestTool\DaGetV2.Shared.TestTool.csproj", "{F57C8A3D-5F32-41CA-A1B7-BF067C0A80FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaGetV2.Gui.Test", "DaGetV2.Gui.Test\DaGetV2.Gui.Test.csproj", "{0A9B7BC2-83BB-493A-9760-EC51C5110666}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,10 @@ Global
 		{F57C8A3D-5F32-41CA-A1B7-BF067C0A80FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F57C8A3D-5F32-41CA-A1B7-BF067C0A80FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F57C8A3D-5F32-41CA-A1B7-BF067C0A80FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A9B7BC2-83BB-493A-9760-EC51C5110666}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A9B7BC2-83BB-493A-9760-EC51C5110666}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A9B7BC2-83BB-493A-9760-EC51C5110666}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A9B7BC2-83BB-493A-9760-EC51C5110666}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,6 +130,7 @@ Global
 		{6CCD9434-1EF3-448C-B7A8-B3BF32A41281} = {456BC266-29E7-4F4E-B292-5F10B7F16852}
 		{682656D8-E004-42A3-B9C0-52BCABD5D8E2} = {B34B3B3A-1269-4213-A200-9C213BAE9BB8}
 		{F57C8A3D-5F32-41CA-A1B7-BF067C0A80FC} = {B34B3B3A-1269-4213-A200-9C213BAE9BB8}
+		{0A9B7BC2-83BB-493A-9760-EC51C5110666} = {27504ACD-8D71-43CB-BA7E-F41313E3A8CC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1AE6DB02-9725-4880-89D7-6C7F46D077CC}

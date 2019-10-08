@@ -47,7 +47,7 @@
             </div>
 
             <div class="input-field col s12">
-                @Html.TextBoxFor(model => model.InitialBalance, new { type = "number", step = "0.01", @class = "validate" })
+                @Html.TextBoxForWithFrenchDecimal(model => model.InitialBalance, new {type = "number", step = "0.01", @class = "validate"})
                 @Html.LabelFor(model => model.InitialBalance)
                 @Html.ValidationMessageFor(model => model.InitialBalance, "", new { @class = "red-text text-darken-4" })
             </div>
