@@ -7,7 +7,7 @@
             {
                 <div class="card-panel teal small-panel">
                     <span class="white-text">
-                        <h4>Total : @Model.Sum(ba => ba.Balance) €</h4>
+                        <h4>Total : @Html.Euro(Model.Sum(ba => ba.Balance))</h4>
                     </span>
                 </div>
             }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DaGetV2.Gui.Models
 {
@@ -25,6 +26,7 @@ namespace DaGetV2.Gui.Models
     {
         public string Id { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:N}", ApplyFormatInEditMode = true)]
         public decimal Balance { get; set; }
 
         public string Wording { get; set; }
