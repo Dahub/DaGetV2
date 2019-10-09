@@ -80,7 +80,7 @@ namespace DaGetV2.Gui
                        await Task.CompletedTask;
                    }
                };
-            });
+           });
 
             services.AddMvc(options =>
             {
@@ -90,15 +90,8 @@ namespace DaGetV2.Gui
         }
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
-            }
+            app.UseExceptionHandler("/Home/Error");
+            app.UseHsts();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

@@ -48,10 +48,7 @@ namespace DaGetV2.Gui
 
             var response = await _client.GetAsync(myUri);
 
-            if (response.StatusCode.Equals(HttpStatusCode.Unauthorized))
-            {
-                throw new UnauthorizedAccessException();
-            }
+            ManageException(response);
 
             return response;
         }
@@ -63,10 +60,7 @@ namespace DaGetV2.Gui
             var response = await _client.PutAsJsonAsync(
                 $"{_appConfiguration.DaGetApiUrl}/{route}", data);
 
-            if (response.StatusCode.Equals(HttpStatusCode.Unauthorized))
-            {
-                throw new UnauthorizedAccessException();
-            }
+            ManageException(response);
 
             return response;
         }
@@ -77,10 +71,7 @@ namespace DaGetV2.Gui
             var response = await _client.PostAsJsonAsync(
                 $"{_appConfiguration.DaGetApiUrl}/{route}", data);
 
-            if(response.StatusCode.Equals(HttpStatusCode.Unauthorized))
-            {
-                throw new UnauthorizedAccessException();
-            }
+            ManageException(response);
 
             return response;
         }
@@ -92,10 +83,7 @@ namespace DaGetV2.Gui
             var response = await _client.DeleteAsync(
                $"{_appConfiguration.DaGetApiUrl}/{route}");
 
-            if (response.StatusCode.Equals(HttpStatusCode.Unauthorized))
-            {
-                throw new UnauthorizedAccessException();
-            }
+            ManageException(response);
 
             return response;
         }
@@ -117,12 +105,22 @@ namespace DaGetV2.Gui
                 RequestUri = myUri
             });
 
+            ManageException(response);
+
+            return response;
+        }
+
+        private static void ManageException(HttpResponseMessage response)
+        {
             if (response.StatusCode.Equals(HttpStatusCode.Unauthorized))
             {
                 throw new UnauthorizedAccessException();
             }
 
-            return response;
+            if ((int)response.StatusCode >= 300)
+            {
+                throw new Exception(response.ReasonPhrase);
+            }
         }
 
         private void AddAccessTokenHeader()
