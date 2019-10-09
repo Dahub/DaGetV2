@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DaGetV2.Gui.Models
 {
-    public class HomeIndexModel
+    public class HomeIndexModel : ModelBase
     {
         public HomeIndexModel()
         {

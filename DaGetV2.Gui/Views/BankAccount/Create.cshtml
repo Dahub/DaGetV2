@@ -5,6 +5,8 @@
     Layout = "_layout";
 }
 
+@await Html.PartialAsync("_modelError", Model)
+
 <h3>Création d'un nouveau compte en banque</h3>
 
 <form action="Create" id="bankAccountForm" method="post">

@@ -38,9 +38,6 @@ namespace DaGetV2.Api.Controllers
                 bankAccounts = _service.GetAll(context, userName);
             }
 
-
-            return BadRequest("plop bad request");
-
             return Ok(bankAccounts.ToListResult());
         }
 

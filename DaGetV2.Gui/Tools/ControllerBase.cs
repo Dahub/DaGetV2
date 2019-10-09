@@ -116,11 +116,6 @@ namespace DaGetV2.Gui
             {
                 throw new UnauthorizedAccessException();
             }
-
-            if ((int)response.StatusCode >= 300)
-            {
-                throw new Exception(response.ReasonPhrase);
-            }
         }
 
         private void AddAccessTokenHeader()

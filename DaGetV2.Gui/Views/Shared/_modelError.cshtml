@@ -1,0 +1,33 @@
+﻿@using Microsoft.AspNetCore.Hosting
+@model DaGetV2.Gui.Models.ModelBase
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
+
+@if (Model.HasErrors)
+{
+    <div class="row">
+        <div class="col s12">
+            <div class="card-panel red lighten-1">
+                <h4>Une ou plusieurs erreur(s) s'est produite</h4><br />
+                @if (Model.Errors.Count == 1)
+                {
+                    @Model.Errors.First()
+                    ;
+                }
+                else
+                {
+                    <ul>
+                        @foreach (var e in Model.Errors)
+                        {
+                            <li>@e</li>
+                        }
+                    </ul>
+                }
+                @if (hostingEnv.EnvironmentName.Equals(EnvironmentName.Development))
+                {
+                    <hr />
+                    <span>@Model.Details</span>
+                }
+            </div>
+        </div>
+    </div>
+}

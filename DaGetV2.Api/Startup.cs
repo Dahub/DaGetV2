@@ -37,8 +37,13 @@ namespace DaGetV2.Api
 
             var serviceProvider = services.BuildServiceProvider();
             var loggerServiceFactory = serviceProvider.GetService<ILoggerFactory>();
-            
-            if(conf.DataBaseType.Equals(DataBaseType.CosmosDb))
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
+            if (conf.DataBaseType.Equals(DataBaseType.CosmosDb))
             {
                 services.AddSingleton(cf => BuildCosmosDbEfContextFactory());
             }

@@ -36,11 +36,6 @@ namespace DaGetV2.Gui.Controllers
         [Route("/BankAccount/Create")]
         public async Task<IActionResult> CreateAsync(BankAccountModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View("Create", model);
-            }
-
             var createBankAccountResponse = await PostToApi("bankAccount", new CreateBankAccountDto()
             {
                 BankAccountTypeId = model.BankAccountTypeId,
@@ -49,21 +44,10 @@ namespace DaGetV2.Gui.Controllers
                 Wording = model.Wording
             });
 
-            return RedirectToAction("IndexAsync", "Home");
-        }
-
-        [HttpPost]
-        [Route("/BankAccount/Edit")]
-        public async Task<IActionResult> EditAsync(BankAccountModel model)
-        {
-            var response = await PutToApi("bankAccount", new UpdateBankAccountDto()
+            if (!await model.ValidateAsync(createBankAccountResponse))
             {
-                Id = model.Id,
-                BankAccountTypeId = model.BankAccountTypeId,
-                InitialBalance = model.InitialBalance,
-                OperationsTypes = model.OperationTypes.ToList(),
-                Wording = model.Wording
-            });
+                return View("Create", model);
+            }
 
             return RedirectToAction("IndexAsync", "Home");
         }
@@ -85,6 +69,27 @@ namespace DaGetV2.Gui.Controllers
                 BankAccountTypes = bankAccountTypes.Datas.ToDictionary(k => k.Id, v => v.Wording),
                 OperationTypes = operationTypes.Datas.Select(ot => new KeyValuePair<Guid?, string>(ot.Id, ot.Wording))
             });
+        }
+
+        [HttpPost]
+        [Route("/BankAccount/Edit")]
+        public async Task<IActionResult> EditAsync(BankAccountModel model)
+        {
+            var updateBankAccountResponse = await PutToApi("bankAccount", new UpdateBankAccountDto()
+            {
+                Id = model.Id,
+                BankAccountTypeId = model.BankAccountTypeId,
+                InitialBalance = model.InitialBalance,
+                OperationsTypes = model.OperationTypes.ToList(),
+                Wording = model.Wording
+            });
+
+            if (!await model.ValidateAsync(updateBankAccountResponse))
+            {
+                return View("Edit", model);
+            }
+
+            return RedirectToAction("IndexAsync", "Home");
         }
 
         private static Guid? GuidFromString(string guid)
