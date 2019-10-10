@@ -1,19 +1,19 @@
-﻿using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using DaGetV2.Gui.Models;
-using DaGetV2.Service.DTO;
-using DaGetV2.Shared.ApiTool;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-
-namespace DaGetV2.Gui.Controllers
+﻿namespace DaGetV2.Gui.Controllers
 {
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using DaGetV2.Gui.Models;
+    using DaGetV2.Service.DTO;
+    using DaGetV2.Shared.ApiTool;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
+    using Newtonsoft.Json;
+
     [Authorize]
-    public class HomeController : ControllerBase
+    public class HomeController : DaGetControllerBase
     {
         public HomeController(IConfiguration configuration) : base(configuration)
         {

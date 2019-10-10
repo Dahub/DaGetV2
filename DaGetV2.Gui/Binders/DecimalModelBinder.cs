@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-
-namespace DaGetV2.Gui
+﻿namespace DaGetV2.Gui
 {
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
+
     public class DecimalModelBinder : IModelBinder
     {
         public Task BindModelAsync(ModelBindingContext bindingContext)

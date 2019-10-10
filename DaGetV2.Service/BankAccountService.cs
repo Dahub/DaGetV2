@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DaGetV2.Dal.Interface;
-using DaGetV2.Domain;
-using DaGetV2.Service.DTO;
-using DaGetV2.Service.Interface;
-
-namespace DaGetV2.Service
+﻿namespace DaGetV2.Service
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using DaGetV2.Dal.Interface;
+    using DaGetV2.Domain;
+    using DaGetV2.Service.DTO;
+    using DaGetV2.Service.Interface;
+
     public class BankAccountService : BaseService, IBankAccountService
     {
         public Guid Create(IContext context, string userName, CreateBankAccountDto toCreateBankAccount)
         {
+            Validate(toCreateBankAccount);
+
             var bankAccountId = Guid.NewGuid();
 
             var bankAccountRepository = context.GetBankAccountRepository();
@@ -59,16 +61,47 @@ namespace DaGetV2.Service
             return bankAccountId;
         }
 
+        public void DeleteBankAccountById(IContext context, string userName, Guid bankAccountId)
+        {
+            var bankAccountRepository = context.GetBankAccountRepository();
+            var operationTypeRepository = context.GetOperationTypeRepository();
+            var operationRepository = context.GetOperationRepository();
+            var userBankAccountRepository = context.GetUserBankAccountRepository();
+
+            var bankAccount = bankAccountRepository.GetById(bankAccountId);
+
+            CheckIfUserCanAccesBankAccount(context, userName, bankAccount, true, true);
+
+            foreach (var userBankAccount in userBankAccountRepository.GetAllByIdBankAccount(bankAccountId))
+            {
+                userBankAccountRepository.Delete(userBankAccount);
+            }
+
+            foreach (var operationType in operationTypeRepository.GetAllByBankAccountId(bankAccountId))
+            {
+                operationTypeRepository.Delete(operationType);
+            }
+
+            foreach (var operation in operationRepository.GetAllByBankAccountId(bankAccountId))
+            {
+                operationRepository.Delete(operation);
+            }
+
+            bankAccountRepository.Delete(bankAccount);
+
+            context.Commit();
+        }
+
         public IEnumerable<BankAccountDto> GetAll(IContext context, string userName)
         {
             var bankAccountRepositoy = context.GetBankAccountRepository();
             return bankAccountRepositoy.GetAllByUser(userName).ToList().ToDto(userName);
         }
 
-        public BankAccountDto GetById(IContext context, string userName, Guid id)
+        public BankAccountDto GetById(IContext context, string userName, Guid bankAccountId)
         {
             var bankAccountRepositoy = context.GetBankAccountRepository();
-            var bankAccount = bankAccountRepositoy.GetById(id);
+            var bankAccount = bankAccountRepositoy.GetById(bankAccountId);
 
             CheckIfUserCanAccesBankAccount(context, userName, bankAccount);
 
@@ -77,6 +110,8 @@ namespace DaGetV2.Service
 
         public void Update(IContext context, string userName, UpdateBankAccountDto toEditBankAccount)
         {
+            Validate(toEditBankAccount);
+
             var bankAccountRepository = context.GetBankAccountRepository();
             var operationTypeRepository = context.GetOperationTypeRepository();
             var bankAccountTypeRepository = context.GetBankAccountTypeRepository();

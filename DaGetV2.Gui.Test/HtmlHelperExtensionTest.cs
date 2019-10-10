@@ -1,19 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Antiforgery.Internal;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Xunit;
-
 namespace DaGetV2.Gui.Test
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+    using System.Text.Encodings.Web;
+    using System.Text.Unicode;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Antiforgery.Internal;
+    using Microsoft.AspNetCore.Html;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.AspNetCore.Mvc.ViewFeatures;
+    using Xunit;
+
     public class HtmlHelperExtensionTest
     {
         [Theory]

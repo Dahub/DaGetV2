@@ -1,9 +1,9 @@
-using System;
-using DaGetV2.Shared.TestTool;
-using Xunit;
-
 namespace DaGetV2.Dal.EF.Test
 {
+    using System;
+    using DaGetV2.Shared.TestTool;
+    using Xunit;
+
     public class UserRepositoryTest
     {
         [Theory]

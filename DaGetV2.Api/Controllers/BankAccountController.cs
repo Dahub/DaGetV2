@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using DaGetV2.Dal.Interface;
-using DaGetV2.Service.DTO;
-using DaGetV2.Service.Interface;
-using DaGetV2.Shared.ApiTool;
-using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Mvc;
-
-namespace DaGetV2.Api.Controllers
+﻿namespace DaGetV2.Api.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using DaGetV2.Dal.Interface;
+    using DaGetV2.Service.DTO;
+    using DaGetV2.Service.Interface;
+    using DaGetV2.Shared.ApiTool;
+    using Microsoft.AspNetCore.Http.Extensions;
+    using Microsoft.AspNetCore.Mvc;
+
+
     [Route("api/[controller]")]
     [ApiController]
     public class BankAccountController : ControllerBase
@@ -39,6 +40,18 @@ namespace DaGetV2.Api.Controllers
             }
 
             return Ok(bankAccounts.ToListResult());
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult Delete([FromHeader(Name = "username")] string userName, Guid id)
+        {
+            using (var context = _contextFactory.CreateContext())
+            {
+                _service.DeleteBankAccountById(context, userName, id);
+            }
+
+            return Ok();
         }
 
         [HttpGet]

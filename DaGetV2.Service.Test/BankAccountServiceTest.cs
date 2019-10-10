@@ -1,19 +1,89 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using DaGetV2.Dal.Interface;
-using DaGetV2.Dal.Interface.Repositories;
-using DaGetV2.Domain;
-using DaGetV2.Service.DTO;
-using DaGetV2.Shared.TestTool;
-using Moq;
-using Xunit;
-
-namespace DaGetV2.Service.Test
+﻿namespace DaGetV2.Service.Test
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using DaGetV2.Dal.Interface;
+    using DaGetV2.Dal.Interface.Repositories;
+    using DaGetV2.Domain;
+    using DaGetV2.Service.DTO;
+    using DaGetV2.Shared.TestTool;
+    using Moq;
+    using Xunit;
+
     public class BankAccountServiceTest
     {
+        [Fact]
+        public void Delete_Bank_Account_Should_Delete_Bank_Account_With_All_Operations_And_All_OperationsTypes()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
+            var operationType1 = DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
+            var operationType2 = DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
+            DataBaseHelper.Instance.UseNewOperation(dbName, bankAccount.Id, operationType1.Id);
+            DataBaseHelper.Instance.UseNewOperation(dbName, bankAccount.Id, operationType2.Id);
+
+            var bankAccountService = new BankAccountService();
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                bankAccountService.DeleteBankAccountById(context, user.UserName, bankAccount.Id);
+
+                Assert.Empty(context.OperationTypes.Where(ot => ot.BankAccount.Id.Equals(bankAccount.Id)));
+                Assert.Empty(context.Operations.Where(o => o.BankAccount.Id.Equals(bankAccount.Id)));
+                Assert.Empty(context.BankAccounts.Where(ba => ba.Id.Equals(bankAccount.Id)));
+                Assert.Empty(context.UserBankAccounts.Where(uba => uba.BankAccount.Id.Equals(bankAccount.Id)));
+            }
+        }
+
+        [Fact]
+        public void Delete_Bank_Account_Where_User_Is_Not_Owner_Should_Throw_DaGet_Unauthorized_Exception()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
+
+            var bankAccountService = new BankAccountService();
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                var userBankAccount = context.UserBankAccounts.SingleOrDefault(uba =>
+                    uba.BankAccountId.Equals(bankAccount.Id) && uba.UserId.Equals(user.Id));
+                userBankAccount.IsOwner = false;
+                userBankAccount.IsReadOnly = false;
+                context.Update(userBankAccount);
+
+                context.Commit();
+            }
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                Assert.Throws<DaGetUnauthorizedException>(() =>
+                    bankAccountService.DeleteBankAccountById(context, user.UserName, bankAccount.Id));
+            }
+        }
+
+
+        [Fact]
+        public void Delete_Bank_Account_Where_User_Is_Empty_Should_Throw_DaGet_Unauthorized_Exception()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, Guid.NewGuid(), bankAccountType.Id);
+
+            var bankAccountService = new BankAccountService();
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                Assert.Throws<DaGetUnauthorizedException>(() =>
+                    bankAccountService.DeleteBankAccountById(context, String.Empty, bankAccount.Id));
+            }
+        }
+
         [Fact]
         public void Add_With_Unknow_User_Should_Throw_DaGet_Unauthorized_Exception()
         {
@@ -217,10 +287,10 @@ namespace DaGetV2.Service.Test
             {
                 Assert.Throws<DaGetUnauthorizedException>(() => bankAccountService.Update(context, Guid.NewGuid().ToString(), new UpdateBankAccountDto()
                 {
-                   Id = bankAccount.Id,
-                   BankAccountTypeId = bankAccountType.Id,
-                   InitialBalance = 0m,
-                   Wording = Guid.NewGuid().ToString()
+                    Id = bankAccount.Id,
+                    BankAccountTypeId = bankAccountType.Id,
+                    InitialBalance = 0m,
+                    Wording = Guid.NewGuid().ToString()
                 }));
             }
         }
@@ -273,7 +343,7 @@ namespace DaGetV2.Service.Test
             var dbName = DataBaseHelper.Instance.NewDataBase();
             var user = DataBaseHelper.Instance.UseNewUser(dbName);
             var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
-            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);           
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
             var operationType = DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
 
             DataBaseHelper.Instance.UseNewOperation(dbName, bankAccount.Id, operationType.Id);

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
-using DaGetV2.Dal.EF;
-using DaGetV2.Domain;
-using Microsoft.EntityFrameworkCore;
-
-namespace DaGetV2.Shared.TestTool
+﻿namespace DaGetV2.Shared.TestTool
 {
+    using System;
+    using System.Linq;
+    using DaGetV2.Dal.EF;
+    using DaGetV2.Domain;
+    using Microsoft.EntityFrameworkCore;
+
     public class DataBaseHelper
     {
         private static DataBaseHelper _helper;
@@ -77,6 +77,38 @@ namespace DaGetV2.Shared.TestTool
             };
 
             return AddUser(dataBaseName, user);
+        }
+
+        public UserBankAccount UseNewUserBankAccount(
+            Guid dataBaseName, 
+            Guid userId, 
+            Guid bankAccountId,
+            bool isOwner = false, 
+            bool isReadOnly = false)
+        {
+            var userBankAccount = new UserBankAccount()
+            {
+                CreationDate = DateTime.Now,
+                Id = Guid.NewGuid(),
+                ModificationDate = DateTime.Now,
+                BankAccountId = bankAccountId,
+                IsOwner = isOwner,
+                IsReadOnly = isReadOnly,
+                UserId = userId
+            };
+
+            var dbContextOptions = new DbContextOptionsBuilder<DaGetContext>()
+                .UseInMemoryDatabase(databaseName: dataBaseName.ToString())
+                .Options;
+
+            using (var context = new DaGetContext(dbContextOptions))
+            {
+                context.UserBankAccounts.Add(userBankAccount);
+
+                context.Commit();
+            }
+
+            return userBankAccount;
         }
 
         public BankAccountType UseNewBankAccountType(Guid databaseName)

@@ -9,7 +9,7 @@ namespace DaGetV2.Gui.Models
     {
         public Guid? Id { get; set; }
 
-      //  [Required(ErrorMessage = "Le nom du compte est obligatoire")]
+        [Required(ErrorMessage = "Le nom du compte est obligatoire")]
         [DisplayName("Libellé")]
         public string Wording { get; set; }
 

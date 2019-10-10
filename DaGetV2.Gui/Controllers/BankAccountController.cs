@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DaGetV2.Gui.Models;
-using DaGetV2.Service.DTO;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-
-namespace DaGetV2.Gui.Controllers
+﻿namespace DaGetV2.Gui.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using DaGetV2.Gui.Models;
+    using DaGetV2.Service.DTO;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
+
     [Authorize]
-    public class BankAccountController : ControllerBase
+    public class BankAccountController : DaGetControllerBase
     {
         public BankAccountController(IConfiguration configuration) 
             : base(configuration)
@@ -69,6 +69,15 @@ namespace DaGetV2.Gui.Controllers
                 BankAccountTypes = bankAccountTypes.Datas.ToDictionary(k => k.Id, v => v.Wording),
                 OperationTypes = operationTypes.Datas.Select(ot => new KeyValuePair<Guid?, string>(ot.Id, ot.Wording))
             });
+        }
+
+        [HttpGet]
+        [Route("/BankAccount/Delete/{id}")]
+        public async Task<IActionResult> DeleteAsync(Guid id)
+        {
+            await DeleteToApi($"bankAccount/{id}");
+
+            return RedirectToAction("IndexAsync", "Home");
         }
 
         [HttpPost]

@@ -1,22 +1,22 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using DaGetV2.Shared.ApiTool;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-
-namespace DaGetV2.Gui
+﻿namespace DaGetV2.Gui
 {
-    public abstract class ControllerBase : Controller
+    using System;
+    using System.Collections.Specialized;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading.Tasks;
+    using DaGetV2.Shared.ApiTool;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
+    using Newtonsoft.Json;
+
+    public abstract class DaGetControllerBase : Controller
     {
         protected readonly AppConfiguration _appConfiguration;
         private readonly HttpClient _client = new HttpClient();
 
-        protected ControllerBase(IConfiguration configuration) 
+        protected DaGetControllerBase(IConfiguration configuration) 
         {
             _appConfiguration = configuration.GetSection("AppConfiguration").Get<AppConfiguration>();
         }

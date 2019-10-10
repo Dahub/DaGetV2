@@ -1,18 +1,18 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OAuth;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-
-namespace DaGetV2.Gui
+﻿namespace DaGetV2.Gui
 {
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.OAuth;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
+    using Newtonsoft.Json.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Text;
+    using System.Text.Encodings.Web;
+    using System.Threading.Tasks;
+
     public class DaOAuthHandler<TOptions> : OAuthHandler<TOptions> where TOptions : OAuthOptions, new()
     {
         public DaOAuthHandler(IOptionsMonitor<TOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)

@@ -1,8 +1,8 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-
-namespace DaGetV2.Gui
+﻿namespace DaGetV2.Gui
 {
+    using System;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
+
     public class CustomBinderProvider : IModelBinderProvider
     {
         public IModelBinder GetBinder(ModelBinderProviderContext context)

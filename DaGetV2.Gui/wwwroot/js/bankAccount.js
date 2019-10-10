@@ -1,4 +1,6 @@
-﻿$("#postForm").click(function () {   
+﻿var idAccountToDelete;
+
+$("#postForm").click(function () {   
     preparOperationTypesForPost();
     $("#bankAccountForm").submit();
 });

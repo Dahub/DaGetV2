@@ -15,12 +15,24 @@
                         <div class="card-action">
                             <a href="/BankAccount/Edit/@bankAccount.Id">Editer</a>
                             <a href="/BankAccount/Share/@bankAccount.Id">Partager</a>
-                            <a href="/BankAccount/Delete/@bankAccount.Id">Supprimer</a>
+                            <a href="#confirmDeleteModal_@bankAccount.Id" class="modal-trigger">Supprimer</a>
                         </div>
                     </div>
                 </div>
             </div>
         </a>
+
+        <div id="confirmDeleteModal_@bankAccount.Id" class="modal">
+            <div class="modal-content">
+                <h4>Supprimer le compte @bankAccount.Wording</h4>
+                <p>Etes vous sûr de vouloir supprimer ce compte ?</p>
+                <p>Les opérations associées seront perdues</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat ">Annuler</a>
+                <a href="/BankAccount/Delete/@bankAccount.Id" class="modal-action modal-close waves-effect waves-green btn-flat ">Supprimer le compte</a>
+            </div>
+        </div>
     }
 }
 else
