@@ -1,7 +1,7 @@
 ﻿namespace DaGetV2.Dal.EF.Test
 {
     using System.Linq;
-    using DaGetV2.Shared.TestTool;
+    using Shared.TestTool;
     using Xunit;
 
     public class BankAccountRepositoryTest

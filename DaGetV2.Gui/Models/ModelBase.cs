@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using DaGetV2.Service.DTO;
-using Newtonsoft.Json;
-
-namespace DaGetV2.Gui.Models
+﻿namespace DaGetV2.Gui.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net.Http;
+    using System.Threading.Tasks;
+    using Newtonsoft.Json;
+    using Service.DTO;
+
     public abstract class ModelBase
     {
         public ModelBase()

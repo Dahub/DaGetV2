@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace DaGetV2.Shared.ApiTool
+﻿namespace DaGetV2.Shared.ApiTool
 {
+    using System.Collections.Generic;
+
     public class SearchResult<T> where T : IDto
     {
         public SearchResult()

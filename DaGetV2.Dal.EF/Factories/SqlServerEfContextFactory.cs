@@ -1,8 +1,8 @@
-﻿using DaGetV2.Dal.Interface;
-using Microsoft.EntityFrameworkCore;
-
-namespace DaGetV2.Dal.EF
+﻿namespace DaGetV2.Dal.EF
 {
+    using DaGetV2.Dal.Interface;
+    using Microsoft.EntityFrameworkCore;
+
     public class SqlServerEfContextFactory : IContextFactory
     {
         private readonly string _connexionString;

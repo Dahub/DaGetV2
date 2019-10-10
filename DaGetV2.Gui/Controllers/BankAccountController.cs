@@ -4,11 +4,11 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using DaGetV2.Gui.Models;
-    using DaGetV2.Service.DTO;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
+    using Models;
+    using Service.DTO;
 
     [Authorize]
     public class BankAccountController : DaGetControllerBase
@@ -36,6 +36,11 @@
         [Route("/BankAccount/Create")]
         public async Task<IActionResult> CreateAsync(BankAccountModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("Create", model);
+            }
+
             var createBankAccountResponse = await PostToApi("bankAccount", new CreateBankAccountDto()
             {
                 BankAccountTypeId = model.BankAccountTypeId,
@@ -84,6 +89,11 @@
         [Route("/BankAccount/Edit")]
         public async Task<IActionResult> EditAsync(BankAccountModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("Edit", model);
+            }
+
             var updateBankAccountResponse = await PutToApi("bankAccount", new UpdateBankAccountDto()
             {
                 Id = model.Id,

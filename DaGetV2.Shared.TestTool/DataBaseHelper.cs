@@ -2,8 +2,8 @@
 {
     using System;
     using System.Linq;
-    using DaGetV2.Dal.EF;
-    using DaGetV2.Domain;
+    using Dal.EF;
+    using Domain;
     using Microsoft.EntityFrameworkCore;
 
     public class DataBaseHelper

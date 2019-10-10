@@ -1,13 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
-
-namespace DaGetV2.Gui
+﻿namespace DaGetV2.Gui
 {
+    using System;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Text;
+    using Microsoft.AspNetCore.Html;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
+
     public static class HtmlHelperExtension
     {
         public static IHtmlContent TextBoxForWithFrenchDecimal<TModel, TResult>(

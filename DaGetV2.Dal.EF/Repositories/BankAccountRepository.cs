@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DaGetV2.Dal.Interface.Repositories;
-using DaGetV2.Domain;
-using Microsoft.EntityFrameworkCore;
-
-namespace DaGetV2.Dal.EF.Repositories
+﻿namespace DaGetV2.Dal.EF.Repositories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using DaGetV2.Dal.Interface.Repositories;
+    using DaGetV2.Domain;
+    using Microsoft.EntityFrameworkCore;
+
     internal class BankAccountRepository : RepositoryBase<BankAccount>, IBankAccountRepository
     {
         public IEnumerable<BankAccount> GetAllByUser(string userName)

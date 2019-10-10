@@ -1,12 +1,12 @@
-﻿using DaGetV2.Dal.Interface;
-using DaGetV2.Domain.Interface;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace DaGetV2.Dal.EF
+﻿namespace DaGetV2.Dal.EF
 {
+    using DaGetV2.Dal.Interface;
+    using DaGetV2.Domain.Interface;
+    using Microsoft.EntityFrameworkCore;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     internal abstract class RepositoryBase<T> : IRepository<T> where T : class, IDomainObject
     {
         IContext IRepository<T>.Context { get; set; }

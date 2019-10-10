@@ -4,12 +4,12 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
-    using DaGetV2.Dal.Interface;
-    using DaGetV2.Dal.Interface.Repositories;
-    using DaGetV2.Domain;
-    using DaGetV2.Service.DTO;
-    using DaGetV2.Shared.TestTool;
+    using Dal.Interface;
+    using Dal.Interface.Repositories;
+    using Domain;
+    using DTO;
     using Moq;
+    using Shared.TestTool;
     using Xunit;
 
     public class BankAccountServiceTest

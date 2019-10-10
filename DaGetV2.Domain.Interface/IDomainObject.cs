@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace DaGetV2.Domain.Interface
+﻿namespace DaGetV2.Domain.Interface
 {
+    using System;
+
     public interface IDomainObject
     {
         Guid Id { get; set; }

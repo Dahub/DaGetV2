@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DaGetV2.Domain;
-using DaGetV2.Service.DTO;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-
-namespace DaGetV2.Service
+﻿namespace DaGetV2.Service
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using DaGetV2.Domain;
+    using DaGetV2.Service.DTO;
+    using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+
     public static class ExtensionMethod
     {
         public static IEnumerable<OperationTypeDto> ToDto(this IEnumerable<OperationType> operationsTypes)

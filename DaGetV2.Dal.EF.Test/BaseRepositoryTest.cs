@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
-using DaGetV2.Domain;
-using DaGetV2.Shared.TestTool;
-using Xunit;
-
-namespace DaGetV2.Dal.EF.Test
+﻿namespace DaGetV2.Dal.EF.Test
 {
+    using System;
+    using System.Linq;
+    using DaGetV2.Domain;
+    using DaGetV2.Shared.TestTool;
+    using Xunit;
+
     public class BaseRepositoryTest 
     {
         [Fact]

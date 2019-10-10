@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using DaGetV2.Dal.Interface;
-using DaGetV2.Service.DTO;
-using DaGetV2.Service.Interface;
-using DaGetV2.Shared.ApiTool;
-using Microsoft.AspNetCore.Mvc;
-
-namespace DaGetV2.Api.Controllers
+﻿namespace DaGetV2.Api.Controllers
 {
+    using System.Collections.Generic;
+    using DaGetV2.Dal.Interface;
+    using DaGetV2.Service.DTO;
+    using DaGetV2.Service.Interface;
+    using DaGetV2.Shared.ApiTool;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
     public class BankAccountTypeController : ControllerBase

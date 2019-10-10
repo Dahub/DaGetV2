@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using DaGetV2.Shared.ApiTool;
-
-namespace DaGetV2.Service.DTO
+﻿namespace DaGetV2.Service.DTO
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using DaGetV2.Shared.ApiTool;
+
     public class CreateBankAccountDto : IDto
     {
         [Required(ErrorMessage = "Type de compte en banque obligatoire")]

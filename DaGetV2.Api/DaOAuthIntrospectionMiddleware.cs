@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using DaGetV2.Dal.Interface;
-using DaGetV2.Service;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Primitives;
-
-namespace DaGetV2.Api
+﻿namespace DaGetV2.Api
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Net;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Text;
+    using System.Threading.Tasks;
+    using DaGetV2.Dal.Interface;
+    using DaGetV2.Service;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Primitives;
+
     public class DaOAuthIntrospectionMiddleware
     {
         private static readonly ConcurrentDictionary<string, bool> _persistedUsers = new ConcurrentDictionary<string, bool>();

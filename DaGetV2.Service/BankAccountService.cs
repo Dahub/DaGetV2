@@ -3,10 +3,10 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using DaGetV2.Dal.Interface;
-    using DaGetV2.Domain;
-    using DaGetV2.Service.DTO;
-    using DaGetV2.Service.Interface;
+    using Dal.Interface;
+    using Domain;
+    using DTO;
+    using Interface;
 
     public class BankAccountService : BaseService, IBankAccountService
     {

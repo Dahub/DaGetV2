@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using DaGetV2.Domain;
+    using Domain;
     
     public interface IUserBankAccountRepository : IRepository<UserBankAccount>
     {

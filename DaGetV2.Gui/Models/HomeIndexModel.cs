@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace DaGetV2.Gui.Models
+﻿namespace DaGetV2.Gui.Models
 {
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+
     public class HomeIndexModel : ModelBase
     {
         public HomeIndexModel()

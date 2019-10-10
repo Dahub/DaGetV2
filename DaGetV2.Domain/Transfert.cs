@@ -1,8 +1,8 @@
-﻿using System;
-using DaGetV2.Domain.Interface;
-
-namespace DaGetV2.Domain
+﻿namespace DaGetV2.Domain
 {
+    using System;
+    using DaGetV2.Domain.Interface;
+
     public class Transfert : IDomainObject
     {
         public Guid Id { get; set; }

@@ -1,11 +1,10 @@
-﻿using DaGetV2.Dal.Interface;
-using DaGetV2.Service.Interface;
-using DaGetV2.Shared.ApiTool;
-using Microsoft.AspNetCore.Mvc;
-
-
-namespace DaGetV2.Api.Controllers
+﻿namespace DaGetV2.Api.Controllers
 {
+    using DaGetV2.Dal.Interface;
+    using DaGetV2.Service.Interface;
+    using DaGetV2.Shared.ApiTool;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
     public class OperationTypeController : ControllerBase

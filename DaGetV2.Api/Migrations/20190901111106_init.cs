@@ -1,8 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace DaGetV2.Api.Migrations
+﻿namespace DaGetV2.Api.Migrations
 {
+    using System;
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

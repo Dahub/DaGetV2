@@ -1,9 +1,9 @@
-﻿using DaGetV2.Domain.Interface;
-using System;
-using System.Collections.Generic;
-
-namespace DaGetV2.Domain
+﻿namespace DaGetV2.Domain
 {
+    using DaGetV2.Domain.Interface;
+    using System;
+    using System.Collections.Generic;
+
     public class BankAccountType : IDomainObject
     {
         public Guid Id { get; set; }

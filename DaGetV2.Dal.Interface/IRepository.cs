@@ -1,9 +1,9 @@
-﻿using DaGetV2.Domain.Interface;
-using System;
-using System.Collections.Generic;
-
-namespace DaGetV2.Dal.Interface
+﻿namespace DaGetV2.Dal.Interface
 {
+    using DaGetV2.Domain.Interface;
+    using System;
+    using System.Collections.Generic;
+
     public interface IRepository<T> where T : IDomainObject
     {
         IContext Context { get; set; }

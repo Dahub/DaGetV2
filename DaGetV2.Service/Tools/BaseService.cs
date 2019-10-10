@@ -4,8 +4,8 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Text;
-    using DaGetV2.Dal.Interface;
-    using DaGetV2.Domain;
+    using Dal.Interface;
+    using Domain;
 
     public abstract class BaseService
     {

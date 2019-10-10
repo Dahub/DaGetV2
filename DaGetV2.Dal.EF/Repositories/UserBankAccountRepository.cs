@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using DaGetV2.Dal.Interface.Repositories;
-    using DaGetV2.Domain;
+    using Interface.Repositories;
+    using Domain;
 
     internal class UserBankAccountRepository : RepositoryBase<UserBankAccount>, IUserBankAccountRepository
     {

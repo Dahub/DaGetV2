@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace DaGetV2.Service
+﻿namespace DaGetV2.Service
 {
+    using System;
+
     public class DaGetServiceException : Exception
     {
         public DaGetServiceException() : base() { }

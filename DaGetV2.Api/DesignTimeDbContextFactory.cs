@@ -1,11 +1,11 @@
-﻿using DaGetV2.Dal.EF;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
-using System.IO;
-
-namespace DaGetV2.Api
+﻿namespace DaGetV2.Api
 {
+    using DaGetV2.Dal.EF;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Design;
+    using Microsoft.Extensions.Configuration;
+    using System.IO;
+
     public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<DaGetContext>
     {
         /// <summary>

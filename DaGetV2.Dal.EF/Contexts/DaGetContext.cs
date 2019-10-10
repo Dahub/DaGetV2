@@ -1,14 +1,14 @@
-﻿using DaGetV2.Dal.EF.Repositories;
-using DaGetV2.Dal.Interface;
-using DaGetV2.Dal.Interface.Repositories;
-using DaGetV2.Domain;
-using DaGetV2.Shared.Constant;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-
-namespace DaGetV2.Dal.EF
+﻿namespace DaGetV2.Dal.EF
 {
+    using DaGetV2.Dal.EF.Repositories;
+    using DaGetV2.Dal.Interface;
+    using DaGetV2.Dal.Interface.Repositories;
+    using DaGetV2.Domain;
+    using DaGetV2.Shared.Constant;
+    using Microsoft.EntityFrameworkCore;
+    using System;
+    using System.Linq;
+
     public class DaGetContext : DbContext, IContext
     {
         public DaGetContext(DbContextOptions options) : base(options) { }

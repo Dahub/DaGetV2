@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace DaGetV2.Shared.ApiTool
+﻿namespace DaGetV2.Shared.ApiTool
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     public static class DtoExtensions
     {
         public static ListResult<T> ToListResult<T>(this IEnumerable<T> values) where T : IDto

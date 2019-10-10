@@ -1,8 +1,8 @@
-﻿using System;
-using DaGetV2.Shared.ApiTool;
-
-namespace DaGetV2.Service.DTO
+﻿namespace DaGetV2.Service.DTO
 {
+    using System;
+    using DaGetV2.Shared.ApiTool;
+
     public class OperationTypeDto : IDto
     {        
         public Guid Id { get; set; }

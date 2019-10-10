@@ -2,10 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
-    using DaGetV2.Dal.Interface;
-    using DaGetV2.Service.DTO;
-    using DaGetV2.Service.Interface;
-    using DaGetV2.Shared.ApiTool;
+    using Dal.Interface;
+    using Service.DTO;
+    using Service.Interface;
+    using Shared.ApiTool;
     using Microsoft.AspNetCore.Http.Extensions;
     using Microsoft.AspNetCore.Mvc;
 

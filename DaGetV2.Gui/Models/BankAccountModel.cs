@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-namespace DaGetV2.Gui.Models
+﻿namespace DaGetV2.Gui.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
+
     public class BankAccountModel : ModelBase
     {
         public Guid? Id { get; set; }

@@ -3,14 +3,14 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
-    using DaGetV2.Gui.Models;
-    using DaGetV2.Service.DTO;
-    using DaGetV2.Shared.ApiTool;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
+    using Models;
     using Newtonsoft.Json;
+    using Service.DTO;
+    using Shared.ApiTool;
 
     [Authorize]
     public class HomeController : DaGetControllerBase

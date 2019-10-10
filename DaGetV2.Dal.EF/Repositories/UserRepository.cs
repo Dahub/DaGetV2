@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using DaGetV2.Dal.Interface.Repositories;
-using DaGetV2.Domain;
-
-namespace DaGetV2.Dal.EF.Repositories
+﻿namespace DaGetV2.Dal.EF.Repositories
 {
+    using System.Linq;
+    using DaGetV2.Dal.Interface.Repositories;
+    using DaGetV2.Domain;
+
     internal class UserRepository : RepositoryBase<User>, IUserRepository
     {
         public User GetByUserName(string username)

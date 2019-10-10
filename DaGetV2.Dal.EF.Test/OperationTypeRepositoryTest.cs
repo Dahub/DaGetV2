@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using DaGetV2.Shared.TestTool;
-using Xunit;
-
-namespace DaGetV2.Dal.EF.Test
+﻿namespace DaGetV2.Dal.EF.Test
 {
+    using System.Linq;
+    using DaGetV2.Shared.TestTool;
+    using Xunit;
+
     public class OperationTypeRepositoryTest
     {
         [Fact]

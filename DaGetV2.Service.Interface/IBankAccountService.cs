@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using DaGetV2.Dal.Interface;
-    using DaGetV2.Service.DTO;
+    using DTO;
 
     public interface IBankAccountService
     {

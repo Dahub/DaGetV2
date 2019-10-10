@@ -1,14 +1,14 @@
-﻿using System;
-using System.Net;
-using DaGetV2.Service;
-using DaGetV2.Service.DTO;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Logging;
-
-namespace DaGetV2.Api.Filters
+﻿namespace DaGetV2.Api.Filters
 {
+    using System;
+    using System.Net;
+    using DaGetV2.Service;
+    using DaGetV2.Service.DTO;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Filters;
+    using Microsoft.Extensions.Logging;
+
     public class DaGetExceptionFilter : ExceptionFilterAttribute
     {
         private readonly IHostingEnvironment _hostingEnvironment;

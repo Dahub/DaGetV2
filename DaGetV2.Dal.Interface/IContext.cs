@@ -1,7 +1,7 @@
 ﻿namespace DaGetV2.Dal.Interface
 {
-    using DaGetV2.Dal.Interface.Repositories;
     using System;
+    using Repositories;
 
     public interface IContext : IDisposable
     {

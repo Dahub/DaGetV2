@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using DaGetV2.Dal.Interface;
-using DaGetV2.Dal.Interface.Repositories;
-using DaGetV2.Domain;
-using DaGetV2.Service.DTO;
-using DaGetV2.Shared.TestTool;
-using Moq;
-using Xunit;
-
-
-namespace DaGetV2.Service.Test
+﻿namespace DaGetV2.Service.Test
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using DaGetV2.Dal.Interface;
+    using DaGetV2.Dal.Interface.Repositories;
+    using DaGetV2.Domain;
+    using DaGetV2.Service.DTO;
+    using DaGetV2.Shared.TestTool;
+    using Moq;
+    using Xunit;
+
     public class OperationTypeServiceTest
     {
         [Fact]

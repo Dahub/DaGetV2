@@ -6,7 +6,7 @@
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using DaGetV2.Shared.ApiTool;
+    using Shared.ApiTool;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Newtonsoft.Json;

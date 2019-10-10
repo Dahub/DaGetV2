@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace DaGetV2.Shared.Constant
+﻿namespace DaGetV2.Shared.Constant
 {
+    using System;
+
     public class BankAccountTypeIds
     {
         public readonly static Guid Current = new Guid("15f2a0f2-71f0-4823-8798-77cfa5752014");

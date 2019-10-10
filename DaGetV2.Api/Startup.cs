@@ -1,23 +1,23 @@
-﻿using System;
-using System.IO;
-using DaGetV2.Api.Filters;
-using DaGetV2.Dal.EF;
-using DaGetV2.Dal.Interface;
-using DaGetV2.Domain;
-using DaGetV2.Service;
-using DaGetV2.Service.Interface;
-using DaGetV2.Shared.Constant;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
-using Swashbuckle.AspNetCore.Swagger;
-
-namespace DaGetV2.Api
+﻿namespace DaGetV2.Api
 {
+    using System;
+    using System.IO;
+    using DaGetV2.Api.Filters;
+    using DaGetV2.Dal.EF;
+    using DaGetV2.Dal.Interface;
+    using DaGetV2.Domain;
+    using DaGetV2.Service;
+    using DaGetV2.Service.Interface;
+    using DaGetV2.Shared.Constant;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+    using NLog.Extensions.Logging;
+    using Swashbuckle.AspNetCore.Swagger;
+
     public class Startup
     {
         private IHostingEnvironment CurrentEnvironment { get; set; }

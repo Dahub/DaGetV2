@@ -2,9 +2,9 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using DaGetV2.Dal.Interface;
-    using DaGetV2.Service.DTO;
-    using DaGetV2.Service.Interface;
+    using Dal.Interface;
+    using DTO;
+    using Interface;
 
     public class BankAccountTypeService : BaseService, IBankAccountTypeService
     {
