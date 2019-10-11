@@ -25,3 +25,10 @@ header, main, footer {
         padding-left: 0;
     }
 }
+
+.incone-outcome-chart-container {
+    position: relative;
+    margin-left:20%;
+    height: 150px;
+    width: 400px;
+}

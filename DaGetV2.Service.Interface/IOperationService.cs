@@ -11,7 +11,7 @@
             IContext context,
             string userName,
             Guid bankAccountId,
-            DateTime startDate,
-            DateTime endDate);
+            string startDate,
+            string endDate);
     }
 }

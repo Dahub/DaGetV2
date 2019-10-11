@@ -35,7 +35,7 @@
                     {
                         Balance = ba.Balance,
                         BankAccountType = ba.BankAccountType,
-                        Id = ba.Id,
+                        Id = ba.Id.ToString(),
                         IsOwner = ba.IsOwner,
                         IsReadOnly = ba.IsReadOnly,
                         Wording = ba.Wording
@@ -45,7 +45,7 @@
                     {
                         Balance = ba.Balance,
                         BankAccountType = ba.BankAccountType,
-                        Id = ba.Id,
+                        Id = ba.Id.ToString(),
                         IsOwner = ba.IsOwner,
                         IsReadOnly = ba.IsReadOnly,
                         Wording = ba.Wording
@@ -55,7 +55,7 @@
                     {
                         Balance = ba.Balance,
                         BankAccountType = ba.BankAccountType,
-                        Id = ba.Id,
+                        Id = ba.Id.ToString(),
                         IsOwner = ba.IsOwner,
                         IsReadOnly = ba.IsReadOnly,
                         Wording = ba.Wording
@@ -65,7 +65,7 @@
                     {
                         Balance = ba.Balance,
                         BankAccountType = ba.BankAccountType,
-                        Id = ba.Id,
+                        Id = ba.Id.ToString(),
                         IsOwner = ba.IsOwner,
                         IsReadOnly = ba.IsReadOnly,
                         Wording = ba.Wording

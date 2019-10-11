@@ -262,7 +262,7 @@
 
             Assert.Equal(2, bankAccounts.Count());
 
-            var myBankAccount = bankAccounts.SingleOrDefault(ba => ba.Id.Equals(secondBankAccount.Id.ToString()));
+            var myBankAccount = bankAccounts.SingleOrDefault(ba => ba.Id.Equals(secondBankAccount.Id));
 
             Assert.NotNull(myBankAccount);
 

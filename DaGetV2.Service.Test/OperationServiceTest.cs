@@ -7,6 +7,29 @@
 
     public class OperationServiceTest
     {
+        [Theory]
+        [InlineData("20190101", "01012019")]
+        [InlineData("01012019", "20190101")]
+        public void GetOperationsWithCriterias_With_Bad_Date_Format_Should_Throw_DaGet_Service_Exception(string startDate, string endDate)
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
+
+            var operationService = new OperationService();
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                Assert.Throws<DaGetServiceException>(() => operationService.GetOperationsWithCriterias(
+                    context,
+                    user.UserName,
+                    bankAccount.Id,
+                    startDate,
+                    endDate));
+            }
+        }
+
         [Fact]
         public void GetOperationsWithCriterias_With_Bank_Account_From_Another_User_Should_Throw_DaGet_Unauthorized_Exception()
         {
@@ -25,8 +48,8 @@
                     context,
                     badUserName,
                     bankAccount.Id,
-                    DateTime.Now.AddMonths(-1),
-                    DateTime.Now));
+                    DateTime.Now.AddMonths(-1).ToString("yyyyMMdd"),
+                    DateTime.Now.ToString("yyyyMMdd")));
             }
         }
 
@@ -51,7 +74,7 @@
             using (var context = DataBaseHelper.Instance.CreateContext(dbName))
             {
                 var operationsFromService =
-                    operationService.GetOperationsWithCriterias(context, user.UserName, bankAccount.Id, startDate, endDate);
+                    operationService.GetOperationsWithCriterias(context, user.UserName, bankAccount.Id, startDate.ToString("yyyyMMdd"), endDate.ToString("yyyyMMdd"));
 
                 Assert.NotNull(operationsFromService);
                 Assert.NotEmpty(operationsFromService);

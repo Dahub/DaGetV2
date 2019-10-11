@@ -28,7 +28,6 @@
                 Id = operation.Id,
                 BankAccountId = operation.BankAccountId,
                 Amount = operation.Amount,
-                BankAccountWording = operation.BankAccount.Wording,
                 IsClosed = operation.IsClosed,
                 IsTransfert = operation.IsTransfert,
                 OperationDate = operation.OperationDate,
@@ -115,7 +114,7 @@
 
             return new BankAccountDto()
             {
-                Id = bankAccount.Id.ToString(),
+                Id = bankAccount.Id,
                 Balance = bankAccount.Balance,
                 InitialBalance = bankAccount.OpeningBalance,
                 BankAccountTypeId = bankAccount.BankAccountTypeId.ToString(),

@@ -1,15 +1,68 @@
-﻿
+﻿@model DaGetV2.Gui.Models.BankAccountDetailModel
+@using System.Globalization
+
 @{
-    Layout = null;
+    Layout = "_layout";
 }
 
-<!DOCTYPE html>
+@await Html.PartialAsync("_modelError", Model)
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Detail</title>
-</head>
-<body>
-</body>
-</html>
+<div class="row">
+    <div class="section">
+        <h3>@Model.BankAccountWording | @Model.Date.ToString("MMMM yyyy", CultureInfo.CurrentCulture)</h3>
+    </div>
+    <hr />
+
+    <div class="incone-outcome-chart-container">
+        <canvas id="myChart" height="200px" width="500px"></canvas>
+    </div>
+
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'horizontalBar',
+            data: {
+                labels: ['Revenus : @Html.Euro(Model.Income)', 'Dépenses : @Html.Euro(Model.Outcome)'],
+                datasets: [{
+                    data: [@Model.Income.ToString(CultureInfo.InvariantCulture), @Model.Outcome.ToString(CultureInfo.InvariantCulture)],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                legend: {
+                    display: false
+                    },
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: false
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            fontSize: 20,
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: false
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+
+
+</div>
+

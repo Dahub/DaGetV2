@@ -68,7 +68,7 @@
             return View("Edit", new BankAccountModel()
             {
                 BankAccountTypeId = GuidFromString(bankAccount.BankAccountTypeId),
-                Id = GuidFromString(bankAccount.Id),
+                Id = bankAccount.Id,
                 InitialBalance = bankAccount.InitialBalance,
                 Wording = bankAccount.Wording,
                 BankAccountTypes = bankAccountTypes.Datas.ToDictionary(k => k.Id, v => v.Wording),
@@ -124,7 +124,25 @@
             var bankAccount = await GetToApi<BankAccountDto>($"bankaccount/{id}");
             var operations = await GetListToApi<OperationDto>($"bankaccount/{id}/operations/{startDate}/{endDate}");
 
-            return View("Detail");
+            return View("Detail", new BankAccountDetailModel()
+            {
+                BankAccountId = bankAccount.Id.ToString(),
+                BankAccountBalance = bankAccount.Balance,
+                BankAccountWording = bankAccount.Wording,
+                Date = new DateTime(year, month, 1),
+                Income = operations.Datas.Where(o => o.Amount > 0).Sum(o => o.Amount),
+                Outcome = Math.Abs(operations.Datas.Where(o => o.Amount < 0).Sum(o => o.Amount)),
+                Operations = operations.Datas.Select(operation => new BankAccountDetailOperationModel()
+                {
+                    Id = operation.Id.ToString(),
+                    OperationDate = operation.OperationDate,
+                    IsClosed = operation.IsClosed,
+                    OperationTypeId = operation.OperationTypeId.ToString(),
+                    Amount = operation.Amount,
+                    IsTransfert = operation.IsTransfert,
+                    OperationTypeWording = operation.OperationTypeWording
+                })
+            });
         }
 
         private static Guid? GuidFromString(string guid)

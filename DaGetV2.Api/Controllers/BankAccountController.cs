@@ -102,8 +102,8 @@
                     context,
                     userName,
                     id,
-                    DateTime.ParseExact(startDate, "yyyyMMdd", CultureInfo.InvariantCulture),
-                    DateTime.ParseExact(endDate, "yyyyMMdd", CultureInfo.InvariantCulture));
+                    startDate,
+                    endDate);
             }
 
             return Ok(operations.ToListResult());

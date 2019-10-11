@@ -17,11 +17,8 @@
 
         public Guid BankAccountId { get; set; }
 
-        public string BankAccountWording { get; set; }
-
         public Guid OperationTypeId { get; set; }
 
         public string OperationTypeWording { get; set; }
-
     }
 }
