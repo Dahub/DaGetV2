@@ -22,6 +22,7 @@
         [HttpGet]
         [Route("/Home/Index")]
         public async Task<IActionResult> IndexAsync()
+        
         {
             var response = await GetToApi("bankaccount");
             var responseContent = await response.Content.ReadAsStringAsync();

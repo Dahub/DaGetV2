@@ -167,6 +167,38 @@
             return AddOperation(databaseName, operation);
         }
 
+        public Operation UseNewOperation(Guid databaseName, Guid bankAccountId, DateTime operationDate)
+        {
+            var operation = new Operation()
+            {
+                Amount = GenerateNewAmount(),
+                BankAccountId = bankAccountId,
+                CreationDate = DateTime.Now,
+                Id = Guid.NewGuid(),
+                ModificationDate = DateTime.Now,
+                OperationDate = operationDate,
+                OperationTypeId = Guid.NewGuid()
+            };
+
+            return AddOperation(databaseName, operation);
+        }
+
+        public Operation UseNewOperation(Guid databaseName, Guid bankAccountId, Guid operationTypeId, DateTime operationDate)
+        {
+            var operation = new Operation()
+            {
+                Amount = GenerateNewAmount(),
+                BankAccountId = bankAccountId,
+                CreationDate = DateTime.Now,
+                Id = Guid.NewGuid(),
+                ModificationDate = DateTime.Now,
+                OperationDate = operationDate,
+                OperationTypeId = operationTypeId
+            };
+
+            return AddOperation(databaseName, operation);
+        }
+
         public OperationType UseNewOperationType(Guid databaseName, Guid bankAccountId)
         {
             var operationType = new OperationType()

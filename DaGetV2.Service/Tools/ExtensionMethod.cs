@@ -3,12 +3,40 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using DaGetV2.Domain;
-    using DaGetV2.Service.DTO;
-    using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+    using Domain;
+    using DTO;
 
     public static class ExtensionMethod
     {
+        public static IEnumerable<OperationDto> ToDto(this IEnumerable<Operation> operations)
+        {
+            if (operations == null)
+            {
+                yield break;
+            }
+
+            foreach (var operation in operations)
+            {
+                yield return operation.ToDto();
+            }
+        }
+
+        public static OperationDto ToDto(this Operation operation)
+        {
+            return new OperationDto()
+            {
+                Id = operation.Id,
+                BankAccountId = operation.BankAccountId,
+                Amount = operation.Amount,
+                BankAccountWording = operation.BankAccount.Wording,
+                IsClosed = operation.IsClosed,
+                IsTransfert = operation.IsTransfert,
+                OperationDate = operation.OperationDate,
+                OperationTypeId = operation.OperationTypeId,
+                OperationTypeWording = operation.OperationType.Wording
+            };
+        }
+
         public static IEnumerable<OperationTypeDto> ToDto(this IEnumerable<OperationType> operationsTypes)
         {
             if (operationsTypes == null)
@@ -51,7 +79,7 @@
 
         public static BankAccountTypeDto ToDto(this BankAccountType bankAccountType)
         {
-            if(bankAccountType == null)
+            if (bankAccountType == null)
             {
                 return null;
             }
@@ -65,12 +93,12 @@
 
         public static IEnumerable<BankAccountDto> ToDto(this IEnumerable<BankAccount> bankAccounts, string userName)
         {
-            if(bankAccounts == null || String.IsNullOrWhiteSpace(userName))
+            if (bankAccounts == null || String.IsNullOrWhiteSpace(userName))
             {
                 yield break;
             }
-            
-            foreach(var ba in bankAccounts)
+
+            foreach (var ba in bankAccounts)
             {
                 yield return ba.ToDto(userName);
             }

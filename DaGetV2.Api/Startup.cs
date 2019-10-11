@@ -64,6 +64,10 @@
             {
                 Configuration = conf
             });
+            services.AddTransient<IOperationService>(ots => new OperationService()
+            {
+                Configuration = conf
+            });
 
             services.AddSwaggerGen(c =>
             {

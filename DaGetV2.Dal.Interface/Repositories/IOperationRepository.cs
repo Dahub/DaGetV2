@@ -7,5 +7,7 @@
     public interface IOperationRepository : IRepository<Operation>
     {
         IEnumerable<Operation> GetAllByBankAccountId(Guid bankAccountId);
+
+        IEnumerable<Operation> GetAll(Guid? bankAccountId, DateTime? startDate, DateTime? endDate, Guid? operationTypeId, bool? isClosed);
     }
 }

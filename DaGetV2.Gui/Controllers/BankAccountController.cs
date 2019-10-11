@@ -13,7 +13,7 @@
     [Authorize]
     public class BankAccountController : DaGetControllerBase
     {
-        public BankAccountController(IConfiguration configuration) 
+        public BankAccountController(IConfiguration configuration)
             : base(configuration)
         {
         }
@@ -22,9 +22,9 @@
         [Route("/BankAccount/Create")]
         public async Task<IActionResult> CreateAsync()
         {
-            var operationTypes = await GetListToApi<OperationTypeDto>("operationtype"); 
+            var operationTypes = await GetListToApi<OperationTypeDto>("operationtype");
             var bankAccountTypes = await GetListToApi<BankAccountTypeDto>("bankaccounttype");
-        
+
             return View("Create", new BankAccountModel()
             {
                 BankAccountTypes = bankAccountTypes.Datas.ToDictionary(k => k.Id, v => v.Wording),
@@ -109,6 +109,22 @@
             }
 
             return RedirectToAction("IndexAsync", "Home");
+        }
+
+        [HttpGet]
+        [Route("/BankAccount/Detail/{id}")]
+        public async Task<IActionResult> DetailAsync(Guid id)
+        {
+            var year = DateTime.Now.Year;
+            var month = DateTime.Now.Month;
+
+            var startDate = new DateTime(year, month, 1).Date.ToString("yyyyMMdd");
+            var endDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)).Date.ToString("yyyyMMdd");
+
+            var bankAccount = await GetToApi<BankAccountDto>($"bankaccount/{id}");
+            var operations = await GetListToApi<OperationDto>($"bankaccount/{id}/operations/{startDate}/{endDate}");
+
+            return View("Detail");
         }
 
         private static Guid? GuidFromString(string guid)

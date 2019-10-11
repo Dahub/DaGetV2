@@ -8,6 +8,7 @@
     using Shared.ApiTool;
     using Microsoft.AspNetCore.Http.Extensions;
     using Microsoft.AspNetCore.Mvc;
+    using System.Globalization;
 
 
     [Route("api/[controller]")]
@@ -16,15 +17,18 @@
     {
         private readonly IBankAccountService _service;
         private readonly IOperationTypeService _operationTypeService;
+        private readonly IOperationService _operationService;
         private readonly IContextFactory _contextFactory;
 
         public BankAccountController(
-            [FromServices] IContextFactory contextFactory, 
+            [FromServices] IContextFactory contextFactory,
             [FromServices] IBankAccountService bankAccountService,
-            [FromServices] IOperationTypeService operationTypeService)
+            [FromServices] IOperationTypeService operationTypeService,
+            [FromServices] IOperationService operationService)
         {
             _service = bankAccountService;
             _operationTypeService = operationTypeService;
+            _operationService = operationService;
             _contextFactory = contextFactory;
         }
 
@@ -80,6 +84,29 @@
             }
 
             return Ok(operationsTypes.ToListResult());
+        }
+
+        [HttpGet]
+        [Route("{id}/operations/{startDate}/{endDate}")]
+        public IActionResult GetOperations(
+            [FromHeader(Name = "username")] string userName,
+            Guid id,
+            string startDate,
+            string endDate)
+        {
+            IEnumerable<OperationDto> operations;
+
+            using (var context = _contextFactory.CreateContext())
+            {
+                operations = _operationService.GetOperationsWithCriterias(
+                    context,
+                    userName,
+                    id,
+                    DateTime.ParseExact(startDate, "yyyyMMdd", CultureInfo.InvariantCulture),
+                    DateTime.ParseExact(endDate, "yyyyMMdd", CultureInfo.InvariantCulture));
+            }
+
+            return Ok(operations.ToListResult());
         }
 
         [HttpPost]
