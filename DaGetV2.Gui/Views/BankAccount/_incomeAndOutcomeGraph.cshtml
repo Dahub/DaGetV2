@@ -1,0 +1,61 @@
+﻿@model DaGetV2.Gui.Models.BankAccountDetailModel
+@using System.Globalization
+
+<div class="incone-outcome-chart-container">
+    <canvas id="myChart" height="150px" width="400px"></canvas>
+</div>
+
+<script type="text/javascript">
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx,
+            {
+                type: 'horizontalBar',
+                data: {
+                    labels: ['Revenus : @Html.Euro(Model.Income)', 'Dépenses : @Html.Euro(Model.Outcome)'],
+                    datasets: [
+                        {
+                            data: [@Model.Income.ToString(CultureInfo.InvariantCulture),
+                                @Model.Outcome.ToString(CultureInfo.InvariantCulture)
+                            ],
+                            backgroundColor: [
+                                'rgba(76, 175, 80, 0.4)',
+                                'rgba(244, 67, 54, 0.4)'
+                            ],
+                            borderColor: [
+                                'rgba(76, 175, 80, 1)',
+                                'rgba(244, 67, 54, 1)'
+                            ],
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    scales: {
+                        xAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true
+                                },
+                                gridLines: {
+                                    display: false
+                                }
+                            }
+                        ],
+                        yAxes: [
+                            {
+                                ticks: {
+                                    fontSize: 20,
+                                    beginAtZero: true
+                                },
+                                gridLines: {
+                                    display: false
+                                }
+                            }
+                        ]
+                    }
+                }
+            });
+</script>

@@ -32,7 +32,8 @@
                 IsTransfert = operation.IsTransfert,
                 OperationDate = operation.OperationDate,
                 OperationTypeId = operation.OperationTypeId,
-                OperationTypeWording = operation.OperationType.Wording
+                OperationTypeWording = operation.OperationType.Wording,
+                Wording = operation.Wording
             };
         }
 

@@ -1,0 +1,15 @@
+﻿@model DaGetV2.Gui.Models.BankAccountDetailModel
+@using System.Globalization
+
+<h4 clss="center-align">
+    @{
+        var prevDate = Model.Date.AddMonths(-1);
+        var nextDate = Model.Date.AddMonths(1);
+        var prevLink = $"/BankAccount/Detail/{@Model.BankAccountId}/{prevDate.Year}/{prevDate.Month}";
+        var nextLink = $"/BankAccount/Detail/{@Model.BankAccountId}/{nextDate.Year}/{nextDate.Month}";
+    }
+
+    <a class="waves-effect waves-light btn-small" href="@prevLink"><i class="large material-icons">arrow_back</i></a>
+    @Model.Date.ToString("MMMM yyyy", CultureInfo.CurrentCulture)
+    <a class="waves-effect waves-light btn-small" href="@nextLink"><i class="large material-icons">arrow_forward</i></a>
+</h4>

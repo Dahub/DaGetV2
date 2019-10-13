@@ -189,6 +189,11 @@
             modelBuilder.Entity<Operation>().ToTable("Operation");
             modelBuilder.Entity<Operation>().HasKey(ba => ba.Id);
             modelBuilder.Entity<Operation>()
+                .Property(ot => ot.Wording)
+                .HasColumnName("Wording")
+                .HasColumnType("nvarchar(512)")
+                .IsRequired();
+            modelBuilder.Entity<Operation>()
                 .Property(o => o.IsClosed)
                 .HasColumnName("IsClosed")
                 .HasColumnType("bit")

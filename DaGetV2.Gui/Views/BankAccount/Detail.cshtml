@@ -8,61 +8,56 @@
 @await Html.PartialAsync("_modelError", Model)
 
 <div class="row">
-    <div class="section">
-        <h3>@Model.BankAccountWording | @Model.Date.ToString("MMMM yyyy", CultureInfo.CurrentCulture)</h3>
+
+    <div class="row">
+        <h3>@Model.BankAccountWording</h3>
+        <div class="col s12 m12 l6 xl6">
+            @await Html.PartialAsync("_dateManager", Model)
+        </div>
+        <div class="col s12 m12 l6 xl6">
+            @await Html.PartialAsync("_incomeAndOutcomeGraph", Model)
+        </div>
     </div>
+
     <hr />
 
-    <div class="incone-outcome-chart-container">
-        <canvas id="myChart" height="200px" width="500px"></canvas>
-    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Opération</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Crédit</th>
+                <th>Débit</th>
+                <th></th>
+            </tr>
+        </thead>
 
-    <script>
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'horizontalBar',
-            data: {
-                labels: ['Revenus : @Html.Euro(Model.Income)', 'Dépenses : @Html.Euro(Model.Outcome)'],
-                datasets: [{
-                    data: [@Model.Income.ToString(CultureInfo.InvariantCulture), @Model.Outcome.ToString(CultureInfo.InvariantCulture)],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                legend: {
-                    display: false
-                    },
-                scales: {
-                    xAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        },
-                        gridLines: {
-                            display: false
+        <tbody>
+            @foreach (var operation in Model.Operations)
+            {
+                <tr>
+                    <td>@operation.Wording</td>
+                    <td>@operation.OperationTypeWording</td>
+                    <td>@operation.OperationDate.ToShortDateString()</td>
+                    <td>@(operation.Amount >= 0 ? Html.Euro(operation.Amount) : Html.Raw(string.Empty))</td>
+                    <td>@(operation.Amount < 0 ? Html.Euro(operation.Amount) : Html.Raw(string.Empty))</td>
+                    <td>
+                        @if (operation.IsClosed)
+                        {
+                            <a class="waves-effect waves-light btn-small grey lighten-2">Ouvrir</a>
                         }
-                    }],
-                    yAxes: [{
-                        ticks: {
-                            fontSize: 20,
-                            beginAtZero: true
-                        },
-                        gridLines: {
-                            display: false
+                        else
+                        {
+                            <a class="waves-effect waves-light btn-small">Clore</a>
+                            <a class="waves-effect waves-light btn-small">Modifier</a>
+                            <a class="waves-effect waves-light btn-small">Supprimer</a>
                         }
-                    }]
-                }
+                    </td>
+                </tr>
             }
-        });
-    </script>
-
+        </tbody>
+    </table>
 
 </div>
 

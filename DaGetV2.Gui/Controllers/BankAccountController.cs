@@ -113,13 +113,21 @@
 
         [HttpGet]
         [Route("/BankAccount/Detail/{id}")]
-        public async Task<IActionResult> DetailAsync(Guid id)
+        [Route("/BankAccount/Detail/{id}/{year}/{month}")]
+        public async Task<IActionResult> DetailAsync(Guid id, int? year, int? month)
         {
-            var year = DateTime.Now.Year;
-            var month = DateTime.Now.Month;
+            if (!year.HasValue)
+            {
+                year = DateTime.Now.Year;
+            }
 
-            var startDate = new DateTime(year, month, 1).Date.ToString("yyyyMMdd");
-            var endDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)).Date.ToString("yyyyMMdd");
+            if (!month.HasValue)
+            {
+                month = DateTime.Now.Month;
+            }
+
+            var startDate = new DateTime(year.Value, month.Value, 1).Date.ToString("yyyyMMdd");
+            var endDate = new DateTime(year.Value, month.Value, DateTime.DaysInMonth(year.Value, month.Value)).Date.ToString("yyyyMMdd");
 
             var bankAccount = await GetToApi<BankAccountDto>($"bankaccount/{id}");
             var operations = await GetListToApi<OperationDto>($"bankaccount/{id}/operations/{startDate}/{endDate}");
@@ -129,7 +137,7 @@
                 BankAccountId = bankAccount.Id.ToString(),
                 BankAccountBalance = bankAccount.Balance,
                 BankAccountWording = bankAccount.Wording,
-                Date = new DateTime(year, month, 1),
+                Date = new DateTime(year.Value, month.Value, 1),
                 Income = operations.Datas.Where(o => o.Amount > 0).Sum(o => o.Amount),
                 Outcome = Math.Abs(operations.Datas.Where(o => o.Amount < 0).Sum(o => o.Amount)),
                 Operations = operations.Datas.Select(operation => new BankAccountDetailOperationModel()
@@ -140,7 +148,8 @@
                     OperationTypeId = operation.OperationTypeId.ToString(),
                     Amount = operation.Amount,
                     IsTransfert = operation.IsTransfert,
-                    OperationTypeWording = operation.OperationTypeWording
+                    OperationTypeWording = operation.OperationTypeWording,
+                    Wording = operation.Wording
                 })
             });
         }

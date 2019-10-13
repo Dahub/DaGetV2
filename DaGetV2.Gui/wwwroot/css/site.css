@@ -28,7 +28,8 @@ header, main, footer {
 
 .incone-outcome-chart-container {
     position: relative;
-    margin-left:20%;
+    margin-left:15%;
+    margin-bottom: 5%;
     height: 150px;
     width: 400px;
 }

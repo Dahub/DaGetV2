@@ -7,6 +7,8 @@
     {
         public Guid Id { get; set; }
 
+        public string Wording { get; set; }
+
         public bool IsClosed { get; set; }
 
         public DateTime OperationDate { get; set; }
