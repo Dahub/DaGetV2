@@ -18,11 +18,11 @@
                 ThenInclude(uba => uba.User);
 
         public override BankAccount GetById(Guid id)
-            => Context.UserBankAccounts.
-                Where(uba => uba.BankAccountId.Equals(id)).
-                Select(uba => uba.BankAccount).
+            => Context.BankAccounts.
+                Where(ba => ba.Id.Equals(id)).
                 Include(ba => ba.BankAccountType).
                 Include(ba => ba.UsersBanksAccounts).
-                ThenInclude(uba => uba.User).SingleOrDefault();
+                ThenInclude(uba => uba.User).
+                SingleOrDefault();
     }
 }

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using DaGetV2.Dal.Interface;
+    using Dal.EF;
     using DTO;
 
     public interface IOperationService
@@ -13,5 +14,7 @@
             Guid bankAccountId,
             string startDate,
             string endDate);
+
+        void Update(DaGetContext context, string userName, UpdateOperationDto updateOperationDto);
     }
 }
