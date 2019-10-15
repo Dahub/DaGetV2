@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-    using DaGetV2.Dal.EF;
     using DaGetV2.Dal.Interface;
     using DTO;
     using Interface;
@@ -31,7 +30,7 @@
             return operationRepository.GetAll(bankAccountId, convertedStartDate, convertedEndDate, null, null).ToList().ToDto();
         }
 
-        public void Update(DaGetContext context, string userName, UpdateOperationDto updateOperationDto)
+        public void Update(IContext context, string userName, UpdateOperationDto updateOperationDto)
         {
             var operationRepository = context.GetOperationRepository();
             var operationTypeRepository = context.GetOperationTypeRepository();

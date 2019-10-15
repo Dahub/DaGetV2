@@ -15,6 +15,6 @@
             string startDate,
             string endDate);
 
-        void Update(DaGetContext context, string userName, UpdateOperationDto updateOperationDto);
+        void Update(IContext context, string userName, UpdateOperationDto updateOperationDto);
     }
 }

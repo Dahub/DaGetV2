@@ -21,8 +21,6 @@
         private readonly IContextFactory _contextFactory;
         private readonly AppConfiguration _conf;
 
-        public string DaAOuthIntrospectionUrl { get; set; }
-
         public DaOAuthIntrospectionMiddleware(RequestDelegate next, IConfiguration Configuration, IContextFactory contextFactory)
         {
             _next = next;

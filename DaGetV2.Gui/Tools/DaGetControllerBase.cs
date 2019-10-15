@@ -21,6 +21,16 @@
             _appConfiguration = configuration.GetSection("AppConfiguration").Get<AppConfiguration>();
         }
 
+        protected static Guid? GuidFromString(string guid)
+        {
+            if (!Guid.TryParse(guid, out var result))
+            {
+                return null;
+            }
+
+            return result;
+        }
+
         protected async Task<T> GetToApi<T>(string route) where T : IDto
         {
             var response = await GetToApi(route);

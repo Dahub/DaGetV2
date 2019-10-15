@@ -153,15 +153,5 @@
                 })
             });
         }
-
-        private static Guid? GuidFromString(string guid)
-        {
-            if (!Guid.TryParse(guid, out var result))
-            {
-                return null;
-            }
-
-            return result;
-        }
     }
 }
