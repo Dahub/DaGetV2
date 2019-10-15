@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DaGetV2.Api</name>
+    </assembly>
+    <members>
+        <member name="M:DaGetV2.Api.DesignTimeDbContextFactory.CreateDbContext(System.String[])">
+            <summary>
+            Create DB context
+            </summary>
+            <param name="args"></param>
+            <returns>DB context</returns>
+        </member>
+    </members>
+</doc>
