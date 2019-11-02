@@ -14,5 +14,7 @@
             string endDate);
 
         void Update(IContext context, string userName, UpdateOperationDto updateOperationDto);
+
+        OperationDto GetById(IContext context, string userName, Guid operationId);
     }
 }

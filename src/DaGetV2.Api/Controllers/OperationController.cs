@@ -1,5 +1,6 @@
 ﻿namespace DaGetV2.Api.Controllers
 {
+    using System;
     using ApplicationCore.DTO;
     using ApplicationCore.Interfaces;
     using Infrastructure.Interfaces;
@@ -22,8 +23,6 @@
 
         [HttpPut]
         [Route("")]
-        [HttpPut]
-        [Route("")]
         public IActionResult Put([FromHeader(Name = "username")] string userName, UpdateOperationDto toUpdateBankAccount)
         {
             using (var context = _contextFactory.CreateContext())
@@ -32,6 +31,20 @@
             }
 
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public IActionResult Get([FromHeader(Name = "username")] string userName, Guid id)
+        {
+            OperationDto result;
+
+            using (var context = _contextFactory.CreateContext())
+            {
+                result = _operationService.GetById(context, userName, id);
+            }
+
+            return Ok(result);
         }
     }
 }

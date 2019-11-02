@@ -84,7 +84,7 @@
                 operationTypeRepository.Delete(operationType);
             }
 
-            foreach (var operation in operationRepository.List(new OperationByBankAccountId(bankAccountId)))
+            foreach (var operation in operationRepository.List(new OperationByBankAccountIdSpecification(bankAccountId)))
             {
                 operationRepository.Delete(operation);
             }
@@ -97,13 +97,19 @@
         public IEnumerable<BankAccountDto> GetAll(IContext context, string userName)
         {
             var userBankAccountRepositoy = context.GetRepository<UserBankAccount>();
-            return userBankAccountRepositoy.List(new UserBankAccountByUserNameSpecification(userName)).Select(uba => uba.BankAccount).ToDto(userName);
+
+            return userBankAccountRepositoy
+                .List(new UserBankAccountByUserNameSpecification(userName))
+                .Select(uba => uba.BankAccount)
+                .ToDto(userName);
         }
 
         public BankAccountDto GetById(IContext context, string userName, Guid bankAccountId)
         {
             var bankAccountRepositoy = context.GetRepository<BankAccount>();
-            var bankAccount = bankAccountRepositoy.SingleOrDefault(new BankAccountByIdWithBankAccountTypeSpecification(bankAccountId));
+
+            var bankAccount = bankAccountRepositoy.SingleOrDefault(
+                new BankAccountByIdWithBankAccountTypeSpecification(bankAccountId));
 
             CheckIfUserCanAccesBankAccount(context, userName, bankAccount);
 
@@ -143,8 +149,11 @@
 
             // manage operations types
             var operationTypes = operationTypeRepository.List(new OperationTypeByBankAccountIdSpecification(bankAccount.Id));
+            
             var toDeleteOperationsTypes = operationTypes.Where(ot => !(toEditBankAccount.OperationsTypes.Where(eot => eot.Key.HasValue).Select(eot => eot.Key.Value).Contains(ot.Id)));
+            
             var toUpdateOperationsTypes = operationTypes.Where(ot => toEditBankAccount.OperationsTypes.Where(eot => eot.Key.HasValue).Select(eot => eot.Key.Value).Contains(ot.Id));
+            
             var newOperationsTypes = toEditBankAccount.OperationsTypes.Where(eot => !eot.Key.HasValue).Select(eot =>
                 new OperationType()
                 {
@@ -165,10 +174,12 @@
                 var newWording = toEditBankAccount.OperationsTypes.
                     Where(eot => eot.Key.HasValue && eot.Key.Value.Equals(toUpdateOperationType.Id)).
                     Select(eot => eot.Value).Single();
+
                 if(toUpdateOperationType.Wording != newWording)
                 {
                     toUpdateOperationType.Wording = newWording;
                     toUpdateOperationType.ModificationDate = DateTime.Now;
+
                     operationTypeRepository.Update(toUpdateOperationType);
                 }
             }
@@ -177,8 +188,9 @@
             {
                 if(operationRepository.List(new FirstOperationByOperationTypeIdSpecification(toDeleteOperationType.Id)).Any())
                 {
-                    throw new DaGetServiceException($"Le type d'opération {toDeleteOperationType.Wording} possède des opérations associées");
+                    throw new DaGetServiceException($"Le type d'opération {toDeleteOperationType.Wording} possède une ou plusieurs opérations associées");
                 }
+
                 operationTypeRepository.Delete(toDeleteOperationType);
             }
 
@@ -189,10 +201,9 @@
         {
             var operationRepository = context.GetRepository<Operation>();
 
-            foreach (var operation in operationRepository.List(new OperationByBankAccountId(bankAccount.Id)))
-            {
-                bankAccount.Balance += operation.Amount;
-            }
+            bankAccount.Balance += operationRepository
+                                    .List(new OperationByBankAccountIdSpecification(bankAccount.Id))
+                                    .Sum(o => o.Amount);          
         }
     }
 }

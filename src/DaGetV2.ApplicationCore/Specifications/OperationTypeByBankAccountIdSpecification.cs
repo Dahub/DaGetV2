@@ -5,7 +5,8 @@
 
     internal class OperationTypeByBankAccountIdSpecification : BaseSpecification<OperationType>
     {
-        public OperationTypeByBankAccountIdSpecification(Guid bankAccountId) : base(ot => ot.BankAccountId.Equals(bankAccountId))
+        public OperationTypeByBankAccountIdSpecification(Guid bankAccountId) 
+            : base(ot => ot.BankAccountId.Equals(bankAccountId))
         {
 
         }

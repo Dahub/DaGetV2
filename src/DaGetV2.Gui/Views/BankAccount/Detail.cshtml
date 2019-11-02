@@ -49,7 +49,7 @@
                         }
                         else
                         {
-                            <a class="waves-effect waves-light btn-small">Clore</a>
+                            <a class="waves-effect waves-light btn-small" onclick="closeOperation('@operation.Id')">Clore</a>
                             <a class="waves-effect waves-light btn-small">Modifier</a>
                             <a class="waves-effect waves-light btn-small">Supprimer</a>
                         }
@@ -61,3 +61,6 @@
 
 </div>
 
+@section Scripts{
+    <script src="~/js/bankAccountDetail.js"></script>  
+}

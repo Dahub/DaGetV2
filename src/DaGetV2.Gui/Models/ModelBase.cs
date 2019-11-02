@@ -5,8 +5,8 @@
     using System.Linq;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using ApplicationCore.DTO;
     using Newtonsoft.Json;
+    using Shared.ApiTool;
 
     public abstract class ModelBase
     {

@@ -2,12 +2,12 @@
 {
     using System;
     using System.Net;
-    using ApplicationCore.DTO;
     using ApplicationCore.Exceptions;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.Extensions.Logging;
+    using Shared.ApiTool;
 
     public class DaGetExceptionFilter : ExceptionFilterAttribute
     {

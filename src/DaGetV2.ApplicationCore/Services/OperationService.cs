@@ -69,5 +69,21 @@
 
             context.Commit();
         }
+
+        public OperationDto GetById(IContext context, string userName, Guid operationId)
+        {
+            var operationRepository = context.GetRepository<Operation>();
+
+            var operation = operationRepository.SingleOrDefault(new OperationByIdWithOperationTypeSpecification(operationId));
+       
+            if(operation == null)
+            {
+                throw new DaGetNotFoundException("Impossible de trouver l'opération");
+            }
+
+            CheckIfUserCanAccesBankAccount(context, userName, operation.BankAccountId, false, false);
+
+            return operation.ToDto();
+        }
     }
 }

@@ -5,7 +5,8 @@
 
     internal class BankAccountByIdWithBankAccountTypeSpecification : BaseSpecification<BankAccount>
     {
-        public BankAccountByIdWithBankAccountTypeSpecification(Guid bankAccountId) : base(ba => ba.Id.Equals(bankAccountId))
+        public BankAccountByIdWithBankAccountTypeSpecification(Guid bankAccountId)
+            : base(ba => ba.Id.Equals(bankAccountId))
         {
             AddInclude(ba => ba.BankAccountType);
         }

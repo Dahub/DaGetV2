@@ -34,20 +34,24 @@
         {
             Includes.Add(includeExpression);
         }
+
         protected virtual void AddInclude(string includeString)
         {
             IncludeStrings.Add(includeString);
         }
+
         protected virtual void ApplyPaging(int skip, int take)
         {
             Skip = skip;
             Take = take;
             IsPagingEnabled = true;
         }
+
         protected virtual void ApplyOrderBy(Expression<Func<T, object>> orderByExpression)
         {
             OrderBy = orderByExpression;
         }
+
         protected virtual void ApplyOrderByDescending(Expression<Func<T, object>> orderByDescendingExpression)
         {
             OrderByDescending = orderByDescendingExpression;
@@ -57,6 +61,5 @@
         {
             GroupBy = groupByExpression;
         }
-
     }
 }

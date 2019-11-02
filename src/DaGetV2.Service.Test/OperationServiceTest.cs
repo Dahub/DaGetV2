@@ -81,7 +81,7 @@
 
                 Assert.NotNull(operationsFromService);
                 Assert.NotEmpty(operationsFromService);
-                Assert.Equal(2, actual: operationsFromService.Count());
+                Assert.Equal(2, operationsFromService.Count());
                 Assert.NotNull(operationsFromService.SingleOrDefault(o => o.Id.Equals(innerOperationOne.Id)));
                 Assert.NotNull(operationsFromService.SingleOrDefault(o => o.Id.Equals(innerOperationTwo.Id)));
                 Assert.Null(operationsFromService.SingleOrDefault(o => o.Id.Equals(beforeOperation.Id)));
@@ -311,6 +311,54 @@
                 Assert.NotNull(bankAccountFromDb);
                 Assert.Equal(newBankAccountAmount, bankAccountFromDb.Balance);
 
+            }
+        }
+
+        [Fact]
+        public void Get_By_Id_When_User_Cannot_See_It_Should_Throw_DaGetNotFoundException()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var userWhoWantToSee = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
+            var operationType = DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
+            var operation = DataBaseHelper.Instance.UseNewOperation(dbName, bankAccount.Id, operationType.Id);
+
+            var operationService = new OperationService();
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                Assert.Throws<DaGetNotFoundException>(() => operationService.GetById(context, userWhoWantToSee.UserName, operation.Id));
+            }
+        }
+
+        [Fact]
+        public void Get_By_Id_When_User_Can_See_It_Should_Return_Operation()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
+            var operationType = DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
+            var operation = DataBaseHelper.Instance.UseNewOperation(dbName, bankAccount.Id, operationType.Id);
+
+            var operationService = new OperationService();
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                var operationFromService = operationService.GetById(context, user.UserName, operation.Id);
+
+                Assert.NotNull(operationFromService);
+                Assert.Equal(operation.Id, operationFromService.Id);
+                Assert.Equal(operation.BankAccountId, operationFromService.BankAccountId);
+                Assert.Equal(operation.Amount, operationFromService.Amount);
+                Assert.Equal(operation.IsClosed, operationFromService.IsClosed);
+                Assert.Equal(operation.IsTransfert, operationFromService.IsTransfert);
+                Assert.Equal(operation.OperationDate, operationFromService.OperationDate);
+                Assert.Equal(operation.OperationTypeId, operationFromService.OperationTypeId);
+                Assert.Equal(operation.Wording, operationFromService.Wording);
+                Assert.Equal(operationType.Wording, operationFromService.OperationTypeWording);
             }
         }
     }

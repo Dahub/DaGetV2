@@ -1,7 +1,5 @@
-﻿namespace DaGetV2.ApplicationCore.DTO
+﻿namespace DaGetV2.Shared.ApiTool
 {
-    using DaGetV2.Shared.ApiTool;
-
     public class ApiErrorResultDto : IDto
     {
         public string Message { get; set; }
