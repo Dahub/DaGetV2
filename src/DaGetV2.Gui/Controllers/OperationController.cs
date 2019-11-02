@@ -25,5 +25,16 @@
 
             return Ok();
         }
+
+        [HttpPost]
+        [Route("/Operation/Open")]
+        public async Task<IActionResult> OpenOperationAsync(Guid idOperation)
+        {
+            var operationDto = await GetToApi<OperationDto>($"operation/{idOperation}");
+            operationDto.IsClosed = false;
+            await PutToApi("operation", operationDto);
+
+            return Ok();
+        }
     }
 }

@@ -45,7 +45,7 @@
                     <td>
                         @if (operation.IsClosed)
                         {
-                            <a class="waves-effect waves-light btn-small grey lighten-2">Ouvrir</a>
+                            <a class="waves-effect waves-light btn-small grey lighten-2" onclick="openOperation('@operation.Id')">Ouvrir</a>
                         }
                         else
                         {
