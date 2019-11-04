@@ -236,6 +236,7 @@
                 Id = Guid.NewGuid(),
                 ModificationDate = DateTime.Now,
                 OpeningBalance = bankAccountAmount,
+                ActualBalance = bankAccountAmount,
                 Wording = "Test bank account"
             };
 
@@ -283,6 +284,10 @@
 
                 var bankAccount = context.BankAccounts.Single(ba => ba.Id.Equals(operation.BankAccountId));
                 bankAccount.Balance += operation.Amount;
+                if(operation.IsClosed)
+                {
+                    bankAccount.ActualBalance += operation.Amount;
+                }
                 context.BankAccounts.Update(bankAccount);
 
                 context.Commit();

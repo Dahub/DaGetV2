@@ -9,6 +9,8 @@
 
         public decimal Balance { get; set; }
 
+        public decimal ActualBalance { get; set; }
+
         public decimal InitialBalance { get; set; }
 
         public string Wording { get; set; }

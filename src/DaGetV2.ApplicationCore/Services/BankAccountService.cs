@@ -34,6 +34,7 @@
             {
                 Balance = toCreateBankAccount.InitialBalance.Value,
                 OpeningBalance = toCreateBankAccount.InitialBalance.Value,
+                ActualBalance = toCreateBankAccount.InitialBalance.Value,
                 BankAccountTypeId = toCreateBankAccount.BankAccountTypeId.Value,
                 Id = bankAccountId,
                 Wording = toCreateBankAccount.Wording
@@ -138,9 +139,11 @@
            
             if(toEditBankAccount.InitialBalance.HasValue && bankAccount.OpeningBalance != toEditBankAccount.InitialBalance.Value)
             {
+                var delta = toEditBankAccount.InitialBalance.Value - bankAccount.OpeningBalance;
+
                 bankAccount.OpeningBalance = toEditBankAccount.InitialBalance.Value;
-                bankAccount.Balance = toEditBankAccount.InitialBalance.Value;
-                RebuildBalance(context, bankAccount);                
+                bankAccount.Balance += delta;
+                bankAccount.ActualBalance += delta;          
             }
 
             bankAccount.ModificationDate = DateTime.Now;
@@ -195,15 +198,6 @@
             }
 
             context.Commit();
-        }
-
-        private void RebuildBalance(IContext context, BankAccount bankAccount)
-        {
-            var operationRepository = context.GetRepository<Operation>();
-
-            bankAccount.Balance += operationRepository
-                                    .List(new OperationByBankAccountIdSpecification(bankAccount.Id))
-                                    .Sum(o => o.Amount);          
         }
     }
 }

@@ -20,6 +20,8 @@
 
         public decimal OpeningBalance { get; set; }
 
+        public decimal ActualBalance { get; set; }
+
         public string Wording { get; set; }
 
         public ICollection<UserBankAccount> UsersBanksAccounts { get; set; }

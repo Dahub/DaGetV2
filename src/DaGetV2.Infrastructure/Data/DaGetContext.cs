@@ -280,6 +280,11 @@
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();
             modelBuilder.Entity<BankAccount>()
+               .Property(ba => ba.ActualBalance)
+               .HasColumnName("ActualBalance")
+               .HasColumnType("decimal(18,2)")
+               .IsRequired();
+            modelBuilder.Entity<BankAccount>()
                .Property(ba => ba.Wording)
                .HasColumnName("Wording")
                .HasColumnType("nvarchar(256)")

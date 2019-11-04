@@ -22,9 +22,9 @@
 
             if (!DateTime.TryParseExact(startDate, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var convertedStartDate))
             {
-                throw  new DaGetServiceException("Le format de la date de départ doit être de la forme yyyyMMdd (exemple : 20190618)");
+                throw new DaGetServiceException("Le format de la date de départ doit être de la forme yyyyMMdd (exemple : 20190618)");
             }
-            if(!DateTime.TryParseExact(endDate, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var convertedEndDate))
+            if (!DateTime.TryParseExact(endDate, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var convertedEndDate))
             {
                 throw new DaGetServiceException("Le format de la date de fin doit être de la forme yyyyMMdd (exemple : 20190618)");
             }
@@ -58,6 +58,21 @@
             bankAccount.Balance -= operation.Amount;
             bankAccount.Balance += updateOperationDto.Amount;
 
+            bankAccount.ActualBalance -= operation.Amount;
+            bankAccount.ActualBalance += updateOperationDto.Amount;
+
+            if (operation.IsClosed != updateOperationDto.IsClosed)
+            {
+                if (updateOperationDto.IsClosed)
+                {
+                    bankAccount.ActualBalance += updateOperationDto.Amount;
+                }
+                else
+                {
+                    bankAccount.ActualBalance -= updateOperationDto.Amount;
+                }
+            }
+
             operation.Amount = updateOperationDto.Amount;
             operation.IsClosed = updateOperationDto.IsClosed;
             operation.OperationDate = updateOperationDto.OperationDate;
@@ -75,8 +90,8 @@
             var operationRepository = context.GetRepository<Operation>();
 
             var operation = operationRepository.SingleOrDefault(new OperationByIdWithOperationTypeSpecification(operationId));
-       
-            if(operation == null)
+
+            if (operation == null)
             {
                 throw new DaGetNotFoundException("Impossible de trouver l'opération");
             }

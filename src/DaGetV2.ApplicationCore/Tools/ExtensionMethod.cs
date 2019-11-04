@@ -117,6 +117,7 @@
             {
                 Id = bankAccount.Id,
                 Balance = bankAccount.Balance,
+                ActualBalance = bankAccount.ActualBalance,
                 InitialBalance = bankAccount.OpeningBalance,
                 BankAccountTypeId = bankAccount.BankAccountTypeId.ToString(),
                 BankAccountType = bankAccount.BankAccountType.Wording,

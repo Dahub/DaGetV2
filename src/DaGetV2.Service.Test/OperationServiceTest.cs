@@ -271,6 +271,42 @@
         }
 
         [Fact]
+        public void Update_When_Is_Closed_Is_Set_From_False_To_True_Should_Update_Actual_Balance()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
+            DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
+            var operationType = DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
+            var operation = DataBaseHelper.Instance.UseNewOperation(dbName, bankAccount.Id, operationType.Id);
+
+            var operationService = new OperationService();
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                operationService.Update(context, user.UserName, new UpdateOperationDto()
+                {
+                    Id = operation.Id,
+                    Wording = operation.Wording,
+                    Amount = operation.Amount,
+                    IsClosed = true,
+                    OperationDate = operation.OperationDate,
+                    OperationTypeId = operation.OperationTypeId
+                });
+            }
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                var bankAccountFromDb = context.BankAccounts.SingleOrDefault(ba => ba.Id.Equals(bankAccount.Id));
+
+                Assert.NotNull(bankAccountFromDb);
+                Assert.Equal(bankAccount.Balance + operation.Amount, bankAccountFromDb.Balance);
+                Assert.Equal(bankAccount.ActualBalance + operation.Amount, bankAccountFromDb.ActualBalance);
+            }
+        }
+
+        [Fact]
         public void Update_When_Amount_Is_Modified_Should_Update_Bank_Account_Balance()
         {
             var dbName = DataBaseHelper.Instance.NewDataBase();

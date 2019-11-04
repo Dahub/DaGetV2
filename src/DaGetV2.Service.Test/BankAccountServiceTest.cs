@@ -144,6 +144,7 @@
 
                 Assert.Equal(initialBalance, bankAccountFromDb.Balance);
                 Assert.Equal(initialBalance, bankAccountFromDb.OpeningBalance);
+                Assert.Equal(initialBalance, bankAccountFromDb.ActualBalance);
                 Assert.Equal(bankAccountType.Id, bankAccountFromDb.BankAccountTypeId);
 
                 var userBankAccountFromDb = context.UserBankAccounts.SingleOrDefault(uba => uba.BankAccountId.Equals(bankAccountFromDb.Id));
@@ -151,7 +152,7 @@
                 Assert.NotNull(userBankAccountFromDb);
                 Assert.Equal(user.Id, userBankAccountFromDb.UserId);
                 Assert.True(userBankAccountFromDb.IsOwner);
-                Assert.False(userBankAccountFromDb.IsReadOnly);
+                Assert.False(userBankAccountFromDb.IsReadOnly);                
 
                 var operationsTypes = context.OperationTypes.Select(ot => ot.BankAccountId.Equals(bankAccountFromDb.Id));
 
@@ -373,10 +374,6 @@
             var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
             var operationType = DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
 
-            var operation1 = DataBaseHelper.Instance.UseNewOperation(dbName, bankAccount.Id, operationType.Id);
-            var operation2 = DataBaseHelper.Instance.UseNewOperation(dbName, bankAccount.Id, operationType.Id);
-            var operation3 = DataBaseHelper.Instance.UseNewOperation(dbName, bankAccount.Id, operationType.Id);
-
             var bankAccountService = new BankAccountService();
 
             var newBankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
@@ -409,7 +406,8 @@
 
                 Assert.NotNull(bankAccountFromDb);
                 Assert.Equal(bankAccount.OpeningBalance + expectingDeltaInBalance, bankAccountFromDb.OpeningBalance);
-                Assert.Equal(bankAccount.Balance + expectingDeltaInBalance + operation1.Amount + operation2.Amount + operation3.Amount, bankAccountFromDb.Balance);
+                Assert.Equal(bankAccount.Balance + expectingDeltaInBalance, bankAccountFromDb.Balance);
+                Assert.Equal(bankAccount.ActualBalance + expectingDeltaInBalance, bankAccountFromDb.ActualBalance);
                 Assert.Equal(newBankAccountType.Id, bankAccountFromDb.BankAccountTypeId);
                 Assert.Equal(bankAccount.CreationDate, bankAccountFromDb.CreationDate);
                 Assert.True(bankAccount.ModificationDate < bankAccountFromDb.ModificationDate);
