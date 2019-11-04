@@ -6,23 +6,23 @@
     using System.IO;
     using Infrastructure.Data;
 
-    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<DaGetContext>
+    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<SqlServerDaGetContext>
     {
         /// <summary>
         /// Create DB context
         /// </summary>
         /// <param name="args"></param>
         /// <returns>DB context</returns>
-        public DaGetContext CreateDbContext(string[] args)
+        public SqlServerDaGetContext CreateDbContext(string[] args)
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .Build();
-            var builder = new DbContextOptionsBuilder<DaGetContext>();
+            var builder = new DbContextOptionsBuilder<SqlServerDaGetContext>();
             var connectionString = configuration.GetConnectionString("DaGetConnexionString");
             builder.UseSqlServer(connectionString, b => b.MigrationsAssembly("DaGetV2.Api"));
-            return new DaGetContext(builder.Options);
+            return new SqlServerDaGetContext(builder.Options);
         }
     }
 }

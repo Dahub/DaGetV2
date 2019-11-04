@@ -3,7 +3,6 @@
     using System;
     using ApplicationCore.DTO;
     using ApplicationCore.Interfaces;
-    using Infrastructure.Interfaces;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("api/[controller]")]

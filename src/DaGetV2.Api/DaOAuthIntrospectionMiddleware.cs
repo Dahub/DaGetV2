@@ -8,9 +8,9 @@
     using System.Text;
     using System.Threading.Tasks;
     using ApplicationCore.Domain;
+    using ApplicationCore.Interfaces;
     using ApplicationCore.Specifications;
     using ApplicationCore.Tools;
-    using Infrastructure.Interfaces;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Primitives;

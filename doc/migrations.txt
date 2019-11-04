@@ -1,0 +1,3 @@
+SQL Server migrations :
+
+add-migration -context SqlServerDaGetContext -outputDir DataBase\SqlServer 'migration name'

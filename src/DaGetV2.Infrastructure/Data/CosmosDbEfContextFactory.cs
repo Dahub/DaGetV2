@@ -1,7 +1,6 @@
 ﻿namespace DaGetV2.Infrastructure.Data
 {
     using ApplicationCore.Interfaces;
-    using Interfaces;
     using Microsoft.EntityFrameworkCore;
 
     public class CosmosDbEfContextFactory : IContextFactory

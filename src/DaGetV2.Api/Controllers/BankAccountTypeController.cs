@@ -4,7 +4,6 @@
     using ApplicationCore.DTO;
     using ApplicationCore.Interfaces;
     using DaGetV2.Shared.ApiTool;
-    using Infrastructure.Interfaces;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("api/[controller]")]

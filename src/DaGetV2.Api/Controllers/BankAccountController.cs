@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using ApplicationCore.DTO;
     using ApplicationCore.Interfaces;
-    using Infrastructure.Interfaces;
     using Microsoft.AspNetCore.Http.Extensions;
     using Microsoft.AspNetCore.Mvc;
     using Shared.ApiTool;
