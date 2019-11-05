@@ -136,6 +136,7 @@
             {
                 BankAccountId = bankAccount.Id.ToString(),
                 BankAccountBalance = bankAccount.Balance,
+                BankAccountActualBalance = bankAccount.ActualBalance,
                 BankAccountWording = bankAccount.Wording,
                 Date = new DateTime(year.Value, month.Value, 1),
                 Income = operations.Datas.Where(o => o.Amount > 0).Sum(o => o.Amount),

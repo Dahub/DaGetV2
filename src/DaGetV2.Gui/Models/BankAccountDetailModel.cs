@@ -16,6 +16,8 @@
 
         public decimal BankAccountBalance { get; set; }
 
+        public decimal BankAccountActualBalance { get; set; }
+
         public decimal Income { get; set; }
 
         public decimal Outcome { get; set; }

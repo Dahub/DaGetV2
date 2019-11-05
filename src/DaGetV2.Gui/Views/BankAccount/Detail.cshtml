@@ -13,6 +13,12 @@
         <h3>@Model.BankAccountWording</h3>
         <div class="col s12 m12 l6 xl6">
             @await Html.PartialAsync("_dateManager", Model)
+            <h4>
+                <strong>Solde :  @Html.Euro(Model.BankAccountBalance)</strong>
+            </h4>
+            <h5>
+                Prévisionnel : @Html.Euro(Model.BankAccountActualBalance)
+            </h5>
         </div>
         <div class="col s12 m12 l6 xl6">
             @await Html.PartialAsync("_incomeAndOutcomeGraph", Model)
@@ -62,5 +68,5 @@
 </div>
 
 @section Scripts{
-    <script src="~/js/bankAccountDetail.js"></script>  
+    <script src="~/js/bankAccountDetail.js"></script>
 }
