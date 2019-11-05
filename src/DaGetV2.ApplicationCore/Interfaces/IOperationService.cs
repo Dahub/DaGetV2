@@ -15,6 +15,8 @@
 
         void Update(IContext context, string userName, UpdateOperationDto updateOperationDto);
 
+        void Add(IContext context, string userName, CreateOperationDto createOperationDto);
+
         OperationDto GetById(IContext context, string userName, Guid operationId);
     }
 }

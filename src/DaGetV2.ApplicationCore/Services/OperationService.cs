@@ -100,5 +100,35 @@
 
             return operation.ToDto();
         }
+
+        public void Add(IContext context, string userName, CreateOperationDto createOperationDto)
+        {
+            var bankAccountRepository = context.GetRepository<BankAccount>();
+            var operationRepository = context.GetRepository<Operation>();
+
+            var bankAccount = bankAccountRepository.GetById(createOperationDto.BankAccountId);
+
+            CheckIfUserCanAccesBankAccount(context, userName, bankAccount, true, false);
+
+            operationRepository.Add(new Operation()
+            {
+                Amount = createOperationDto.Amount,
+                BankAccountId = bankAccount.Id,
+                Id = Guid.NewGuid(),
+                CreationDate = DateTime.Now,
+                IsClosed = false,
+                IsTransfert = false,
+                ModificationDate = DateTime.Now,
+                OperationDate = createOperationDto.OperationDate,
+                OperationTypeId = createOperationDto.OperationTypeId,
+                Wording = createOperationDto.Wording
+            });
+
+            bankAccount.Balance += createOperationDto.Amount;
+
+            bankAccountRepository.Update(bankAccount);
+
+            context.Commit();
+        }
     }
 }

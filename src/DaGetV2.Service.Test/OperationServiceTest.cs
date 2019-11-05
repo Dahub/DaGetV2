@@ -397,5 +397,129 @@
                 Assert.Equal(operationType.Wording, operationFromService.OperationTypeWording);
             }
         }
+
+        [Fact]
+        public void Add_Operation_With_Unknow_Bank_Account_Should_Throw_DaGetNotFoundException()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
+            var operationType = DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
+
+            var operationService = new OperationService();
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                Assert.Throws<DaGetNotFoundException>(() => operationService.Add(context, user.UserName, new CreateOperationDto()
+                                    {
+                                        Amount = 10m,
+                                        BankAccountId = Guid.NewGuid(),
+                                        OperationDate = DateTime.Now,
+                                        OperationTypeId = operationType.Id,
+                                        Wording = Guid.NewGuid().ToString()
+                                    }));
+            }
+        }
+
+        [Fact]
+        public void Add_Operation_On_Someone_Else_Bank_Account_Should_Throw_DaGetNotFoundException()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var secondUser = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
+            var operationType = DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
+
+            var operationService = new OperationService();
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                Assert.Throws<DaGetNotFoundException>(() => operationService.Add(context, secondUser.UserName, new CreateOperationDto()
+                {
+                    Amount = 10m,
+                    BankAccountId = bankAccount.Id,
+                    OperationDate = DateTime.Now,
+                    OperationTypeId = operationType.Id,
+                    Wording = Guid.NewGuid().ToString()
+                }));
+            }
+        }
+
+        [Fact]
+        public void Add_Operation_Without_Right_To_Write_To_Bank_Account_Should_Throw_DaGetUnauthorizedException()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var secondUser = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
+            var operationType = DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
+            var userBankAccount = DataBaseHelper.Instance.UseNewUserBankAccount(dbName, secondUser.Id, bankAccount.Id, false, true);
+
+            var operationService = new OperationService();
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                Assert.Throws<DaGetUnauthorizedException>(() => operationService.Add(context, secondUser.UserName, new CreateOperationDto()
+                {
+                    Amount = 10m,
+                    BankAccountId = bankAccount.Id,
+                    OperationDate = DateTime.Now,
+                    OperationTypeId = operationType.Id,
+                    Wording = Guid.NewGuid().ToString()
+                }));
+            }
+        }
+
+        [Fact]
+        public void Add_Operation_When_Everything_Is_Correct_Should_Add_Operation_And_Modifiy_Balances()
+        {
+            var dbName = DataBaseHelper.Instance.NewDataBase();
+            var user = DataBaseHelper.Instance.UseNewUser(dbName);
+            var bankAccountType = DataBaseHelper.Instance.UseNewBankAccountType(dbName);
+            var bankAccount = DataBaseHelper.Instance.UseNewBankAccount(dbName, user.Id, bankAccountType.Id);
+            var operationType = DataBaseHelper.Instance.UseNewOperationType(dbName, bankAccount.Id);
+
+            var operationService = new OperationService();
+
+            var expectedDelta = 452.08m;
+            var expectedOperationDate = DateTime.Now;
+            var expectedWording = Guid.NewGuid().ToString();
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                operationService.Add(context, user.UserName, new CreateOperationDto()
+                {
+                    Amount = expectedDelta,
+                    BankAccountId = bankAccount.Id,
+                    OperationDate = expectedOperationDate,
+                    OperationTypeId = operationType.Id,
+                    Wording = expectedWording
+                });
+            }
+
+            using (var context = DataBaseHelper.Instance.CreateContext(dbName))
+            {
+                var bankAccountFromDb = context.BankAccounts.SingleOrDefault(ba => ba.Id.Equals(bankAccount.Id));
+
+                Assert.NotNull(bankAccountFromDb);
+                Assert.Equal(bankAccount.Balance + expectedDelta, bankAccountFromDb.Balance);
+                Assert.Equal(bankAccount.ActualBalance, bankAccountFromDb.ActualBalance);
+
+                var operationFromDb = context.Operations.SingleOrDefault(o =>
+                                                            o.BankAccountId.Equals(bankAccount.Id)
+                                                            && o.OperationDate.Equals(expectedOperationDate));
+
+                Assert.NotNull(operationFromDb);
+                Assert.Equal(operationFromDb.Amount, expectedDelta);
+                Assert.Equal(operationFromDb.OperationDate, expectedOperationDate);
+                Assert.Equal(operationFromDb.OperationTypeId, operationType.Id);
+                Assert.Equal(operationFromDb.Wording, expectedWording);
+                Assert.False(operationFromDb.IsClosed);
+                Assert.False(operationFromDb.IsTransfert);
+            }
+        }
     }
 }
